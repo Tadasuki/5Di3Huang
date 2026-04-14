@@ -1,0 +1,71 @@
+{
+  "id": "sejong",
+  "familyId": "jeonju_yi",
+  "dynastyId": "choseon",
+  "name": "李祹",
+  "templeName": "世宗",
+  "posthumousName": "庄宪英文明武仁圣明孝大王",
+  "eraName": "永乐、洪熙、宣德、正统、景泰",
+  "title": "国王",
+  "birthYear": 1397,
+  "deathYear": 1450,
+  "reignStart": 1418,
+  "reignEnd": 1450,
+  "birthplace": "汉城景福宫",
+  "birthplaceCoords": [
+    126.977222,
+    37.578611
+  ],
+  "ethnicity": "朝鲜族",
+  "image": "",
+  "bio": "世宗（1397年—1450年），名李祹，朝鲜王朝第四代国王。在位期间重视文治与制度建设，推动科学技术、农业、音乐与礼制发展，并主持创制训民正音（后称韩文），对朝鲜社会文化产生深远影响。",
+  "timeline": [
+    {
+      "year": 1397,
+      "event": "出生"
+    },
+    {
+      "year": 1418,
+      "event": "即位"
+    },
+    {
+      "year": 1443,
+      "event": "主持创制训民正音"
+    },
+    {
+      "year": 1446,
+      "event": "训民正音颁布"
+    },
+    {
+      "year": 1450,
+      "event": "去世"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "训民正音",
+      "description": "主持创制并颁布训民正音，使本土文字体系成形，促进文化传播与教育普及。"
+    },
+    {
+      "title": "制度与学术",
+      "description": "整饬官制与典章，提倡学术与编纂，推动技术、历法与农政等领域的发展。"
+    }
+  ],
+  "controversies": [
+    {
+      "title": "对外用兵与边疆政策",
+      "description": "在北方与沿海的防务与用兵影响国内资源配置，后世对其得失评价不一。"
+    }
+  ],
+  "ratings": {
+    "military": 70,
+    "economy": 82,
+    "culture": 98,
+    "diplomacy": 78,
+    "legacy": 96,
+    "benevolence": 90,
+    "stability": 86,
+    "capability": 84
+  },
+  "summary": "世宗以文治见长，尤以训民正音的创制与文化政策著称。他在制度建设、学术推动与科技发展方面的投入，使其被广泛视为朝鲜王朝最具代表性的明君之一。"
+}

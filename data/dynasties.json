@@ -1,0 +1,168 @@
+[
+  {
+    "id": "xia",
+    "name": "夏",
+    "fullName": "夏朝",
+    "startYear": -2070,
+    "endYear": -1600,
+    "type": "central",
+    "color": "#8B7355",
+    "capital": "阳城",
+    "capitalCoords": [
+      113.139,
+      34.410
+    ],
+    "description": "中国历史上第一个世袭制王朝，由禹之子启建立，标志着中国从原始社会向奴隶社会的过渡。",
+    "leaders": [
+      "da_yu",
+      "qi"
+    ]
+  },
+  {
+    "id": "shang",
+    "name": "商",
+    "fullName": "商朝",
+    "startYear": -1600,
+    "endYear": -1046,
+    "type": "central",
+    "color": "#6B4226",
+    "capital": "亳、殷（今河南安阳一带）",
+    "capitalCoords": [
+      114.3524,
+      36.1088
+    ],
+    "description": "中国历史上第二个世袭制王朝，也是中国第一个有直接同时期文字记载（甲骨文）的王朝。青铜器铸造技术在此期间高度发达。",
+    "leaders": [
+      "zi_lv",
+      "zi_shou"
+    ]
+  },
+  {
+    "id": "qin",
+    "name": "秦",
+    "fullName": "秦朝",
+    "startYear": -221,
+    "endYear": -207,
+    "type": "central",
+    "color": "#1a1a2e",
+    "capital": "咸阳",
+    "capitalCoords": [
+      108.70,
+      34.33
+    ],
+    "description": "中国历史上第一个统一的中央集权制封建王朝。秦始皇统一六国，建立了中央集权的政治制度，统一了文字、度量衡和货币。",
+    "leaders": [
+      "ying_zheng",
+      "hu_hai"
+    ]
+  },
+  {
+    "id": "tang",
+    "name": "唐",
+    "fullName": "唐朝",
+    "startYear": 618,
+    "endYear": 907,
+    "type": "central",
+    "color": "#c9a96e",
+    "capital": "长安",
+    "capitalCoords": [
+      108.9398,
+      34.3413
+    ],
+    "description": "中国历史上最强盛的朝代之一，国力空前强大，文化灿烂辉煌，是当时世界上最强大的国家之一。唐朝的开放与包容，使其成为中华文明的巅峰时期。",
+    "leaders": [
+      "li_yuan",
+      "li_shimin",
+      "wu_zetian",
+      "li_longji"
+    ]
+  },
+  {
+    "id": "ming",
+    "name": "明",
+    "fullName": "明朝",
+    "startYear": 1368,
+    "endYear": 1644,
+    "type": "central",
+    "color": "#9B111E",
+    "capital": "南京",
+    "capitalCoords": [
+      118.7969,
+      32.0603
+    ],
+    "description": "中国历史上最后一个由汉族建立的大一统中原王朝。明初历经洪武之治、永乐盛世，国力强盛；后因政治腐败、党争及天灾外患而走向衰亡。",
+    "leaders": [
+      "zhu_yuanzhang",
+      "zhu_yunwen",
+      "zhu_di"
+    ]
+  },
+  {
+    "id": "qing",
+    "name": "清",
+    "fullName": "清朝",
+    "startYear": 1636,
+    "endYear": 1912,
+    "type": "central",
+    "color": "#D4AF37",
+    "capital": "北京",
+    "capitalCoords": [
+      116.4074,
+      39.9042
+    ],
+    "description": "中国历史上最后一个封建王朝，由满族建立。清朝前期国力强盛，开创了康乾盛世；后期国势衰落，遭受列强侵略，最终在辛亥革命中覆灭。",
+    "leaders": [
+      "nurhaci",
+      "huang_taiji",
+      "kangxi",
+      "yongzheng",
+      "qianlong",
+      "pu_yi"
+    ]
+  },
+  {
+    "id": "roc",
+    "name": "中华民国",
+    "fullName": "中华民国",
+    "startYear": 1912,
+    "endYear": null,
+    "type": "central",
+    "color": "#003399",
+    "capital": "南京",
+    "capitalCoords": [
+      118.7969,
+      32.0603
+    ],
+    "description": "亚洲第一个民主共和国，由孙中山建立。经历了军阀混战、黄金十年、抗日战争和国共内战，最终政府迁至台湾。",
+    "leaders": [
+      "sun_yat_sen",
+      "li_yuanhong",
+      "chiang_kai_shek"
+    ]
+  },
+  {
+    "id": "prc",
+    "name": "中华人民共和国",
+    "fullName": "中华人民共和国",
+    "startYear": 1949,
+    "endYear": null,
+    "type": "central",
+    "color": "#DE2910",
+    "capital": "北京",
+    "capitalCoords": [
+      116.4074,
+      39.9042
+    ],
+    "description": "1949年10月1日由中国共产党建立的社会主义国家，是中国历史上的现代政权。经过社会主义革命和建设、改革开放，中国已发展成为世界第二大经济体。",
+    "leaders": [
+      "mao_zedong",
+      "hua_guofeng",
+      "deng_xiaoping",
+      "hu_yaobang",
+      "zhao_ziyang",
+      "jiang_zemin",
+      "hu_jintao",
+      "xi_jinping"
+    ]
+  }
+]

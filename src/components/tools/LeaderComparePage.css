@@ -1,0 +1,22 @@
+.leader-compare-page {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: calc(var(--navbar-height) + var(--space-xl));
+  padding-bottom: var(--space-3xl);
+}
+
+.leader-compare-nav {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.leader-compare-back {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.leader-compare-back:hover {
+  color: var(--color-gold);
+}
+

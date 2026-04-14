@@ -1,0 +1,342 @@
+import { useEffect, useRef, useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { useDynasties, useFamilies } from '../../hooks/useDynasties'
+import { useRegionalRegimes } from '../../hooks/useRegionalRegime'
+import { useHistoricalEvents } from '../../hooks/useHistoricalEvents'
+import { useSearchVisibility } from '../../context/SearchVisibilityContext'
+import { getLeaderShortTitle } from '../../utils/leaderTitle'
+import LeaderCard from './LeaderCard'
+import DynastySection from './DynastySection'
+import './HomePage.css'
+
+function pickRandomItems(items, count, seed) {
+  if (!Array.isArray(items) || items.length === 0) return []
+  const result = []
+  const used = new Set()
+  let t = Math.max(0.00001, Math.min(0.99999, seed))
+
+  for (let i = 0; i < Math.min(count, items.length); i++) {
+    t = (t * 9301 + 49297) % 233280
+    const r = t / 233280
+    let idx = Math.floor(r * items.length)
+    while (used.has(idx) && used.size < items.length) {
+      idx = (idx + 1) % items.length
+    }
+    used.add(idx)
+    result.push(items[idx])
+  }
+  return result
+}
+
+export default function HomePage() {
+  const { dynasties, loading } = useDynasties()
+  const regionalRegimes = useRegionalRegimes()
+  const { families } = useFamilies()
+  const eventsLibrary = useHistoricalEvents()
+  const [seed] = useState(() => Math.random())
+  const { setHomeSearchVisible } = useSearchVisibility()
+  const searchRef = useRef(null)
+
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    const el = searchRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setHomeSearchVisible(Boolean(entry?.isIntersecting)),
+      { root: null, threshold: 0.15 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [setHomeSearchVisible])
+
+  const polities = useMemo(() => {
+    const central = dynasties.map(d => ({ ...d, kind: 'dynasty' }))
+    const regional = regionalRegimes.map(r => ({ ...r, kind: 'regional' }))
+    return [...central, ...regional]
+  }, [dynasties, regionalRegimes])
+
+  const polityById = useMemo(() => {
+    const map = new Map()
+    polities.forEach(p => map.set(p.id, p))
+    return map
+  }, [polities])
+
+  const allLeaders = useMemo(() => {
+    const seen = new Set()
+    const out = []
+    polities.forEach(p => {
+      ; (p.leaderData || []).forEach(l => {
+        if (l?.id && !seen.has(l.id)) {
+          seen.add(l.id)
+          out.push(l)
+        }
+      })
+    })
+    return out
+  }, [polities])
+
+  function getLeaderThemeColor(leader) {
+    if (!leader) return '#c9a96e'
+    const customColor = typeof leader.color === 'string' ? leader.color.trim() : ''
+    if (customColor) return customColor
+    const polity = polityById.get(leader.dynastyId)
+    return polity?.color || '#c9a96e'
+  }
+
+  const featuredLeaders = useMemo(
+    () => pickRandomItems(allLeaders, 3, seed + 0.13),
+    [allLeaders, seed]
+  )
+
+  const events = useMemo(
+    () => pickRandomItems(eventsLibrary, 4, seed + 0.37),
+    [eventsLibrary, seed]
+  )
+
+  const filteredPolities = useMemo(() => {
+    const raw = search.trim()
+    if (!raw) return polities
+    const q = raw.toLowerCase()
+    const match = s => (typeof s === 'string' ? s.toLowerCase().includes(q) : false)
+
+    return polities
+      .map(p => ({
+        ...p,
+        leaderData: (p.leaderData || []).filter(l =>
+          match(l.name) ||
+          match(l.templeName) ||
+          match(l.eraName) ||
+          match(l.birthplace)
+        ),
+      }))
+      .filter(p => p.leaderData.length > 0 || match(p.name) || match(p.fullName))
+  }, [polities, search])
+
+  const totalLeaders = polities.reduce((sum, d) => sum + (d.leaderData || []).length, 0)
+
+  const filteredLeaders = useMemo(() => {
+    const raw = search.trim()
+    if (!raw) return []
+    const q = raw.toLowerCase()
+    const match = s => (typeof s === 'string' ? s.toLowerCase().includes(q) : false)
+
+    return allLeaders.filter(l =>
+      match(l.name) ||
+      match(l.templeName) ||
+      match(l.eraName) ||
+      match(l.birthplace)
+    )
+  }, [allLeaders, search])
+
+  if (loading) {
+    return (
+      <div className="home-page">
+        <div className="hero">
+          <div className="container">
+            <h1 className="hero-title">载入中...</h1>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="home-page" id="home-page">
+      <section className="hero">
+        <div className="container">
+          <h1 className="hero-title">五帝三皇神圣事</h1>
+          <p className="hero-subtitle">
+            五帝三皇神圣事，骗了无涯过客。有多少风流人物？<br></br>盗跖庄蹻流誉后，更陈王奋起挥黄钺。歌未竟，东方白。
+          </p>
+          <div className="hero-stats">
+            <div className="hero-stat">
+              <div className="hero-stat-value">{polities.length}</div>
+              <div className="hero-stat-label">朝代/政权</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-value">{totalLeaders}</div>
+              <div className="hero-stat-label">执政者</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-value">4000+</div>
+              <div className="hero-stat-label">年历史跨度</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="home-search" ref={searchRef}>
+          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            className="search-input"
+            placeholder="搜索执政者姓名、庙号、年号或祖籍..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            id="leader-search"
+          />
+        </div>
+
+        {!search.trim() && (
+          <section className="home-panels" aria-label="首页导航与推荐">
+            <div className="home-panel">
+              <div className="panel-title-row">
+                <h2 className="panel-title">推荐人物</h2>
+                <Link to="/timeline" className="panel-link">去时间线 →</Link>
+              </div>
+              {featuredLeaders.length > 0 ? (
+                <div className="featured-grid">
+                  {featuredLeaders.map(leader => (
+                    <Link
+                      key={leader.id}
+                      to={`/leader/${leader.id}`}
+                      className="featured-leader"
+                      style={{ '--featured-color': getLeaderThemeColor(leader) }}
+                    >
+                      <div className="featured-leader-badge">
+                        {leader.name.charAt(0)}
+                      </div>
+                      <div className="featured-leader-info">
+                        <div className="featured-leader-name">
+                          {leader.name}
+                          {leader.templeName && (
+                            <span className="featured-leader-tag">{leader.templeName}</span>
+                          )}
+                        </div>
+                        <div className="featured-leader-sub">
+                          {getLeaderShortTitle(leader) || '执政者'}
+                          {typeof leader?.factionTag === 'string' && leader.factionTag.trim()
+                            ? ` · ${leader.factionTag.trim()}`
+                            : ''}
+                          {leader.reignStart != null && leader.reignEnd != null
+                            ? ` · ${leader.reignStart}—${leader.reignEnd}`
+                            : ''}
+                        </div>
+                        {leader.summary && (
+                          <div className="featured-leader-desc">
+                            {leader.summary}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="panel-empty">暂无人物数据</div>
+              )}
+            </div>
+
+            <div className="home-panel">
+              <h2 className="panel-title">快速入口</h2>
+              <div className="quick-links">
+                <Link to="/timeline" className="quick-link">时间线</Link>
+                <Link to="/map" className="quick-link">地图</Link>
+                <Link to="/tools" className="quick-link">工具</Link>
+                <Link to="/about" className="quick-link">关于</Link>
+              </div>
+
+              <h2 className="panel-title" style={{ marginTop: 'var(--space-lg)' }}>历史事件</h2>
+              <div className="event-list">
+                {events.map(evt => (
+                  <Link key={evt.id} className="event-item" to={`/event/${evt.id}`}>
+                    <div className="event-year">{evt.year}</div>
+                    <div className="event-body">
+                      <div className="event-name">{evt.name}</div>
+                      <div className="event-desc">{evt.summary || evt.impact || ''}</div>
+                    </div>
+                  </Link>
+                ))}
+                {events.length === 0 && (
+                  <div className="panel-empty">暂无事件数据</div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {search.trim() ? (
+          <section className="search-results" aria-label="搜索结果">
+            <div className="panel-title-row" style={{ marginTop: 'var(--space-xl)' }}>
+              <h2 className="panel-title" style={{ marginBottom: 0 }}>搜索结果</h2>
+              <span className="panel-link" style={{ pointerEvents: 'none' }}>
+                人物 {filteredLeaders.length} · 朝代/政权 {filteredPolities.length}
+              </span>
+            </div>
+
+            <div className="dynasty-list">
+              {filteredPolities.map((dynasty, i) => (
+                <DynastySection
+                  key={dynasty.id}
+                  dynasty={dynasty}
+                  index={i}
+                />
+              ))}
+              {filteredPolities.length === 0 && (
+                <div className="panel-empty">未找到匹配的朝代/政权或人物</div>
+              )}
+            </div>
+          </section>
+        ) : (
+          <section className="home-discover" aria-label="随便看看">
+            <div className="panel-title-row">
+              <h2 className="panel-title" style={{ marginBottom: 0 }}>随便看看</h2>
+              <Link to="/timeline" className="panel-link">更多 →</Link>
+            </div>
+            <div className="search-leaders-grid">
+              {pickRandomItems(allLeaders, 6, seed + 0.77).map((leader, i) => (
+                <LeaderCard
+                  key={leader.id}
+                  leader={leader}
+                  dynastyColor={getLeaderThemeColor(leader)}
+                  index={i}
+                />
+              ))}
+              {allLeaders.length === 0 && (
+                <div className="panel-empty">暂无人物数据</div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {!search.trim() && families && families.length > 0 && (
+          <section className="home-families" aria-label="统治者家族" style={{ marginTop: 'var(--space-2xl)', paddingBottom: 'var(--space-xl)' }}>
+            <div className="panel-title-row">
+              <h2 className="panel-title">历史家族</h2>
+              <Link to="/map" className="panel-link">去地图查看发迹地 →</Link>
+            </div>
+            <div className="search-leaders-grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+              {families.map(fam => (
+                <Link
+                  key={fam.id}
+                  to={`/family/${fam.id}`}
+                  className="featured-leader"
+                  style={{ '--featured-color': fam.color || '#8c7a52', height: '100%' }}
+                >
+                  <div className="featured-leader-badge">
+                    {fam.name.charAt(0)}
+                  </div>
+                  <div className="featured-leader-info">
+                    <div className="featured-leader-name">
+                      {fam.name}
+                    </div>
+                    <div className="featured-leader-sub" style={{ marginTop: 4 }}>
+                      发迹地：{fam.ancestralHome || '未知'}
+                      {fam.leaderData?.length > 0 ? ` · ${fam.leaderData.length} 位相关人物` : ''}
+                    </div>
+                    {fam.description && (
+                      <div className="featured-leader-desc" style={{ marginTop: 8, opacity: 0.85 }}>
+                        {fam.description}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  )
+}

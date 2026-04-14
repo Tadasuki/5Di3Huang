@@ -1,0 +1,26 @@
+.radar-chart-container {
+  width: 340px;
+  height: 340px;
+  padding: var(--space-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.radar-chart-total {
+  margin-top: var(--space-sm);
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+  .radar-chart-container {
+    width: 280px;
+    height: 280px;
+  }
+}

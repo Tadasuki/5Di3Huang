@@ -1,0 +1,113 @@
+.about-page {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: calc(var(--navbar-height) + var(--space-xl));
+  padding-bottom: var(--space-3xl);
+}
+
+.about-hero {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.about-title {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-md);
+}
+
+.about-desc {
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--color-text-secondary);
+}
+
+.about-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-3xl);
+}
+
+.about-card {
+  padding: var(--space-xl);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.about-card-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+.about-card h3 {
+  margin-bottom: var(--space-sm);
+  font-size: 1.15rem;
+}
+
+.about-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.about-tech {
+  margin-top: var(--space-2xl);
+}
+
+.about-tech-title {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.tech-badge {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: all var(--transition-fast);
+}
+
+.tech-badge:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+.about-disclaimer {
+  margin-top: var(--space-3xl);
+  padding: var(--space-xl);
+  background: rgba(179, 58, 58, 0.05);
+  border: 1px solid rgba(179, 58, 58, 0.2);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.about-disclaimer h4 {
+  color: var(--color-vermilion-light);
+  margin-bottom: var(--space-sm);
+}
+
+.about-disclaimer p {
+  font-size: 0.85rem;
+  max-width: 600px;
+  margin: 0 auto;
+}

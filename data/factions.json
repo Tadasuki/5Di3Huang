@@ -1,0 +1,35 @@
+[
+  {
+    "id": "ccp",
+    "name": "中国共产党",
+    "shortName": "中共",
+    "category": "政党",
+    "color": "#b33a3a",
+    "description": "中国大陆唯一的合法执政党。"
+  },
+  {
+    "id": "dpp",
+    "name": "民主进步党",
+    "shortName": "民进党",
+    "category": "政党",
+    "color": "#009c1a",
+    "description": "台湾目前的执政党，是台湾主要政党之一。"
+  },
+  {
+    "id": "kmt",
+    "name": "中国国民党",
+    "shortName": "国民党",
+    "category": "政党",
+    "color": "#2b5fbf",
+    "description": "近现代中国重要政治力量之一。"
+  },
+  {
+    "id": "pgp",
+    "name": "中华进步党",
+    "shortName": "进步党",
+    "category": "政党",
+    "color": "#008013",
+    "description": "中华进步党是中华民国初期的一个政党，由共和党、民主党、统一党合并而来。"
+  }
+]
+

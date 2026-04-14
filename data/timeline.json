@@ -1,0 +1,176 @@
+[
+  {
+    "startYear": -2070,
+    "endYear": -1600,
+    "central": { "id": "xia", "name": "夏", "color": "#8B7355" },
+    "regional": []
+  },
+  {
+    "startYear": -1600,
+    "endYear": -1046,
+    "central": { "id": "shang", "name": "商", "color": "#6B4226" },
+    "regional": []
+  },
+  {
+    "startYear": -1046,
+    "endYear": -771,
+    "central": { "id": "western_zhou", "name": "西周", "color": "#4A6741" },
+    "regional": []
+  },
+  {
+    "startYear": -770,
+    "endYear": -256,
+    "central": { "id": "eastern_zhou", "name": "东周", "color": "#5C7A4A" },
+    "regional": [
+      { "id": "spring_autumn", "name": "春秋", "startYear": -770, "endYear": -476 },
+      { "id": "warring_states", "name": "战国", "startYear": -475, "endYear": -221 }
+    ]
+  },
+  {
+    "startYear": -221,
+    "endYear": -207,
+    "central": { "id": "qin", "name": "秦", "color": "#1a1a2e" },
+    "regional": []
+  },
+  {
+    "startYear": -202,
+    "endYear": 8,
+    "central": { "id": "western_han", "name": "西汉", "color": "#B22222" },
+    "regional": []
+  },
+  {
+    "startYear": 9,
+    "endYear": 23,
+    "central": { "id": "xin", "name": "新", "color": "#8B4513" },
+    "regional": []
+  },
+  {
+    "startYear": 25,
+    "endYear": 220,
+    "central": { "id": "eastern_han", "name": "东汉", "color": "#CD5C5C" },
+    "regional": []
+  },
+  {
+    "startYear": 220,
+    "endYear": 280,
+    "central": { "id": "three_kingdoms", "name": "三国", "color": "#808080" },
+    "regional": [
+      { "id": "wei", "name": "曹魏", "startYear": 220, "endYear": 265 },
+      { "id": "shu", "name": "蜀汉", "startYear": 221, "endYear": 263 },
+      { "id": "wu", "name": "东吴", "startYear": 229, "endYear": 280 }
+    ]
+  },
+  {
+    "startYear": 266,
+    "endYear": 316,
+    "central": { "id": "western_jin", "name": "西晋", "color": "#C0C0C0" },
+    "regional": []
+  },
+  {
+    "startYear": 317,
+    "endYear": 420,
+    "central": { "id": "eastern_jin", "name": "东晋", "color": "#A9A9A9" },
+    "regional": [
+      { "id": "16k", "name": "十六国", "startYear": 304, "endYear": 439 }
+    ]
+  },
+  {
+    "startYear": 420,
+    "endYear": 589,
+    "central": { "id": "southern_northern", "name": "南北朝", "color": "#6A5ACD" },
+    "regional": [
+      { "id": "northern_wei", "name": "北魏", "startYear": 386, "endYear": 534 },
+      { "id": "eastern_wei", "name": "东魏", "startYear": 534, "endYear": 550 },
+      { "id": "western_wei", "name": "西魏", "startYear": 535, "endYear": 557 },
+      { "id": "northern_qi", "name": "北齐", "startYear": 550, "endYear": 577 },
+      { "id": "northern_zhou", "name": "北周", "startYear": 557, "endYear": 581 },
+      { "id": "liu_song", "name": "刘宋", "startYear": 420, "endYear": 479 },
+      { "id": "southern_qi", "name": "南齐", "startYear": 479, "endYear": 502 },
+      { "id": "liang", "name": "梁", "startYear": 502, "endYear": 557 },
+      { "id": "chen", "name": "陈", "startYear": 557, "endYear": 589 }
+    ]
+  },
+  {
+    "startYear": 581,
+    "endYear": 618,
+    "central": { "id": "sui", "name": "隋", "color": "#DAA520" },
+    "regional": []
+  },
+  {
+    "startYear": 618,
+    "endYear": 907,
+    "central": { "id": "tang", "name": "唐", "color": "#c9a96e" },
+    "regional": [
+      { "id": "wu_zhou", "name": "武周", "startYear": 690, "endYear": 705 }
+    ]
+  },
+  {
+    "startYear": 907,
+    "endYear": 979,
+    "central": { "id": "five_ten", "name": "五代十国", "color": "#696969" },
+    "regional": [
+      { "id": "five_dynasties", "name": "五代", "startYear": 907, "endYear": 960 },
+      { "id": "ten_kingdoms", "name": "十国", "startYear": 902, "endYear": 979 }
+    ]
+  },
+  {
+    "startYear": 960,
+    "endYear": 1127,
+    "central": { "id": "northern_song", "name": "北宋", "color": "#2E8B57" },
+    "regional": [
+      { "id": "liao", "name": "辽", "startYear": 916, "endYear": 1125 },
+      { "id": "western_xia", "name": "西夏", "startYear": 1038, "endYear": 1227 }
+    ]
+  },
+  {
+    "startYear": 1127,
+    "endYear": 1279,
+    "central": { "id": "southern_song", "name": "南宋", "color": "#3CB371" },
+    "regional": [
+      { "id": "jin_dynasty", "name": "金", "startYear": 1115, "endYear": 1234 }
+    ]
+  },
+  {
+    "startYear": 1271,
+    "endYear": 1368,
+    "central": { "id": "yuan", "name": "元", "color": "#4169E1" },
+    "regional": []
+  },
+  {
+    "startYear": 1368,
+    "endYear": 1644,
+    "central": { "id": "ming", "name": "明", "color": "#9B111E" },
+    "regional": [
+      { "id": "choseon", "name": "朝鲜王国", "startYear": 1392, "endYear": 1897 },
+      { "id": "zheng", "name": "明郑", "startYear": 1628, "endYear": 1683 }
+    ]
+  },
+  {
+    "startYear": 1636,
+    "endYear": 1912,
+    "central": { "id": "qing", "name": "清", "color": "#D4AF37" },
+    "regional": [
+      { "id": "southern_ming", "name": "南明", "startYear": 1644, "endYear": 1662 },
+      { "id": "taiping", "name": "太平天国", "startYear": 1851, "endYear": 1864 }
+    ]
+  },
+  {
+    "startYear": 1912,
+    "endYear": null,
+    "central": { "id": "roc", "name": "中华民国", "color": "#003399" },
+    "regional": [
+      { "id": "warlords", "name": "各军阀", "startYear": 1916, "endYear": 1928 },
+      { "id": "soviet", "name": "中华苏维埃", "startYear": 1931, "endYear": 1937 },
+      { "id": "manchukuo", "name": "满洲国", "startYear": 1932, "endYear": 1945 },
+      { "id": "wangjingwei", "name": "日傀国民政府", "startYear": 1938, "endYear": 1945 }
+    ]
+  },
+  {
+    "startYear": 1949,
+    "endYear": null,
+    "central": { "id": "prc", "name": "中华人民共和国", "color": "#DE2910" },
+    "regional": [
+      { "id": "roc_taiwan", "name": "中华民国（台湾）", "startYear": 1949, "endYear": null }
+    ]
+  }
+]

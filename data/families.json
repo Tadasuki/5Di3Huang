@@ -1,0 +1,59 @@
+[
+  {
+    "id": "zhongli_zhu",
+    "name": "钟离朱氏",
+    "ancestralHome": "濠州钟离（今安徽凤阳）",
+    "ancestralHomeCoords": [
+      117.56,
+      32.86
+    ],
+    "color": "#9B111E",
+    "yHaplogroup": "O-MF12415",
+    "description": "大明皇族，由明太祖朱元璋开创，发迹于江淮一带的濠州钟离。"
+  },
+  {
+    "id": "fenghua_chiang",
+    "name": "奉化蒋氏",
+    "ancestralHome": "浙江奉化溪口",
+    "ancestralHomeCoords": [
+      121.28,
+      29.68
+    ],
+    "color": "#2b5fbf",
+    "description": "近代中国极具影响力的政治家族，以蒋介石、蒋经国父子为代表，主导了中华民国近半个世纪的政治走向。"
+  },
+  {
+    "id": "jeonju_yi",
+    "name": "全州李氏",
+    "ancestralHome": "全州（今全罗北道全州）",
+    "ancestralHomeCoords": [
+      127.1489,
+      35.8219
+    ],
+    "color": "#4169E1",
+    "description": "朝鲜半岛重要政治家族，发迹于全州。李成桂以此为基础开创了长达五百多年的朝鲜王朝。"
+  },
+  {
+    "id": "jianzhou_aixinjueluo",
+    "name": "建州爱新觉罗氏",
+    "ancestralHome": "赫图阿拉（今辽宁新宾）",
+    "ancestralHomeCoords": [
+      124.858986,
+      41.702268
+    ],
+    "color": "#DAA520",
+    "yHaplogroup": "C-F14749",
+    "description": "清朝皇室家族，发祥于东北建州女真，由努尔哈赤奠基、皇太极改族名为满洲，最终入主中原建立大清。"
+  },
+  {
+    "id": "shangqiu_zi",
+    "name": "殷商子姓王族",
+    "ancestralHome": "亳（今河南商丘或安徽亳州一带）",
+    "ancestralHomeCoords": [
+      115.65,
+      34.41
+    ],
+    "color": "#A0522D",
+    "description": "商朝王室家族，子姓，始祖为契，以商人贸易和青铜文明闻名。"
+  }
+]

@@ -1,0 +1,320 @@
+[
+  {
+    "id": "sap",
+    "name": "春秋",
+    "fullName": "春秋时期",
+    "startYear": -770,
+    "endYear": -476,
+    "color": "#6B8E6B",
+    "capital": "洛邑（周王畿）等",
+    "description": "东周前期，周王室衰微，齐、晋、楚、秦等诸侯争霸，礼乐征伐自诸侯出。这一时期编年史书《春秋》流传至今，故史称春秋。"
+  },
+  {
+    "id": "war",
+    "name": "战国",
+    "fullName": "战国时期",
+    "startYear": -475,
+    "endYear": -221,
+    "color": "#8B6914",
+    "capital": "各国都城",
+    "description": "东周后期，晋分三家，形成齐、楚、燕、韩、赵、魏、秦七雄并立，兼并战争激烈，变法图强，为秦统一六国奠定基础。"
+  },
+  {
+    "id": "wei",
+    "name": "曹魏",
+    "fullName": "曹魏",
+    "startYear": 220,
+    "endYear": 265,
+    "color": "#5C6B7A",
+    "capital": "洛阳",
+    "description": "曹丕代汉称帝所建，占据中原，与蜀汉、东吴鼎足而立。司马氏掌权后，曹魏被西晋取代。"
+  },
+  {
+    "id": "shu",
+    "name": "蜀汉",
+    "fullName": "蜀汉",
+    "startYear": 221,
+    "endYear": 263,
+    "color": "#6B8E23",
+    "capital": "成都",
+    "description": "刘备据益州称帝，国号汉，史称蜀汉。诸葛亮辅政，与魏、吴周旋，后为魏所灭。"
+  },
+  {
+    "id": "wu",
+    "name": "东吴",
+    "fullName": "孙吴",
+    "startYear": 229,
+    "endYear": 280,
+    "color": "#4682B4",
+    "capital": "建业（今南京）",
+    "description": "孙权称帝所建，据江南，与魏、蜀对峙。水师强盛，开发江南，为南朝开发奠定基础。"
+  },
+  {
+    "id": "16k",
+    "name": "十六国",
+    "fullName": "十六国时期",
+    "startYear": 304,
+    "endYear": 439,
+    "color": "#8B7355",
+    "capital": "各国流移",
+    "description": "西晋末年起，北方匈奴、鲜卑、羯、氐、羌等族与汉族政权在北方先后建立众多政权，史家择要称「十六国」，政局动荡，民族大融合。"
+  },
+  {
+    "id": "liu_song",
+    "name": "刘宋",
+    "fullName": "刘宋",
+    "startYear": 420,
+    "endYear": 479,
+    "color": "#7083b7",
+    "capital": "建康（今南京）",
+    "description": "东晋灭亡后，刘裕建立刘宋，开启南朝时期。期间政权多内斗，文治有一定成就，为后续南朝奠定基础。"
+  },
+  {
+    "id": "southern_qi",
+    "name": "南齐",
+    "fullName": "南齐",
+    "startYear": 479,
+    "endYear": 502,
+    "color": "#a49ac7",
+    "capital": "建康（今南京）",
+    "description": "萧道成灭刘宋建立南齐，延续南朝格局。统治时间较短，政局多变乱。"
+  },
+  {
+    "id": "liang",
+    "name": "梁",
+    "fullName": "南梁",
+    "startYear": 502,
+    "endYear": 557,
+    "color": "#b8a3e3",
+    "capital": "建康（今南京）",
+    "description": "萧衍建立南梁，佛教繁荣，文化昌盛。后期因侯景之乱国力大损，最终为陈所代。"
+  },
+  {
+    "id": "chen",
+    "name": "陈",
+    "fullName": "南陈",
+    "startYear": 557,
+    "endYear": 589,
+    "color": "#b39ddc",
+    "capital": "建康（今南京）",
+    "description": "南朝最后一代。陈霸先建立，后为隋军所灭，南北朝格局至此结束。"
+  },
+  {
+    "id": "northern_wei",
+    "name": "北魏",
+    "fullName": "北魏",
+    "startYear": 386,
+    "endYear": 534,
+    "color": "#6A8D92",
+    "capital": "平城、洛阳",
+    "description": "鲜卑拓跋氏建立，统一北方，推行均田制、汉化改革，后期迁都洛阳。国家分裂导致东魏、西魏建立。"
+  },
+  {
+    "id": "eastern_wei",
+    "name": "东魏",
+    "fullName": "东魏",
+    "startYear": 534,
+    "endYear": 550,
+    "color": "#778899",
+    "capital": "邺城",
+    "description": "北魏分裂后，北齐高氏实际掌控政权，称东魏，奉孝静帝为君，后为北齐所取代。"
+  },
+  {
+    "id": "western_wei",
+    "name": "西魏",
+    "fullName": "西魏",
+    "startYear": 535,
+    "endYear": 557,
+    "color": "#708090",
+    "capital": "长安",
+    "description": "北魏分裂后，宇文氏掌控西魏政权，推行府兵制及均田制，为隋唐制度奠基。西魏后由北周取代。"
+  },
+  {
+    "id": "northern_qi",
+    "name": "北齐",
+    "fullName": "北齐",
+    "startYear": 550,
+    "endYear": 577,
+    "color": "#BBD7E7",
+    "capital": "邺城",
+    "description": "东魏之后，高洋建立北齐，承袭东魏疆域与制度，短暂统治华北，后为北周所灭。"
+  },
+  {
+    "id": "northern_zhou",
+    "name": "北周",
+    "fullName": "北周",
+    "startYear": 557,
+    "endYear": 581,
+    "color": "#567483",
+    "capital": "长安",
+    "description": "宇文氏取代西魏建立，完成对北齐的统一，实行重要政治和军事改革，为隋朝奠定基础。"
+  },
+  {
+    "id": "wu_zhou",
+    "name": "武周",
+    "fullName": "武周",
+    "startYear": 690,
+    "endYear": 705,
+    "color": "#B8860B",
+    "capital": "洛阳",
+    "description": "武则天称帝所建国号周，史称武周，承唐制度而重科举与吏治，神龙政变后中宗复辟，仍属唐朝脉络。"
+  },
+  {
+    "id": "five_dynasties",
+    "name": "五代",
+    "fullName": "五代",
+    "startYear": 907,
+    "endYear": 960,
+    "color": "#696969",
+    "capital": "开封、洛阳等",
+    "description": "唐亡后，后梁、后唐、后晋、后汉、后周五个短命王朝相继统治中原，武将夺权频繁，为北宋统一铺路。"
+  },
+  {
+    "id": "ten_kingdoms",
+    "name": "十国",
+    "fullName": "十国",
+    "startYear": 902,
+    "endYear": 979,
+    "color": "#778899",
+    "capital": "成都、金陵、杭州等",
+    "description": "与五代大致同时，南方与巴蜀存在吴、南唐、吴越、楚、前蜀、后蜀、南汉、南平、闽、北汉等割据政权，合称十国（略有出入）。"
+  },
+  {
+    "id": "liao",
+    "name": "辽",
+    "fullName": "辽朝",
+    "startYear": 916,
+    "endYear": 1125,
+    "color": "#2F4F4F",
+    "capital": "上京临潢府等",
+    "description": "契丹耶律氏所建，控扼北方与燕云，与北宋长期并立，制度兼采唐宋与部落传统，后为金所灭。"
+  },
+  {
+    "id": "western_xia",
+    "name": "西夏",
+    "fullName": "西夏",
+    "startYear": 1038,
+    "endYear": 1227,
+    "color": "#8B4513",
+    "capital": "兴庆府（今银川）",
+    "description": "党项李元昊称帝，据河西与河套，与宋、辽（金）周旋，创西夏文，后为蒙古所灭。"
+  },
+  {
+    "id": "jin_dynasty",
+    "name": "金",
+    "fullName": "金朝",
+    "startYear": 1115,
+    "endYear": 1234,
+    "color": "#CD853F",
+    "capital": "会宁、中都、开封等",
+    "description": "女真完颜氏灭辽与北宋，据中原与北方，与南宋对峙，汉化加深，后为蒙古与南宋联军所灭。"
+  },
+  {
+    "id": "choseon",
+    "name": "朝鲜王国",
+    "fullName": "朝鲜王朝",
+    "relatedCentralDynastyId": "ming",
+    "startYear": 1392,
+    "endYear": 1897,
+    "color": "#4169E1",
+    "capital": "汉城（今首尔）",
+    "description": "李成桂建国，奉明正朔，与明清两代中国关系密切，儒学治国，甲午战争后国号改为大韩帝国。",
+    "leaders": ["sejong"]
+  },
+  {
+    "id": "zheng",
+    "name": "明郑",
+    "fullName": "明郑政权",
+    "startYear": 1628,
+    "endYear": 1683,
+    "color": "#CD5C5C",
+    "capital": "厦门、台湾",
+    "description": "郑成功及其子孙以反清复明为旗号，据台抗清，奉明正朔，施琅平台后纳入清朝版图。"
+  },
+  {
+    "id": "southern_ming",
+    "name": "南明",
+    "fullName": "南明政权",
+    "startYear": 1644,
+    "endYear": 1662,
+    "color": "#B22222",
+    "capital": "南京、福州、肇庆、昆明等",
+    "description": "明朝京师陷落后，宗室与遗臣在南方相继拥立弘光、隆武、绍武、永历等政权，联明抗清，史称南明。永历帝败走缅甸，被吴三桂擒杀，南明告终。南明史反映明清易代之际的政治军事与士人抉择。",
+    "relatedCentralDynastyId": "qing"
+  },
+  {
+    "id": "taiping",
+    "name": "太平天国",
+    "fullName": "太平天国",
+    "startYear": 1851,
+    "endYear": 1864,
+    "color": "#8B0000",
+    "capital": "天京（南京）",
+    "description": "洪秀全领导的农民政权，席卷南方，定都天京，颁布《天朝田亩制度》。与清廷长期内战，天京陷落后失败，深刻影响近代中国。"
+  },
+  {
+    "id": "warlords",
+    "name": "各军阀",
+    "fullName": "北洋军阀时期",
+    "startYear": 1916,
+    "endYear": 1928,
+    "color": "#556B2F",
+    "capital": "北京及各督军驻地",
+    "description": "袁世凯死后，北洋系分裂为直、皖、奉等派系，地方军阀割据，政局混乱，至北伐战争后南京国民政府形式上统一全国。"
+  },
+  {
+    "id": "soviet",
+    "name": "中华苏维埃",
+    "fullName": "中华苏维埃共和国",
+    "startYear": 1931,
+    "endYear": 1937,
+    "color": "#B22222",
+    "capital": "瑞金",
+    "description": "中国共产党在江西瑞金建立的苏维埃政权，与南京国民政府对峙，长征后撤销名义上的国家形态，融入抗日民族统一战线。"
+  },
+  {
+    "id": "manchukuo",
+    "name": "满洲国",
+    "fullName": "满洲国",
+    "startYear": 1932,
+    "endYear": 1945,
+    "color": "#2F4F4F",
+    "capital": "新京（长春）",
+    "description": "日本侵华期间在东北扶植的傀儡政权，溥仪为执政/皇帝。1945年苏联出兵东北后瓦解。",
+    "leaders": ["pu_yi"]
+  },
+  {
+    "id": "wangjingwei",
+    "name": "汪伪国民政府",
+    "fullName": "汪精卫国民政府",
+    "startYear": 1938,
+    "endYear": 1945,
+    "color": "#696969",
+    "capital": "南京",
+    "description": "抗战期间日本占领区扶植的傀儡政权，与重庆国民政府对峙，二战结束后被清算。"
+  },
+  {
+    "id": "roc_taiwan",
+    "name": "中华民国（台湾）",
+    "fullName": "中华民国（台湾）",
+    "relatedCentralDynastyId": "prc",
+    "startYear": 1949,
+    "endYear": null,
+    "color": "#003399",
+    "capital": "台北",
+    "description": "1949年后中华民国政府在台湾延续其法统与政治体制，与海峡两岸关系及国际秩序密切相关。",
+    "leaders": ["chiang_kai_shek", "chiang_ching_kuo", "lee_teng_hui", "chen_shui_bian", "ma_ying_jeou", "tsai_ing_wen", "lai_ching_te"]
+  },
+  {
+    "id": "prc_sec",
+    "name": "中共其他势力",
+    "fullName": "中共中央其他总书记",
+    "relatedCentralDynastyId": "prc",
+    "startYear": 1976,
+    "endYear": 1989,
+    "color": "#DE2910",
+    "capital": "北京",
+    "description": "反映中国共产党高层权力更迭的支线，主要呈现华国锋至江泽民之间中共中央最高负责人的变动情况。",
+    "leaders": ["hu_yaobang", "zhao_ziyang"]
+  }
+]
