@@ -54,6 +54,43 @@
       34.41
     ],
     "color": "#A0522D",
+    "yHaplogroup": "C-F10036",
     "description": "商朝王室家族，子姓，始祖为契，以商人贸易和青铜文明闻名。"
+  },
+  {
+    "id": "zhuozhou_zhao",
+    "name": "涿州赵氏",
+    "ancestralHome": "河北涿州",
+    "ancestralHomeCoords": [
+      115.98,
+      39.48
+    ],
+    "color": "#914614",
+    "yHaplogroup": "Q-MF10603",
+    "description": "宋朝皇族，发足于涿州，代表人物为宋太祖赵匡胤。其治下开创了重文轻武、繁荣昌盛的大宋文明。"
+  },
+  {
+    "id": "longxi_li",
+    "name": "陇西李氏",
+    "ancestralHome": "陇西（今甘肃临洮一带）",
+    "ancestralHomeCoords": [
+      103.57,
+      35.31
+    ],
+    "color": "#6B4226",
+    "yHaplogroup": "O-M175",
+    "description": "唐朝皇族，发足于陇西，代表人物为唐太宗李世民。其治下开创了贞观之治，使唐朝成为当时世界上最强大的国家之一。"
+  },
+  {
+    "id": "qin_ying",
+    "name": "秦国嬴姓公族",
+    "ancestralHome": "秦邑（今甘肃天水一带）",
+    "ancestralHomeCoords": [
+      105.72,
+      34.58
+    ],
+    "color": "#8B0000",
+    "yHaplogroup": "O-MF14479",
+    "description": "嬴姓赵氏。由秦非子建立秦国，最终由秦始皇嬴政统一六国，开启了中国两千多年的大一统帝制。"
   }
 ]

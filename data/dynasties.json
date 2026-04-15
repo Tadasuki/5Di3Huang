@@ -78,6 +78,24 @@
     ]
   },
   {
+    "id": "song",
+    "name": "宋",
+    "fullName": "宋朝",
+    "startYear": 960,
+    "endYear": 1279,
+    "type": "central",
+    "color": "#914614",
+    "capital": "开封",
+    "capitalCoords": [
+      114.34,
+      34.79
+    ],
+    "description": "中国历史上承五代十国、下启元朝的朝代。分北宋（960—1127年）与南宋（1127—1279年），是中国历史上经济、文化、教育与科学创新高度发达的时期。",
+    "leaders": [
+      "zhao_kuangyin"
+    ]
+  },
+  {
     "id": "ming",
     "name": "明",
     "fullName": "明朝",

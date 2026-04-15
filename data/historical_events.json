@@ -36,6 +36,23 @@
     "leaderIds": ["li_shimin"]
   },
   {
+    "id": "chenqiao_mutiny",
+    "name": "陈桥兵变",
+    "year": 960,
+    "coords": [
+      114.47,
+      34.96
+    ],
+    "location": "陈桥驿（今河南封丘东南）",
+    "polityId": "song",
+    "type": "政变",
+    "summary": "后周末年，赵匡胤受命率军北上御敌，行至陈桥驿时，部属发动政变，将黄袍加在他身上，拥立其为皇帝。",
+    "impact": "这也标志着五代十国的终结和宋朝的建立。通过和平禅让的方式实现了政权交替，减少了社会动荡。",
+    "leaderIds": [
+      "zhao_kuangyin"
+    ]
+  },
+  {
     "id": "founding_prc",
     "name": "开国大典",
     "year": 1949,

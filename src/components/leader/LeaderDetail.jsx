@@ -236,6 +236,13 @@ export default function LeaderDetail() {
                     finalNextList.push({ leader: hyb, groupId: 'prc_sec', groupLabel: '总书记' })
                 }
             }
+            if (id === 'deng_xiaoping') {
+                const jzm = allLeaders.find(l => l.id === 'jiang_zemin')
+                if (jzm) {
+                    // 邓小平直接跳转到江泽民，绕过胡、赵
+                    finalNextList = [{ leader: jzm, groupId: 'central', groupLabel: '领导核心' }]
+                }
+            }
             if (id === 'hu_yaobang') {
                 const hgf = allLeaders.find(l => l.id === 'hua_guofeng')
                 if (hgf) {
@@ -249,10 +256,11 @@ export default function LeaderDetail() {
                 }
             }
             if (id === 'jiang_zemin') {
+                const dxp = allLeaders.find(l => l.id === 'deng_xiaoping')
                 const zzy = allLeaders.find(l => l.id === 'zhao_ziyang')
-                if (zzy) {
-                    finalPrevList.push({ leader: zzy, groupId: 'prc_sec', groupLabel: '总书记' })
-                }
+                finalPrevList = []
+                if (dxp) finalPrevList.push({ leader: dxp, groupId: 'central', groupLabel: '领导核心' })
+                if (zzy) finalPrevList.push({ leader: zzy, groupId: 'prc_sec', groupLabel: '总书记' })
             }
 
             const seenPrev = new Set()

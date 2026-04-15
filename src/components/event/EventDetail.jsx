@@ -55,11 +55,11 @@ export default function EventDetail() {
             <h1 className="event-title">{event.name}</h1>
             <div className="event-meta">
               <span>📅 {event.year}</span>
-            {event.location && (
-              <Link to={`/map?event=${event.id}`} className="location-link tag-clickable" title="在地图中定位该地点">
-                📍 {event.location} <span className="jump-icon">↗</span>
-              </Link>
-            )}
+              {event.location && (
+                <Link to={`/map?event=${event.id}`} className="location-link tag-clickable" title="在地图中定位该地点">
+                  📍 {event.location} <span className="jump-icon">↗</span>
+                </Link>
+              )}
               {event.type && (
                 <Link to={`/events/type/${encodeURIComponent(event.type)}`} className="event-type-tag tag-clickable">
                   🏷 {event.type} <span className="jump-icon">↗</span>
