@@ -3,6 +3,10 @@
     "name": "胡耀邦",
     "title": "中共中央主席、中共中央总书记",
     "image": "/leaders/prc/hyb.jpg",
+    "quote": {
+        "text": "对同志要宽厚，对家属要严厉。",
+        "source": "胡耀邦"
+    },
     "shortTitle": "总书记",
     "factionId": "ccp",
     "factionTag": "改革派",

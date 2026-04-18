@@ -41,7 +41,7 @@ export default function CompareRadar({ left, right, leftColor, rightColor }) {
     labels: RATING_DIMENSIONS.map(d => d.label),
     datasets: [
       {
-        label: left?.name || '左侧',
+        label: left?.name || '被对比方',
         data: getRatings(left),
         backgroundColor: withOpacity(leftColor, 0.18),
         borderColor: leftColor,
@@ -52,7 +52,7 @@ export default function CompareRadar({ left, right, leftColor, rightColor }) {
         pointRadius: 4,
       },
       {
-        label: right?.name || '右侧',
+        label: right?.name || '对比方',
         data: getRatings(right),
         backgroundColor: withOpacity(rightColor, 0.14),
         borderColor: rightColor,
@@ -74,7 +74,7 @@ export default function CompareRadar({ left, right, leftColor, rightColor }) {
         grid: { color: 'rgba(44, 40, 32, 0.06)' },
         pointLabels: {
           color: '#5c5548',
-          font: { size: 13, family: "'Noto Sans SC', sans-serif", weight: 600 },
+          font: { size: 13, family: "'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif", weight: 600 },
         },
         ticks: { display: false, stepSize: 20 },
         suggestedMin: 0,
@@ -86,7 +86,7 @@ export default function CompareRadar({ left, right, leftColor, rightColor }) {
         display: true,
         labels: {
           color: '#5c5548',
-          font: { family: "'Noto Sans SC', sans-serif", size: 12, weight: 600 },
+          font: { family: "'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif", size: 12, weight: 600 },
           boxWidth: 10,
           boxHeight: 10,
           usePointStyle: true,

@@ -2,6 +2,8 @@ import { useParams, Link } from 'react-router-dom'
 import { useFamily } from '../../hooks/useDynasties'
 import LeaderCard from '../home/LeaderCard'
 import { withOpacity } from '../../utils/colorUtils'
+import { getFamilyBadgeText } from '../../utils/familyBadge'
+import AnnotatedText from '../common/AnnotatedText'
 import './FamilyDetail.css'
 
 export default function FamilyDetail() {
@@ -31,15 +33,14 @@ export default function FamilyDetail() {
   }
 
   const color = family.color || '#c9a96e'
+  const badgeText = getFamilyBadgeText(family)
+  const badgeCompact = badgeText.length >= 3
+  const haplogroup = typeof family?.yHaplogroup === 'string' ? family.yHaplogroup.trim() : ''
+  const haplogroupUrl = haplogroup ? `https://www.theytree.com/tree/${encodeURIComponent(haplogroup)}` : ''
 
   return (
     <div className="family-detail" id={`family-detail-${family.id}`}>
       <div className="container">
-        <div className="family-detail-nav">
-          <Link to="/" className="family-detail-back">← 首页</Link>
-          <Link to="/map" className="family-detail-back">历史地图</Link>
-        </div>
-
         <header className="family-detail-header" style={{ '--family-color': color }}>
           <div
             className="family-detail-badge"
@@ -47,22 +48,40 @@ export default function FamilyDetail() {
               background: `linear-gradient(135deg, ${color}, ${withOpacity(color, 0.6)})`
             }}
           >
-            {(family.name || '族').charAt(0)}
+            {badgeText.length === 4 ? (
+              <div style={{
+                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px',
+                fontSize: '1.35rem', lineHeight: 1, padding: '0', margin: 'auto',
+                fontFamily: 'var(--font-serif)', fontWeight: 900, letterSpacing: 0
+              }}>
+                {badgeText.split('').map((c, i) => <span key={i} style={{ textAlign: 'center' }}>{c}</span>)}
+              </div>
+            ) : (
+              <span className={`family-detail-badge-text${badgeCompact ? ' family-detail-badge-text--compact' : ''}`}>
+                {badgeText}
+              </span>
+            )}
           </div>
 
           <div className="family-detail-intro">
-            <p className="family-detail-label">统治者家族</p>
+            <p className="family-detail-label">执政者家族</p>
             <h1 className="family-detail-title">
               {family.name}
-              {family.yHaplogroup && (
-                <span className="family-haplogroup-tag" title="Y染色体单倍群">
-                  {family.yHaplogroup}
-                </span>
+              {haplogroup && (
+                <a
+                  className="family-haplogroup-tag family-haplogroup-link family-tag-clickable"
+                  title="在 YTree 查看该单倍群"
+                  href={haplogroupUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {haplogroup} <span className="family-jump-icon">↗</span>
+                </a>
               )}
             </h1>
 
             {family.description && (
-              <p className="family-detail-desc">{family.description}</p>
+              <p className="family-detail-desc"><AnnotatedText text={family.description} /></p>
             )}
 
             <div className="family-detail-meta">

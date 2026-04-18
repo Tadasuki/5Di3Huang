@@ -56,7 +56,7 @@
 .map-container {
   flex: 1;
   position: relative;
-  min-height: 500px;
+  min-height: 750px;
   margin: 0 var(--space-lg) var(--space-lg);
   border: 2px solid var(--color-gold);
   border-radius: var(--radius-md);
@@ -70,7 +70,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  min-height: 500px;
+  /* 地图框纵宽 */
+  min-height: 750px;
   background: var(--color-bg-secondary);
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-md);
@@ -100,13 +101,22 @@
 .map-legend {
   position: absolute;
   bottom: 48px;
-  left: var(--space-lg);
+  left: 16px;
   background: var(--color-navbar-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
   z-index: 10;
+  box-shadow: var(--shadow-card);
+}
+
+.map-legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .map-legend-title {
@@ -114,7 +124,35 @@
   color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: var(--space-sm);
+}
+
+.map-legend-toggle {
+  font-size: 0.6rem;
+  color: var(--color-text-tertiary);
+  margin-left: var(--space-md);
+  transition: transform var(--transition-fast);
+}
+
+.map-legend-content-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map-legend.expanded .map-legend-content-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.map-legend-content {
+  overflow: hidden;
+  padding-top: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease, padding-top 0.3s ease;
+}
+
+.map-legend.expanded .map-legend-content {
+  padding-top: var(--space-sm);
+  opacity: 1;
 }
 
 .map-legend-item {

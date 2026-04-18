@@ -3,6 +3,10 @@
   "name": "赵紫阳",
   "alternateNames": "赵修业（原）",
   "image": "/leaders/prc/zzy.jpg",
+  "quote": {
+    "text": "我们已经老了，无所谓了。",
+    "source": "1989年5月19日于天安门广场"
+  },
   "title": "国务院总理、中共中央总书记",
   "shortTitle": "总书记",
   "factionId": "ccp",

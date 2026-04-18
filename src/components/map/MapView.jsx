@@ -62,6 +62,7 @@ export default function MapView() {
     const markersRef = useRef([])
     const [mapLoaded, setMapLoaded] = useState(globalMapLoaded)
     const [filter, setFilter] = useState(searchParams.get('filter') || 'all')
+    const [isLegendExpanded, setIsLegendExpanded] = useState(window.innerWidth > 768)
 
     // 统一的“先 resize 再飞行”：避免容器尺寸未就绪导致图标/画布错位到左上角
     const flyToFocus = useMemo(() => {
@@ -214,14 +215,14 @@ export default function MapView() {
             markersRef.current.forEach(m => m.remove())
             markersRef.current = []
 
-            // 1a. 添加家族/统治者祖籍点 (符合 "all" 或 "祖籍" 过滤条件时显示)
+            // 1a. 添加家族/执政者祖籍点 (符合 "all" 或 "祖籍" 过滤条件时显示)
             if (filter === 'all' || filter === '祖籍') {
                 // 1) 绘制家族
                 families.forEach(fam => {
                     if (fam.ancestralHomeCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
-                <div style="font-family: sans-serif; padding: 4px;">
+                <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
                   <strong style="color: ${fam.color || '#c9a96e'}">${fam.name}</strong>
                   <br/><small>发迹地: ${fam.ancestralHome}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/family/${fam.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">家族详情</button>
@@ -240,12 +241,12 @@ export default function MapView() {
                     }
                 })
 
-                // 2) 绘制没有单独归类家族的统治者个体祖籍
+                // 2) 绘制没有单独归类家族的执政者个体祖籍
                 leaders.forEach(leader => {
                     if (!leader.familyId && leader.ancestralHomeCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
-                <div style="font-family: sans-serif; padding: 4px;">
+                <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
                   <strong>${leader.name}</strong>
                   <br/><small>祖籍: ${leader.ancestralHome}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/leader/${leader.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">人物详情</button>
@@ -266,13 +267,13 @@ export default function MapView() {
                 })
             }
 
-            // 1b. 添加统治者出生地点 (符合 "all" 或 "出生地" 过滤条件时显示)
+            // 1b. 添加执政者出生地点 (符合 "all" 或 "出生地" 过滤条件时显示)
             if (filter === 'all' || filter === '出生地') {
                 leaders.forEach(leader => {
                     if (leader.birthplaceCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
-                <div style="font-family: sans-serif; padding: 4px;">
+                <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
                   <strong>${leader.name}</strong>
                   <br/><small>出生地: ${leader.birthplace}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/leader/${leader.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">人物详情</button>
@@ -300,7 +301,7 @@ export default function MapView() {
                         const timeStr = evt.year < 0 ? `公元前${Math.abs(evt.year)}年` : `公元${evt.year}年`
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
-                <div style="font-family: sans-serif; padding: 4px; max-width: 200px;">
+                <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px; max-width: 200px;">
                   <strong style="color: var(--color-vermilion);">${evt.name}</strong> <small>(${timeStr})</small>
                   <br/><span style="font-size: 0.8rem;">${evt.location}</span>
                   <br/><small style="display: block; margin-top: 4px; line-height: 1.4;">${evt.summary}</small>
@@ -328,7 +329,7 @@ export default function MapView() {
                     if (polity.capitalCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
-                <div style="font-family: sans-serif; padding: 4px;">
+                <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
                   <strong style="color: var(--color-jade);">${polity.name}都城：${polity.capital}</strong>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/${polity.routeType}/${polity.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">政权详情</button>
                 </div>
@@ -403,23 +404,30 @@ export default function MapView() {
                     {/* 增加一层隔离的原生挂载点，彻底防止 React 渲染下方图例时误杀地图节点 */}
                     <div ref={mapContainer} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
                     {mapLoaded && (
-                        <div className="map-legend">
-                            <div className="map-legend-title">图例</div>
-                            <div className="map-legend-item">
-                                <span className="map-legend-dot" style={{ background: '#c9a96e' }} />
-                                统治者祖籍
+                        <div className={`map-legend ${isLegendExpanded ? 'expanded' : 'collapsed'}`}>
+                            <div className="map-legend-header" onClick={() => setIsLegendExpanded(!isLegendExpanded)}>
+                                <div className="map-legend-title" style={{ margin: 0 }}>图例</div>
+                                <span className="map-legend-toggle">{isLegendExpanded ? '▼' : '▲'}</span>
                             </div>
-                            <div className="map-legend-item">
-                                <span className="map-legend-dot" style={{ background: '#3a7cb3' }} />
-                                统治者出生地
-                            </div>
-                            <div className="map-legend-item">
-                                <span className="map-legend-dot" style={{ background: '#b33a3a' }} />
-                                历史事件
-                            </div>
-                            <div className="map-legend-item">
-                                <span className="map-legend-dot" style={{ background: '#4a8b6f' }} />
-                                历代都城
+                            <div className="map-legend-content-wrapper">
+                                <div className="map-legend-content">
+                                    <div className="map-legend-item">
+                                        <span className="map-legend-dot" style={{ background: '#c9a96e' }} />
+                                        执政者祖籍
+                                    </div>
+                                    <div className="map-legend-item">
+                                        <span className="map-legend-dot" style={{ background: '#3a7cb3' }} />
+                                        执政者出生地
+                                    </div>
+                                    <div className="map-legend-item">
+                                        <span className="map-legend-dot" style={{ background: '#b33a3a' }} />
+                                        历史事件
+                                    </div>
+                                    <div className="map-legend-item">
+                                        <span className="map-legend-dot" style={{ background: '#4a8b6f' }} />
+                                        历代都城
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

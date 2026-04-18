@@ -4,7 +4,10 @@ import { useDynasties, useFamilies } from '../../hooks/useDynasties'
 import { useRegionalRegimes } from '../../hooks/useRegionalRegime'
 import { useHistoricalEvents } from '../../hooks/useHistoricalEvents'
 import { useSearchVisibility } from '../../context/SearchVisibilityContext'
+import { getLeaderImageSrc } from '../../utils/leaderImage'
+import { getFamilyBadgeText } from '../../utils/familyBadge'
 import { getLeaderShortTitle } from '../../utils/leaderTitle'
+import AnnotatedText from '../common/AnnotatedText'
 import LeaderCard from './LeaderCard'
 import DynastySection from './DynastySection'
 import './HomePage.css'
@@ -36,8 +39,21 @@ export default function HomePage() {
   const [seed] = useState(() => Math.random())
   const { setHomeSearchVisible } = useSearchVisibility()
   const searchRef = useRef(null)
+  const [featuredImgFailed, setFeaturedImgFailed] = useState({})
 
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    if (loading) return
+    const raw = sessionStorage.getItem('homeScrollRestoreY')
+    if (!raw) return
+    sessionStorage.removeItem('homeScrollRestoreY')
+    const y = Number(raw)
+    if (!Number.isFinite(y) || y < 0) return
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: y, behavior: 'auto' })
+    })
+  }, [loading])
 
   useEffect(() => {
     const el = searchRef.current
@@ -113,7 +129,7 @@ export default function HomePage() {
       .filter(p => p.leaderData.length > 0 || match(p.name) || match(p.fullName))
   }, [polities, search])
 
-  const totalLeaders = polities.reduce((sum, d) => sum + (d.leaderData || []).length, 0)
+  const totalLeaders = allLeaders.length
 
   const filteredLeaders = useMemo(() => {
     const raw = search.trim()
@@ -146,9 +162,27 @@ export default function HomePage() {
       <section className="hero">
         <div className="container">
           <h1 className="hero-title">五帝三皇神圣事</h1>
-          <p className="hero-subtitle">
-            五帝三皇神圣事，骗了无涯过客。有多少风流人物？<br></br>盗跖庄蹻流誉后，更陈王奋起挥黄钺。歌未竟，东方白。
-          </p>
+          <div className="hero-subtitle" style={{
+            margin: 'var(--space-2xl) auto var(--space-2xl)',
+            padding: 'var(--space-md) clamp(10px, 3vw, var(--space-xl))',
+            maxWidth: '680px',
+            borderTop: '1px dashed var(--color-border)',
+            borderBottom: '1px dashed var(--color-border)',
+            position: 'relative'
+          }}>
+            <div style={{ position: 'absolute', top: '-18px', left: '50%', transform: 'translateX(-50%)', background: 'transparent', fontSize: '2rem', color: 'var(--color-gold-light)', lineHeight: '1', fontFamily: 'var(--font-serif)' }}>
+              ❝
+            </div>
+            <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(0.88rem, 4.5vw, 1.25rem)', lineHeight: '2.2', color: 'var(--color-text-primary)', textAlign: 'center', margin: 'var(--space-lg) 0 var(--space-sm) 0', whiteSpace: 'nowrap' }}>
+              五帝三皇神圣事，骗了无涯过客。<br/>
+              有多少风流人物？<br/>
+              盗跖庄蹻流誉后，更陈王奋起挥黄钺。<br/>
+              歌未竟，东方白。
+            </p>
+            <div style={{ textAlign: 'right', fontSize: 'clamp(0.75rem, 3.8vw, 1.05rem)', color: 'var(--color-gold)', fontFamily: 'var(--font-serif)', whiteSpace: 'nowrap' }}>
+              —— <Link to="/leader/mao_zedong" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '4px', textDecorationThickness: '0.7px' }}>毛泽东</Link>《贺新郎·读史》
+            </div>
+          </div>
           <div className="hero-stats">
             <div className="hero-stat">
               <div className="hero-stat-value">{polities.length}</div>
@@ -188,40 +222,56 @@ export default function HomePage() {
               </div>
               {featuredLeaders.length > 0 ? (
                 <div className="featured-grid">
-                  {featuredLeaders.map(leader => (
-                    <Link
-                      key={leader.id}
-                      to={`/leader/${leader.id}`}
-                      className="featured-leader"
-                      style={{ '--featured-color': getLeaderThemeColor(leader) }}
-                    >
-                      <div className="featured-leader-badge">
-                        {leader.name.charAt(0)}
-                      </div>
-                      <div className="featured-leader-info">
-                        <div className="featured-leader-name">
-                          {leader.name}
-                          {leader.templeName && (
-                            <span className="featured-leader-tag">{leader.templeName}</span>
+                  {featuredLeaders.map(leader => {
+                    const imageSrc = getLeaderImageSrc(leader)
+                    const showImage = imageSrc && !featuredImgFailed[leader.id]
+                    return (
+                      <Link
+                        key={leader.id}
+                        to={`/leader/${leader.id}`}
+                        className="featured-leader"
+                        style={{ '--featured-color': getLeaderThemeColor(leader) }}
+                      >
+                        <div className="featured-leader-badge">
+                          {showImage ? (
+                            <img
+                              src={imageSrc}
+                              alt={leader.name}
+                              className="featured-leader-avatar-img"
+                              loading="lazy"
+                              onError={() => {
+                                setFeaturedImgFailed(prev => ({ ...prev, [leader.id]: true }))
+                              }}
+                            />
+                          ) : (
+                            leader.name.charAt(0)
                           )}
                         </div>
-                        <div className="featured-leader-sub">
-                          {getLeaderShortTitle(leader) || '执政者'}
-                          {typeof leader?.factionTag === 'string' && leader.factionTag.trim()
-                            ? ` · ${leader.factionTag.trim()}`
-                            : ''}
-                          {leader.reignStart != null && leader.reignEnd != null
-                            ? ` · ${leader.reignStart}—${leader.reignEnd}`
-                            : ''}
-                        </div>
-                        {leader.summary && (
-                          <div className="featured-leader-desc">
-                            {leader.summary}
+                        <div className="featured-leader-info">
+                          <div className="featured-leader-name">
+                            {leader.name}
+                            {leader.templeName && (
+                              <span className="featured-leader-tag">{leader.templeName}</span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </Link>
-                  ))}
+                          <div className="featured-leader-sub">
+                            {getLeaderShortTitle(leader) || '执政者'}
+                            {typeof leader?.factionTag === 'string' && leader.factionTag.trim()
+                              ? ` · ${leader.factionTag.trim()}`
+                              : ''}
+                            {leader.reignStart != null && leader.reignEnd != null
+                              ? ` · ${leader.reignStart}—${leader.reignEnd}`
+                              : ''}
+                          </div>
+                          {leader.summary && (
+                            <div className="featured-leader-desc">
+                              <AnnotatedText text={leader.summary} />
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="panel-empty">暂无人物数据</div>
@@ -244,7 +294,7 @@ export default function HomePage() {
                     <div className="event-year">{evt.year}</div>
                     <div className="event-body">
                       <div className="event-name">{evt.name}</div>
-                      <div className="event-desc">{evt.summary || evt.impact || ''}</div>
+                      <div className="event-desc"><AnnotatedText text={evt.summary || evt.impact || ''} /></div>
                     </div>
                   </Link>
                 ))}
@@ -301,7 +351,12 @@ export default function HomePage() {
         )}
 
         {!search.trim() && families && families.length > 0 && (
-          <section className="home-families" aria-label="统治者家族" style={{ marginTop: 'var(--space-2xl)', paddingBottom: 'var(--space-xl)' }}>
+          <section
+            id="home-families"
+            className="home-families"
+            aria-label="执政者家族"
+            style={{ marginTop: 'var(--space-2xl)', paddingBottom: 'var(--space-xl)' }}
+          >
             <div className="panel-title-row">
               <h2 className="panel-title">历史家族</h2>
               <Link to="/map" className="panel-link">去地图查看发迹地 →</Link>
@@ -313,9 +368,22 @@ export default function HomePage() {
                   to={`/family/${fam.id}`}
                   className="featured-leader"
                   style={{ '--featured-color': fam.color || '#8c7a52', height: '100%' }}
+                  onClick={() => {
+                    sessionStorage.setItem('homeScrollRestoreY', String(window.scrollY))
+                  }}
                 >
                   <div className="featured-leader-badge">
-                    {fam.name.charAt(0)}
+                    {getFamilyBadgeText(fam).length === 4 ? (
+                      <div style={{
+                        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px',
+                        fontSize: '1.05rem', lineHeight: 1, padding: '0', margin: 'auto',
+                        fontFamily: 'var(--font-serif)', fontWeight: 900, letterSpacing: 0
+                      }}>
+                        {getFamilyBadgeText(fam).split('').map((c, i) => <span key={i} style={{ textAlign: 'center' }}>{c}</span>)}
+                      </div>
+                    ) : (
+                      getFamilyBadgeText(fam)
+                    )}
                   </div>
                   <div className="featured-leader-info">
                     <div className="featured-leader-name">
@@ -327,7 +395,7 @@ export default function HomePage() {
                     </div>
                     {fam.description && (
                       <div className="featured-leader-desc" style={{ marginTop: 8, opacity: 0.85 }}>
-                        {fam.description}
+                        <AnnotatedText text={fam.description} />
                       </div>
                     )}
                   </div>

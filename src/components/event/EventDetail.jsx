@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useHistoricalEvent, useHistoricalEvents } from '../../hooks/useHistoricalEvents'
 import { useAllLeaders } from '../../hooks/useDynasties'
 import LeaderCard from '../home/LeaderCard'
+import AnnotatedText from '../common/AnnotatedText'
 import './EventDetail.css'
 
 export default function EventDetail() {
@@ -44,11 +45,6 @@ export default function EventDetail() {
   return (
     <div className="event-detail" id={`event-detail-${event.id}`}>
       <div className="container">
-        <div className="event-detail-nav">
-          <Link to="/" className="event-detail-back">← 首页</Link>
-          <Link to="/map" className="event-detail-back">地图</Link>
-        </div>
-
         <header className="event-header">
           <div className="event-badge">{event.name.charAt(0)}</div>
           <div className="event-header-main">
@@ -66,13 +62,13 @@ export default function EventDetail() {
                 </Link>
               )}
             </div>
-            {event.summary && <p className="event-summary">{event.summary}</p>}
+            {event.summary && <p className="event-summary"><AnnotatedText text={event.summary} /></p>}
           </div>
         </header>
 
         <section className="event-section" aria-labelledby="event-impact-heading">
           <h2 id="event-impact-heading" className="event-section-title">影响</h2>
-          <p className="event-text">{event.impact || '暂无影响描述。'}</p>
+          <p className="event-text"><AnnotatedText text={event.impact || '暂无影响描述。'} /></p>
         </section>
 
         <section className="event-section" aria-labelledby="event-people-heading">
@@ -111,7 +107,8 @@ export default function EventDetail() {
                     </div>
                     <div className="event-timeline-name">{e.name}</div>
                     <div className="event-timeline-desc">
-                      {e.location && <span>📍 {e.location} · </span>}{e.summary || e.impact || ''}
+                      {e.location && <span>📍 {e.location} · </span>}
+                      <AnnotatedText text={e.summary || e.impact || ''} />
                     </div>
                   </div>
                 </Link>

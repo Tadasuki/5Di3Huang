@@ -42,7 +42,7 @@
   padding: var(--space-md) 0 var(--space-3xl);
 }
 
-/* 中央时间轴 */
+/* 中央时间轴 — enhanced with glow */
 .timeline-axis {
   position: absolute;
   left: 50%;
@@ -60,7 +60,9 @@
     var(--color-gold) 92%,
     transparent
   );
-  box-shadow: 0 0 20px rgba(166, 124, 50, 0.12);
+  box-shadow:
+    0 0 20px rgba(166, 124, 50, 0.12),
+    0 0 40px rgba(166, 124, 50, 0.05);
 }
 
 .timeline-axis::before {
@@ -106,7 +108,7 @@
   justify-self: start;
 }
 
-/* 年代节点（落在轴线栅格内） */
+/* 年代节点（落在轴线栅格内） — enhanced with ring animation */
 .timeline-dot {
   grid-column: 2;
   grid-row: 1;
@@ -118,9 +120,15 @@
   border: 3px solid var(--color-bg-primary);
   z-index: 2;
   box-shadow: 0 0 12px rgba(44, 40, 32, 0.18);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* ---- 卡片尺寸：固定宽度，避免长短不一 ---- */
+.timeline-entry:hover .timeline-dot {
+  transform: scale(1.25);
+  box-shadow: 0 0 18px rgba(166, 124, 50, 0.35);
+}
+
+/* ---- 卡片 — enhanced with subtle gradients ---- */
 .timeline-card {
   padding: var(--space-md);
   background: var(--color-bg-card);
@@ -128,12 +136,42 @@
   border-radius: var(--radius-md);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 .timeline-card--central {
   width: 280px;
   min-width: 280px;
   max-width: 280px;
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-card),
+    color-mix(in srgb, var(--color-bg-card) 92%, var(--color-gold))
+  );
+}
+
+/* Decorative accent line on central cards */
+.timeline-card--central::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold),
+    transparent
+  );
+  opacity: 0.3;
+  transition: opacity var(--transition-fast);
+}
+
+.timeline-dynasty-link:hover .timeline-card--central::after {
+  opacity: 0.7;
 }
 
 .timeline-card--regional {
@@ -156,6 +194,7 @@
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
 }
 
 .timeline-card-color--regional {
@@ -178,6 +217,8 @@
 .timeline-card-years {
   font-size: 0.8rem;
   color: var(--color-text-tertiary);
+  font-family: var(--font-serif);
+  letter-spacing: 0.3px;
 }
 
 .timeline-card-years--small {
@@ -245,6 +286,9 @@
   border-color: var(--color-border-hover);
 }
 
+/* ========================================
+   TABLET
+   ======================================== */
 @media (max-width: 900px) {
   .timeline-card--central {
     width: 240px;
@@ -260,67 +304,167 @@
   }
 }
 
-@media (max-width: 768px) {
+/* ========================================
+   MOBILE — Complete redesign for clarity
+   ======================================== */
+@media (max-width: 1024px) {
+  .timeline-page {
+    padding-top: calc(var(--navbar-height) + var(--space-md));
+  }
+
+  .timeline-page-title {
+    font-size: 1.6rem;
+  }
+
+  .timeline-page-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    padding: 0 var(--space-sm);
+  }
+
+  /* ---- Axis: thin line hugging left edge ---- */
   .timeline-container {
-    padding-left: var(--space-sm);
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .timeline-axis {
-    left: 22px;
+    left: 20px;
     margin-left: 0;
+    width: 2px;
   }
 
+  .timeline-axis::before {
+    width: 10px;
+    height: 10px;
+    top: -6px;
+  }
+
+  /* ---- Entry: single column, flowing right of axis ---- */
   .timeline-entry {
-    grid-template-columns: 1fr;
-    padding-left: 52px;
-    margin-bottom: var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-left: 44px;
+    padding-right: var(--space-md);
+    margin-bottom: var(--space-md);
   }
 
+  /* ---- Dot: positioned on the axis ---- */
+  .timeline-dot {
+    position: absolute;
+    left: 20px;
+    top: 16px;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+    grid-column: unset;
+    grid-row: unset;
+    justify-self: unset;
+    align-self: unset;
+  }
+
+  .timeline-entry:hover .timeline-dot {
+    transform: translateX(-50%) scale(1.25);
+  }
+
+  /* ---- Cluster: stack vertically ---- */
   .timeline-entry-cluster {
-    grid-column: 1 !important;
-    justify-self: stretch !important;
+    grid-column: unset !important;
+    justify-self: unset !important;
     flex-direction: column;
     width: 100%;
-    gap: var(--space-md);
+    gap: 6px;
   }
 
-  /* 移动端：先中央、再割据，阅读顺序统一 */
-  .timeline-entry--left .timeline-entry-cluster,
-  .timeline-entry--right .timeline-entry-cluster {
-    flex-direction: column;
-  }
-
-  .timeline-entry--left .timeline-entry-cluster > .timeline-regional-column {
-    order: 2;
-  }
-
+  /* Central dynasty always shows first */
   .timeline-entry--left .timeline-entry-cluster > .timeline-dynasty-link,
   .timeline-entry--left .timeline-entry-cluster > .timeline-central-static {
     order: 1;
   }
-
+  .timeline-entry--left .timeline-entry-cluster > .timeline-regional-column {
+    order: 2;
+  }
   .timeline-entry--right .timeline-entry-cluster > .timeline-dynasty-link,
   .timeline-entry--right .timeline-entry-cluster > .timeline-central-static {
     order: 1;
   }
-
   .timeline-entry--right .timeline-entry-cluster > .timeline-regional-column {
     order: 2;
   }
 
-  .timeline-dot {
-    grid-column: 1;
-    position: absolute;
-    left: 22px;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  /* ---- Central card: prominent, full width ---- */
+  .timeline-card--central {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    padding: var(--space-sm) var(--space-md);
+    border-left: 3px solid var(--color-gold);
   }
 
-  .timeline-card--central,
-  .timeline-card--regional,
+  .timeline-card-name {
+    font-size: 1.05rem;
+  }
+
+  .timeline-card-years {
+    font-size: 0.78rem;
+  }
+
+  /* ---- Regional cards: indented, compact ---- */
   .timeline-regional-column {
     width: 100%;
     min-width: 0;
     max-width: none;
+    gap: 4px;
+    padding-left: var(--space-md);
+  }
+
+  .timeline-card--regional {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    padding: 5px var(--space-sm);
+    border-left-width: 2px;
+    background: color-mix(in srgb, var(--color-bg-card) 80%, transparent);
+  }
+
+  .timeline-card-name--regional {
+    font-size: 0.85rem;
+  }
+
+  .timeline-card-years--small {
+    font-size: 0.7rem;
+  }
+
+  .timeline-card-color {
+    width: 8px;
+    height: 8px;
+  }
+
+  .timeline-card-color--regional {
+    width: 6px;
+    height: 6px;
   }
 }
+
+@media (max-width: 380px) {
+  .timeline-axis {
+    left: 14px;
+  }
+
+  .timeline-entry {
+    padding-left: 36px;
+  }
+
+  .timeline-dot {
+    left: 14px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .timeline-entry:hover .timeline-dot {
+    transform: translateX(-50%) scale(1.2);
+  }
+}
+

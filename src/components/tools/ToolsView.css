@@ -110,3 +110,43 @@
   color: var(--color-jade-light);
   border: 1px solid rgba(74, 139, 111, 0.2);
 }
+
+@media (max-width: 1024px) {
+  .tools-page {
+    padding-top: calc(var(--navbar-height) + var(--space-md));
+  }
+
+  .tools-title {
+    font-size: 1.6rem;
+  }
+
+  .tools-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .tool-card {
+    padding: var(--space-lg);
+  }
+
+  .tool-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .tool-card-name {
+    font-size: 1.05rem;
+  }
+
+  .tool-card-desc {
+    font-size: 0.82rem;
+    margin-bottom: var(--space-sm);
+  }
+}

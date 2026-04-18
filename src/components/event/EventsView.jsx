@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useHistoricalEvents } from '../../hooks/useHistoricalEvents'
+import AnnotatedText from '../common/AnnotatedText'
 import './EventsView.css'
 
 const TYPE_LABEL = {
@@ -90,7 +91,7 @@ export default function EventsView() {
                   {evt.location || '—'}
                 </div>
                 <div className="events-card-desc">
-                  {evt.summary || evt.impact || ''}
+                  <AnnotatedText text={evt.summary || evt.impact || ''} />
                 </div>
               </div>
               <span className="events-card-arrow">›</span>
@@ -104,4 +105,3 @@ export default function EventsView() {
     </div>
   )
 }
-

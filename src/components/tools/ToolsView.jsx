@@ -11,6 +11,14 @@ const tools = [
     to: '/tools/leader-compare',
   },
   {
+    id: 'rating-rank',
+    icon: '🏆',
+    name: '治国评分排行',
+    desc: '根据军事、仁德、历史影响等八项指标对历代执政者进行综合排名。',
+    status: 'available',
+    to: '/tools/rating-rank',
+  },
+  {
     id: 'dynasty-compare',
     icon: '⚖️',
     name: '朝代对比',
@@ -28,7 +36,7 @@ const tools = [
     id: 'region-analysis',
     icon: '🌏',
     name: '地域分布分析',
-    desc: '分析历代统治者的祖籍分布，探索权力中心的地理变迁规律。',
+    desc: '分析历代执政者的祖籍分布，探索权力中心的地理变迁规律。',
     status: 'coming'
   },
   {
@@ -45,13 +53,6 @@ const tools = [
     desc: '输入年号快速查询对应的帝王、朝代和具体年份。',
     status: 'coming'
   },
-  {
-    id: 'rating-rank',
-    icon: '🏆',
-    name: '治国评分排行',
-    desc: '根据军事、仁德、历史影响等八项指标对历代统治者进行综合排名。',
-    status: 'coming'
-  }
 ]
 
 export default function ToolsView() {

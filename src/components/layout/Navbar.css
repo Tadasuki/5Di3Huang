@@ -259,7 +259,7 @@
   padding: var(--space-xs);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navbar-toggle {
     display: block;
   }

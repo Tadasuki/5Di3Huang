@@ -4,6 +4,7 @@ import { useAllLeaders } from '../../hooks/useDynasties'
 import { useFactions } from '../../hooks/useFactions'
 import LeaderCard from '../home/LeaderCard'
 import { withOpacity } from '../../utils/colorUtils'
+import AnnotatedText from '../common/AnnotatedText'
 import './FactionDetail.css'
 
 export default function FactionDetail() {
@@ -13,6 +14,9 @@ export default function FactionDetail() {
 
   const faction = factionById.get(String(id)) ?? null
   const color = faction?.color || '#c9a96e'
+  const rawBadge = typeof faction?.badge === 'string' ? faction.badge.trim() : ''
+  const badgeText = rawBadge || (typeof faction?.shortName === 'string' ? faction.shortName.trim() : '') || (faction?.name || '阵').charAt(0)
+  const badgeCompact = badgeText.length >= 3
 
   const members = useMemo(() => {
     if (!id) return []
@@ -41,23 +45,20 @@ export default function FactionDetail() {
   return (
     <div className="faction-detail" id={`faction-detail-${faction.id}`}>
       <div className="container">
-        <div className="faction-detail-nav">
-          <Link to="/" className="faction-detail-back">← 首页</Link>
-          <Link to="/timeline" className="faction-detail-back">时间线</Link>
-        </div>
-
         <header className="faction-detail-header" style={{ '--faction-color': color }}>
           <div
             className="faction-detail-badge"
             style={{ background: `linear-gradient(135deg, ${color}, ${withOpacity(color, 0.55)})` }}
           >
-            {(faction.shortName || faction.name || '阵').charAt(0)}
+            <span className={`faction-detail-badge-text${badgeCompact ? ' faction-detail-badge-text--compact' : ''}`}>
+              {badgeText}
+            </span>
           </div>
           <div className="faction-detail-intro">
             <p className="faction-detail-label">{faction.category || '阵营'}</p>
             <h1 className="faction-detail-title">{faction.name}</h1>
             {faction.description && (
-              <p className="faction-detail-desc">{faction.description}</p>
+              <p className="faction-detail-desc"><AnnotatedText text={faction.description} /></p>
             )}
             <div className="faction-detail-meta">
               <span>👥 成员 {members.length} 人</span>
@@ -89,4 +90,3 @@ export default function FactionDetail() {
     </div>
   )
 }
-

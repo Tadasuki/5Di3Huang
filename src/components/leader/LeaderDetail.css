@@ -22,6 +22,35 @@
   background: var(--color-bg-glass);
 }
 
+/* Epigraph */
+.leader-epigraph {
+  margin: 0 auto var(--space-md);
+  padding: 2px clamp(10px, 3vw, var(--space-md));
+  max-width: 760px;
+  text-align: center;
+}
+
+.leader-epigraph-text {
+  margin: 0 0 2px;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--color-text-primary);
+  font-style: italic;
+  font-weight: 800;
+  text-align: center;
+  text-align-last: center;
+}
+
+.leader-epigraph-source {
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-serif);
+  font-size: 0.86rem;
+  color: var(--color-gold-dark);
+  font-style: italic;
+}
+
 /* Profile Card */
 .profile-card {
   display: flex;
@@ -98,16 +127,19 @@
 /* Info section */
 .profile-info {
   flex: 1;
+  min-width: 0;
 }
 
 .profile-name {
   font-family: var(--font-serif);
   font-size: 2.2rem;
   font-weight: 900;
-  margin-bottom: var(--space-xs);
+  margin-bottom: var(--space-xl);
+  margin-left: var(--space-sm);
   display: flex;
   align-items: baseline;
   gap: var(--space-md);
+  flex-wrap: wrap;
 }
 
 .profile-title-badge {
@@ -142,30 +174,35 @@
   filter: brightness(1.1);
 }
 
+/* Info grid — clean structure with defined max width per item */
 .profile-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--space-sm) var(--space-xl);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg) var(--space-2xl);
   margin-top: var(--space-md);
 }
 
 .profile-info-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 1fr;
   align-items: baseline;
   gap: var(--space-sm);
+  padding-bottom: 6px;
 }
 
 .profile-info-label {
   font-size: 0.8rem;
   color: var(--color-text-tertiary);
   white-space: nowrap;
-  min-width: 50px;
+  text-align: right;
+  font-weight: 600;
 }
 
 .profile-info-value {
   font-size: 0.95rem;
   color: var(--color-text-primary);
   font-weight: 500;
+  text-align: left;
 }
 
 .location-link {
@@ -201,6 +238,7 @@
 
 .tab-bar-spacer {
   flex: 1;
+  min-width: var(--space-sm);
 }
 
 .tab-compare-btn {
@@ -216,12 +254,17 @@
   text-decoration: none;
   white-space: nowrap;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .tab-compare-btn:hover {
   color: var(--color-text-primary);
   border-color: var(--color-border-hover);
   transform: translateY(-1px);
+}
+
+.tab-swipe-hint {
+  display: none;
 }
 
 /* Bio tab */
@@ -231,6 +274,73 @@
   color: var(--color-text-secondary);
   white-space: pre-wrap;
   max-width: 800px;
+}
+
+.bio-note-anchor {
+  position: relative;
+  display: inline;
+}
+
+.bio-annotated {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--color-gold-dark) 65%, transparent);
+  cursor: pointer;
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast), background var(--transition-fast);
+}
+
+.bio-annotated:hover,
+.bio-annotated.is-active {
+  color: var(--color-gold-dark);
+  text-decoration-color: var(--color-gold);
+  background: color-mix(in srgb, var(--color-gold) 10%, transparent);
+}
+
+.bio-note-popover {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  z-index: 8;
+  width: min(560px, 80vw);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--gradient-card);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.bio-note-title {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+  text-align: left;
+}
+
+.bio-note-content {
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.bio-note-source {
+  margin-top: var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--color-text-tertiary);
+  text-align: left;
 }
 
 /* Timeline tab */
@@ -341,11 +451,10 @@
 
 .leader-event-year {
   font-family: var(--font-serif);
-  font-weight: 900;
+  font-weight: 700;
   color: var(--color-gold);
   font-size: 0.85rem;
   margin-left: var(--space-sm);
-  font-weight: 700;
   opacity: 0.9;
 }
 
@@ -456,28 +565,7 @@
   margin-bottom: var(--space-md);
 }
 
-@media (max-width: 768px) {
-  .profile-card {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .profile-name {
-    justify-content: center;
-    flex-wrap: wrap;
-    font-size: 1.8rem;
-  }
-
-  .profile-info-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .summary-content {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Prev / Next navigation */
 .detail-prev-next {
   margin-top: var(--space-2xl);
   display: flex;
@@ -547,17 +635,250 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
-  .detail-prev-next {
-    flex-direction: column;
+/* ========================================
+   MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+  .leader-detail {
+    padding-top: calc(var(--navbar-height) + var(--space-md));
   }
-  .detail-prev-next-col.align-right {
+
+  .leader-back {
+    font-size: 0.82rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .leader-epigraph {
+    margin-bottom: var(--space-sm);
+    padding: 2px var(--space-sm);
+  }
+
+  .leader-epigraph-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .leader-epigraph-source {
+    font-size: 0.76rem;
+  }
+
+  /* Profile card — stack vertically, center name section */
+  .profile-card {
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-lg) var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .profile-avatar-section {
+    flex-direction: column;
+    gap: var(--space-sm);
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile-avatar {
+    width: 88px;
+    height: 88px;
+    font-size: 2.2rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .profile-polity-badges {
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .profile-dynasty-badge {
+    font-size: 0.75rem;
+    padding: 3px 12px;
+  }
+
+  /* Name section — centered title, badges */
+  .profile-name {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.6rem;
+    gap: 4px;
+    margin-bottom: var(--space-xs);
+    margin-left: 0;
+  }
+
+  .profile-title-badge {
+    font-size: 0.88rem;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .leader-family-tag {
+    margin-left: 0;
+    margin-top: 2px;
+  }
+
+  /* Info grid — single column, label-value layout */
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: var(--space-sm);
+  }
+
+  .profile-info-item {
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(139, 115, 64, 0.06);
+  }
+
+  .profile-info-item:last-child {
+    border-bottom: none;
+  }
+
+  .profile-info-label {
+    font-size: 0.78rem;
+    text-align: right;
+    letter-spacing: 0.02em;
+  }
+
+  .profile-info-value {
+    font-size: 0.9rem;
+  }
+
+  /* Tab compare button + swipe hint */
+  .tab-compare-btn {
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.8rem;
+  }
+
+  .tab-swipe-hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.68rem;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.06em;
+    opacity: 0.78;
+  }
+
+  /* Bio */
+  .bio-content {
+    font-size: 0.92rem;
+    line-height: 1.85;
+  }
+
+  .bio-note-popover {
+    width: min(460px, 88vw);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .bio-note-title {
+    font-size: 0.9rem;
+  }
+
+  .bio-note-content {
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .bio-note-source {
+    font-size: 0.76rem;
+  }
+
+  /* Leader timeline */
+  .leader-timeline {
+    padding-left: 32px;
+  }
+
+  .leader-timeline::before {
+    left: 8px;
+  }
+
+  .leader-timeline-dot {
+    left: -28px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .leader-timeline-year {
+    font-size: 0.8rem;
+  }
+
+  .leader-timeline-event {
+    font-size: 0.88rem;
+  }
+
+  /* Achievements / Controversies */
+  .achievement-item,
+  .controversy-item,
+  .leader-event-item {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .achievement-title,
+  .controversy-title,
+  .leader-event-title {
+    font-size: 0.95rem;
+  }
+
+  .achievement-desc,
+  .controversy-desc,
+  .leader-event-desc {
+    font-size: 0.85rem;
+  }
+
+  /* Summary */
+  .summary-content {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-chart {
+    order: -1;
+  }
+
+  /* Prev / Next */
+  .detail-prev-next {
+    flex-direction: row;
+    gap: var(--space-md);
     align-items: stretch;
   }
+
   .detail-prev-next-col {
-    width: 100%;
+    width: 50%;
   }
+
+  .detail-prev-next-col.align-right {
+    align-items: flex-end;
+  }
+
+  .detail-prev-next-card {
+    min-height: 62px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
   .detail-prev-next-card.align-right {
-    text-align: left;
+    text-align: right;
+  }
+
+  .detail-prev-next-v {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .profile-avatar {
+    width: 72px;
+    height: 72px;
+    font-size: 1.8rem;
+  }
+
+  .profile-name {
+    font-size: 1.4rem;
   }
 }

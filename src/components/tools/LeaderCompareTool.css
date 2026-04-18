@@ -296,12 +296,15 @@
   background: rgba(0, 0, 0, 0.03);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .lct-total-row {
     grid-template-columns: 1fr;
+    gap: var(--space-sm);
   }
   .lct-total-vs {
     justify-self: center;
+    padding: 4px 10px;
+    font-size: 0.8rem;
   }
 }
 
@@ -432,17 +435,194 @@
   white-space: pre-wrap;
 }
 
+/* ========================================
+   MOBILE: COMPLETE REBUILD
+   ======================================== */
 @media (max-width: 980px) {
   .lct-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
   .lct-pickers {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
   .lct-vs {
     display: none;
   }
   .lct-summary-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .leader-compare-tool {
+    padding: var(--space-md);
+    margin-top: var(--space-lg);
+    border-radius: var(--radius-lg);
+  }
+
+  .lct-title {
+    font-size: 1.3rem;
+  }
+
+  .lct-sub {
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  /* Pickers — full width stacked */
+  .lct-pickers {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    margin: var(--space-md) 0;
+  }
+
+  .lct-picker-stack {
+    gap: 4px;
+  }
+
+  /* Grid — single column */
+  .lct-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  /* Sides — left and right leader cards */
+  .lct-side {
+    padding: var(--space-md);
+  }
+
+  .lct-profile {
+    grid-template-columns: 44px 1fr;
+    gap: var(--space-sm);
+  }
+
+  .lct-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .lct-name {
+    font-size: 1rem;
+  }
+
+  .lct-kv-row {
+    grid-template-columns: 48px 1fr;
+    gap: 6px;
+  }
+
+  .lct-k {
+    font-size: 0.72rem;
+  }
+
+  .lct-v {
+    font-size: 0.82rem;
+  }
+
+  /* Center panel */
+  .lct-panel {
+    padding: var(--space-md);
+  }
+
+  .lct-panel-title {
+    font-size: 0.85rem;
+  }
+
+  .lct-panel-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  /* Scale toggle group */
+  .lct-scale-toggle {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .lct-scale-btn {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+
+  /* Total score row — stack */
+  .lct-total-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .lct-total-side {
+    padding: 8px 10px;
+  }
+
+  .lct-total-side.align-right {
+    text-align: left;
+  }
+
+  .lct-total-num {
+    font-size: 1.3rem;
+  }
+
+  .lct-total-vs {
+    display: none;
+  }
+
+  /* Axis labels */
+  .lct-axis-label {
+    font-size: 0.72rem;
+  }
+
+  /* Timeline bars */
+  .lct-track {
+    height: 16px;
+  }
+
+  .lct-line-label {
+    font-size: 0.82rem;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .lct-line-years {
+    font-size: 0.75rem;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  /* Radar canvas */
+  .lct-center canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  /* Summary */
+  .lct-summary-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .lct-summary {
+    padding: var(--space-md);
+  }
+
+  .lct-summary-title {
+    font-size: 0.9rem;
+  }
+
+  .lct-summary-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  /* Open link */
+  .lct-open {
+    font-size: 0.78rem;
+  }
+
+  .lct-name-row {
+    gap: var(--space-sm);
   }
 }

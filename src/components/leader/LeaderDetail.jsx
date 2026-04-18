@@ -1,5 +1,5 @@
 import { useParams, Link, useSearchParams } from 'react-router-dom'
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useLeader } from '../../hooks/useLeader'
 import { useDynasties, useAllLeaders, useFamily } from '../../hooks/useDynasties'
 import { useHistoricalEvents } from '../../hooks/useHistoricalEvents'
@@ -9,6 +9,7 @@ import { withOpacity } from '../../utils/colorUtils'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { computeTotalScore } from '../../utils/ratings'
 import RadarChart from './RadarChart'
+import AnnotatedText from '../common/AnnotatedText'
 import './LeaderDetail.css'
 
 const regionalModules = import.meta.glob('/data/regional_regimes.json', { eager: true })
@@ -27,6 +28,32 @@ const TAB_LIST = [
     { key: 'events', label: '事件', icon: '🧭' },
     { key: 'summary', label: '总结', icon: '📊' },
 ]
+
+function cleanQuoteText(raw) {
+    if (typeof raw !== 'string') return ''
+    return raw.trim().replace(/^["'「『“]+|["'」』”]+$/g, '')
+}
+
+function getLeaderEpigraph(leader) {
+    if (!leader) return null
+
+    if (leader?.quote && typeof leader.quote === 'object') {
+        const t = cleanQuoteText(leader.quote.text)
+        const s = typeof leader.quote.source === 'string' ? leader.quote.source.trim() : ''
+        if (t) return { text: t, source: s }
+    }
+
+    const quoteText = cleanQuoteText(leader?.quoteText || leader?.quote)
+    const quoteSource = typeof leader?.quoteSource === 'string' ? leader.quoteSource.trim() : ''
+    if (quoteText) return { text: quoteText, source: quoteSource }
+
+    const summary = typeof leader?.summary === 'string' ? leader.summary.trim() : ''
+    if (!summary) return null
+    const first = summary.split(/[。！？；]/)[0]?.trim() || summary
+    if (!first) return null
+    const text = first.length > 34 ? `${first.slice(0, 34)}…` : first
+    return { text, source: '本站编注' }
+}
 
 export default function LeaderDetail() {
     const { id } = useParams()
@@ -53,6 +80,33 @@ export default function LeaderDetail() {
 
     const [avatarImgFailed, setAvatarImgFailed] = useState(false)
     const avatarSrc = leader ? getLeaderImageSrc(leader) : ''
+
+    // Tab-bar scroll indicator state
+    const tabBarRef = useRef(null)
+    const [tabScrollState, setTabScrollState] = useState('')
+
+    const updateTabScroll = useCallback(() => {
+        const el = tabBarRef.current
+        if (!el) return
+        const canLeft = el.scrollLeft > 2
+        const canRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 2
+        let cls = ''
+        if (canLeft) cls += 'can-scroll-left '
+        if (canRight) cls += 'can-scroll-right'
+        setTabScrollState(cls.trim())
+    }, [])
+
+    useEffect(() => {
+        const el = tabBarRef.current
+        if (!el) return
+        updateTabScroll()
+        el.addEventListener('scroll', updateTabScroll, { passive: true })
+        window.addEventListener('resize', updateTabScroll)
+        return () => {
+            el.removeEventListener('scroll', updateTabScroll)
+            window.removeEventListener('resize', updateTabScroll)
+        }
+    }, [updateTabScroll, leader])
 
     // Find dynasty info
     const dynasty = dynasties.find(d => d.id === leader?.dynastyId)
@@ -309,9 +363,9 @@ export default function LeaderDetail() {
             <div className="leader-detail">
                 <div className="container">
                     <div className="leader-not-found">
-                        <h2>未找到该统治者</h2>
+                        <h2>未找到该执政者</h2>
                         <p style={{ color: 'var(--color-text-tertiary)', marginBottom: 'var(--space-lg)' }}>
-                            您查找的统治者不存在或尚未录入数据
+                            您查找的执政者不存在或尚未录入数据
                         </p>
                         <Link to="/" className="btn btn-primary">返回首页</Link>
                     </div>
@@ -322,6 +376,7 @@ export default function LeaderDetail() {
 
     const leaderName = typeof leader.name === 'string' ? leader.name : (leader.name != null ? String(leader.name) : '')
     const leaderInitial = leaderName ? leaderName.charAt(0) : '?'
+    const epigraph = getLeaderEpigraph(leader)
 
     function formatReignValue(l) {
         const periods = Array.isArray(l?.reignPeriods) ? l.reignPeriods : []
@@ -411,9 +466,18 @@ export default function LeaderDetail() {
     return (
         <div className="leader-detail" id="leader-detail">
             <div className="container">
-                <Link to="/" className="leader-back">
-                    ← 返回首页
-                </Link>
+                {epigraph && (
+                    <div className="leader-epigraph" aria-label="人物引言">
+                        <p className="leader-epigraph-text">
+                            <span>“</span>
+                            <AnnotatedText text={epigraph.text} />
+                            <span>”</span>
+                        </p>
+                        {epigraph.source && (
+                            <p className="leader-epigraph-source">—— {epigraph.source}</p>
+                        )}
+                    </div>
+                )}
 
                 {/* Profile Card */}
                 <div
@@ -502,30 +566,35 @@ export default function LeaderDetail() {
 
                 {/* Tabs */}
                 <div className="detail-tabs">
-                    <div className="tab-bar">
-                        {TAB_LIST.map(tab => (
-                            <button
-                                key={tab.key}
-                                className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`}
-                                onClick={() => setActiveTab(tab.key)}
-                                id={`tab-${tab.key}`}
+                    <div className={`tab-bar-scroll-wrapper ${tabScrollState}`}>
+                        <div className="tab-bar" ref={tabBarRef}>
+                            {TAB_LIST.map(tab => (
+                                <button
+                                    key={tab.key}
+                                    className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`}
+                                    onClick={() => setActiveTab(tab.key)}
+                                    id={`tab-${tab.key}`}
+                                >
+                                    {tab.icon} {tab.label}
+                                </button>
+                            ))}
+                            <div className="tab-bar-spacer" />
+                            <Link
+                                to={`/tools/leader-compare?left=${encodeURIComponent(String(leader.id))}`}
+                                className="tab-compare-btn"
+                                title="打开人物对比工具（当前人物在被对比方）"
                             >
-                                {tab.icon} {tab.label}
-                            </button>
-                        ))}
-                        <div className="tab-bar-spacer" />
-                        <Link
-                            to={`/tools/leader-compare?left=${encodeURIComponent(String(leader.id))}`}
-                            className="tab-compare-btn"
-                            title="打开人物对比工具（当前人物在左侧）"
-                        >
-                            对比 ↗
-                        </Link>
+                                对比 ↗
+                            </Link>
+                        </div>
                     </div>
+                    <div className="tab-swipe-hint" aria-hidden="true">← 左右滑动切换栏目 →</div>
 
                     <div className="detail-tab-content" key={activeTab}>
                         {activeTab === 'bio' && (
-                            <div className="bio-content">{leader.bio}</div>
+                            <div className="bio-content">
+                                <AnnotatedText text={leader.bio} annotations={leader.bioAnnotations} />
+                            </div>
                         )}
 
                         {activeTab === 'timeline' && (
@@ -553,7 +622,7 @@ export default function LeaderDetail() {
                                         style={{ animationDelay: `${i * 0.08}s` }}
                                     >
                                         <div className="achievement-title">✦ {item.title}</div>
-                                        <div className="achievement-desc">{item.description}</div>
+                                        <div className="achievement-desc"><AnnotatedText text={item.description} /></div>
                                     </div>
                                 ))}
                             </div>
@@ -568,7 +637,7 @@ export default function LeaderDetail() {
                                         style={{ animationDelay: `${i * 0.08}s` }}
                                     >
                                         <div className="controversy-title">⚡ {item.title}</div>
-                                        <div className="controversy-desc">{item.description}</div>
+                                        <div className="controversy-desc"><AnnotatedText text={item.description} /></div>
                                     </div>
                                 ))}
                             </div>
@@ -590,13 +659,14 @@ export default function LeaderDetail() {
                                             </div>
                                         </div>
                                         <div className="leader-event-desc">
-                                            {(evt.location ? `${evt.location} · ` : '')}{evt.summary || evt.impact || ''}
+                                            {(evt.location ? `${evt.location} · ` : '')}
+                                            <AnnotatedText text={evt.summary || evt.impact || ''} />
                                         </div>
                                     </Link>
                                 ))}
                                 {relatedEvents.length === 0 && (
                                     <div className="leader-event-empty">
-                                        暂无关联事件（可在 <code>data/historical_events.json</code> 的事件条目里补充 leaderIds）。
+                                        暂无关联事件（等待补充）。
                                     </div>
                                 )}
                             </div>
@@ -619,7 +689,7 @@ export default function LeaderDetail() {
                                             </div>
                                         ) : null}
                                     </div>
-                                    <p>{leader.summary}</p>
+                                    <p><AnnotatedText text={leader.summary} /></p>
                                 </div>
                             </div>
                         )}

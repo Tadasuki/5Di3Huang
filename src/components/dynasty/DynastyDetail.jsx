@@ -5,6 +5,7 @@ import { useDynasties } from '../../hooks/useDynasties'
 import LeaderCard from '../home/LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import AnnotatedText from '../common/AnnotatedText'
 import './DynastyDetail.css'
 
 // 引入割据政权数据，以便在需要时建立跨表跳转联系
@@ -88,11 +89,6 @@ export default function DynastyDetail() {
   return (
     <div className="dynasty-detail" id={`dynasty-detail-${dynasty.id}`}>
       <div className="container">
-        <div className="dynasty-detail-nav">
-          <Link to="/" className="dynasty-detail-back">← 返回首页</Link>
-          <Link to="/timeline" className="dynasty-detail-back">时间线</Link>
-        </div>
-
         <header
           className="dynasty-detail-header"
           style={{ '--dynasty-color': color }}
@@ -111,9 +107,9 @@ export default function DynastyDetail() {
               <span>📅 {formatYearRangeOngoing(dynasty.startYear, dynasty.endYear)}</span>
               <span>⏱ {calculateDuration(dynasty.startYear, dynasty.endYear)}年</span>
               {dynasty.capital && (
-                <Link 
-                  to={`/map?polity=${dynasty.id}`} 
-                  className="location-link tag-clickable" 
+                <Link
+                  to={`/map?polity=${dynasty.id}`}
+                  className="location-link tag-clickable"
                   title="在地图中定位该都城"
                 >
                   🏰 {dynasty.capital} <span className="jump-icon">↗</span>
@@ -121,14 +117,14 @@ export default function DynastyDetail() {
               )}
             </div>
             {dynasty.description && (
-              <p className="dynasty-detail-desc">{dynasty.description}</p>
+              <p className="dynasty-detail-desc"><AnnotatedText text={dynasty.description} /></p>
             )}
           </div>
         </header>
 
         <section aria-labelledby="dynasty-leaders-heading">
           <h2 id="dynasty-leaders-heading" className="dynasty-detail-section-title">
-            统治者
+            执政者
           </h2>
           <div className="dynasty-detail-leaders">
             {dynasty.leaderData.map((leader, i) => (
@@ -140,7 +136,7 @@ export default function DynastyDetail() {
               />
             ))}
             {dynasty.leaderData.length === 0 && (
-              <p className="dynasty-detail-empty">暂无统治者条目，可在「data/leaders/{dynasty.id}/」下添加 JSON。</p>
+              <p className="dynasty-detail-empty">暂无执政者条目，可在「data/leaders/{dynasty.id}/」下添加 JSON。</p>
             )}
           </div>
         </section>
@@ -161,9 +157,9 @@ export default function DynastyDetail() {
             <div className="detail-prev-next-col align-right">
               {nextDynasties && nextDynasties.length > 0 ? (
                 nextDynasties.map(n => (
-                  <Link 
-                    key={n.id} 
-                    to={`/${n.routeType || 'dynasty'}/${n.id}`} 
+                  <Link
+                    key={n.id}
+                    to={`/${n.routeType || 'dynasty'}/${n.id}`}
                     className="detail-prev-next-card align-right"
                   >
                     <div className="detail-prev-next-k">

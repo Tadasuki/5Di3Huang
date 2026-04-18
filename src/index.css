@@ -2,6 +2,22 @@
    五帝三皇神圣事 — 全局设计系统
    ======================================== */
 
+@font-face {
+  font-family: 'Han Chan ZhengKai';
+  src: url('https://cdn.jsdelivr.net/npm/@fontpkg/chill-kai@2.0.1/ChillKai.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OPPO Sans';
+  src: url('https://cdn.jsdelivr.net/npm/@fontpkg/oppo-sans-4-0@1.700.0/OPPO%20Sans%204.0.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---------- CSS 变量 ---------- */
 :root {
   /* 核心色彩（亮色 · 纸本暖白） */
@@ -68,8 +84,9 @@
 
   /* 字体 */
   --font-serif: 'Noto Serif SC', 'Songti SC', serif;
-  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-sans: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-zhenkai: 'Han Chan ZhengKai', 'KaiTi', 'STKaiti', 'Noto Serif SC', serif;
 
   /* 过渡 */
   --transition-fast: 150ms ease;
@@ -106,6 +123,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* 自定义滚动条 */
@@ -148,6 +166,33 @@ h4 {
 p {
   line-height: 1.8;
   color: var(--color-text-secondary);
+}
+
+/* 长段落两端对齐（中文优化） */
+main :where(
+  p,
+  li,
+  dd,
+  blockquote,
+  .bio-content,
+  .summary-text,
+  .achievement-desc,
+  .controversy-desc,
+  .leader-event-desc,
+  .event-summary,
+  .event-text,
+  .event-desc,
+  .dynasty-desc,
+  .about-desc,
+  .family-detail-desc,
+  .faction-detail-desc,
+  .regional-detail-desc,
+  .lct-summary-text,
+  .annotation-content
+) {
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-align-last: auto;
 }
 
 a {
@@ -264,6 +309,51 @@ img {
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.tab-bar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll fade indicators — added via wrapper */
+.tab-bar-scroll-wrapper {
+  position: relative;
+}
+
+.tab-bar-scroll-wrapper::before,
+.tab-bar-scroll-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.tab-bar-scroll-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--color-bg-secondary), transparent);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.tab-bar-scroll-wrapper::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--color-bg-secondary), transparent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.tab-bar-scroll-wrapper.can-scroll-left::before {
+  opacity: 1;
+}
+
+.tab-bar-scroll-wrapper.can-scroll-right::after {
+  opacity: 1;
 }
 
 .tab-btn {
@@ -282,6 +372,7 @@ img {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-focus-ring-color: transparent;
+  flex-shrink: 0;
 }
 
 .tab-btn:focus,
@@ -393,7 +484,7 @@ img {
 }
 
 /* 响应式 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   :root {
     --navbar-height: 56px;
   }
@@ -405,5 +496,9 @@ img {
   }
   .container {
     padding: 0 var(--space-md);
+  }
+  .tab-btn {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.82rem;
   }
 }

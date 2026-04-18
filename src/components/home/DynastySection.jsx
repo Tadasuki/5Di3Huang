@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import LeaderCard from './LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import AnnotatedText from '../common/AnnotatedText'
 import './DynastySection.css'
 
 export default function DynastySection({ dynasty, index }) {
@@ -40,7 +41,7 @@ export default function DynastySection({ dynasty, index }) {
       </div>
 
       {dynasty.description && (
-        <p className="dynasty-desc">{dynasty.description}</p>
+        <p className="dynasty-desc"><AnnotatedText text={dynasty.description} /></p>
       )}
 
       <div className="dynasty-leaders-grid">
@@ -54,7 +55,7 @@ export default function DynastySection({ dynasty, index }) {
         ))}
         {dynasty.leaderData.length === 0 && (
           <p style={{ color: 'var(--color-text-tertiary)', fontStyle: 'italic', padding: 'var(--space-md)' }}>
-            暂无统治者数据，等待填充...
+            暂无执政者数据，等待填充...
           </p>
         )}
       </div>

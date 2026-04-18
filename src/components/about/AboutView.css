@@ -26,6 +26,16 @@
   color: var(--color-text-secondary);
 }
 
+.about-desc p {
+  text-indent: 2em;
+  margin-bottom: var(--space-md);
+  text-align: justify;
+}
+
+.about-desc p:last-child {
+  margin-bottom: 0;
+}
+
 .about-sections {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -75,7 +85,7 @@
 
 .tech-badge {
   padding: var(--space-sm) var(--space-lg);
-  background: var(--color-bg-tertiary);
+  background: color-mix(in srgb, var(--color-bg-primary) 92%, #000 8%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 0.85rem;
@@ -90,6 +100,17 @@
   border-color: var(--color-gold);
   color: var(--color-gold);
   transform: translateY(-2px);
+}
+
+.font-stack-icon {
+  display: inline-flex;
+  width: 1.1em;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-gold-dark);
 }
 
 .about-disclaimer {
@@ -107,7 +128,5 @@
 }
 
 .about-disclaimer p {
-  font-size: 0.85rem;
-  max-width: 600px;
   margin: 0 auto;
 }

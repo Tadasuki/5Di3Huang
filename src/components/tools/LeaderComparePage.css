@@ -20,3 +20,17 @@
   color: var(--color-gold);
 }
 
+@media (max-width: 1024px) {
+  .leader-compare-page {
+    padding-top: calc(var(--navbar-height) + var(--space-md));
+  }
+
+  .leader-compare-nav {
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .leader-compare-back {
+    font-size: 0.85rem;
+  }
+}

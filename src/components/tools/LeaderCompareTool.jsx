@@ -9,6 +9,7 @@ import { formatLifeYearRange, formatYearRangeOngoing } from '../../utils/yearFor
 import { computeTotalScore } from '../../utils/ratings'
 import CompareRadar from './CompareRadar'
 import SearchSelect from './SearchSelect'
+import AnnotatedText from '../common/AnnotatedText'
 import './LeaderCompareTool.css'
 
 function toDateUTC(y, m = 1, d = 1) {
@@ -443,7 +444,7 @@ export default function LeaderCompareTool() {
     if (!rgb) return color
     const white = { r: 255, g: 255, b: 255 }
     const black = { r: 0, g: 0, b: 0 }
-    // 使左侧颜色变浅、右侧颜色加深以增加区分度
+    // 使被对比方颜色变浅、对比方颜色加深以增加区分度
     const tweaked = side === 'left'
       ? mixRgb(rgb, white, 0.50)
       : mixRgb(rgb, black, 0.50)
@@ -832,7 +833,7 @@ export default function LeaderCompareTool() {
                   />
                 )
               ) : (
-                <div className="lct-line lct-line-missing">左侧暂无在位时间数据</div>
+                <div className="lct-line lct-line-missing">被对比方暂无在位时间数据</div>
               )}
 
               {reignRightSegs.length > 0 ? (
@@ -855,7 +856,7 @@ export default function LeaderCompareTool() {
                   />
                 )
               ) : (
-                <div className="lct-line lct-line-missing">右侧暂无在位时间数据</div>
+                <div className="lct-line lct-line-missing">对比方暂无在位时间数据</div>
               )}
             </div>
           </div>
@@ -864,7 +865,7 @@ export default function LeaderCompareTool() {
             <div className="lct-panel-title">八维评分叠加</div>
             <div className="lct-total-row" aria-label="综合评分对比">
               <div className="lct-total-side" style={{ '--lct-total-color': leftColor }}>
-                <div className="lct-total-name">{left?.name || '左侧'}</div>
+                <div className="lct-total-name">{left?.name || '被对比方'}</div>
                 <div className="lct-total-score">
                   <span className="lct-total-num">{Number.isFinite(leftTotal) ? leftTotal : '—'}</span>
                   <span className="lct-total-den">/100</span>
@@ -880,7 +881,7 @@ export default function LeaderCompareTool() {
               <div className="lct-total-vs">VS</div>
 
               <div className="lct-total-side align-right" style={{ '--lct-total-color': rightColor }}>
-                <div className="lct-total-name">{right?.name || '右侧'}</div>
+                <div className="lct-total-name">{right?.name || '对比方'}</div>
                 <div className="lct-total-score">
                   <span className="lct-total-num">{Number.isFinite(rightTotal) ? rightTotal : '—'}</span>
                   <span className="lct-total-den">/100</span>
@@ -908,15 +909,15 @@ export default function LeaderCompareTool() {
       <div className="lct-summary-grid" aria-label="总结对比">
         <div className="lct-summary" style={{ borderColor: withOpacity(leftColor, 0.35) }}>
           <div className="lct-summary-title" style={{ color: leftColor }}>
-            总结（{left?.name || '左侧'}）
+            总结（{left?.name || '被对比方'}）
           </div>
-          <div className="lct-summary-text">{left?.summary || '—'}</div>
+          <div className="lct-summary-text"><AnnotatedText text={left?.summary || '—'} /></div>
         </div>
         <div className="lct-summary" style={{ borderColor: withOpacity(rightColor, 0.35) }}>
           <div className="lct-summary-title" style={{ color: rightColor }}>
-            总结（{right?.name || '右侧'}）
+            总结（{right?.name || '对比方'}）
           </div>
-          <div className="lct-summary-text">{right?.summary || '—'}</div>
+          <div className="lct-summary-text"><AnnotatedText text={right?.summary || '—'} /></div>
         </div>
       </div>
     </section>

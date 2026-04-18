@@ -1,0 +1,590 @@
+/* ========================================
+   治国评分排行 — RatingRankPage
+   ======================================== */
+
+.rank-page {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: calc(var(--navbar-height) + var(--space-xl));
+  padding-bottom: var(--space-3xl);
+}
+
+/* ---- 导航 ---- */
+.rank-nav {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.rank-back {
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-fast);
+}
+.rank-back:hover {
+  color: var(--color-gold);
+}
+
+/* ---- 头部 ---- */
+.rank-head {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.rank-title {
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-xs);
+}
+
+.rank-sub {
+  color: var(--color-text-tertiary);
+  font-size: 0.95rem;
+}
+
+/* ---- 总人数统计 ---- */
+.rank-count {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-lg);
+}
+.rank-count strong {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+/* ---- 筛选控制栏 ---- */
+.rank-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-xl);
+  margin-bottom: var(--space-xl);
+  align-items: flex-end;
+}
+
+.rank-filter-stack {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-end;
+}
+
+.rank-filter-group {
+  display: flex;
+  align-items: flex-end;
+}
+
+.rank-clear-btn {
+  padding: 5px 14px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: 4px;
+}
+.rank-clear-btn:hover {
+  border-color: var(--color-vermilion);
+  color: var(--color-vermilion);
+}
+
+/* ---- 排行表格 ---- */
+.rank-table-wrapper {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* 列宽定义 */
+.rank-col-rank { width: 52px; }
+.rank-col-name { width: auto; min-width: 154px; }
+.rank-col-polity { width: 130px; }
+.rank-col-total { width: 96px; }
+
+.rank-col-dim { width: 84px; }
+
+/* 表头 */
+.rank-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-bg-secondary);
+  border-bottom: 2px solid var(--color-border);
+  padding: 10px 10px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+  letter-spacing: 0.4px;
+}
+
+.rank-table thead th:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.rank-table thead th.rank-th-active {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-border);
+}
+
+.rank-table thead th.rank-th-active:hover {
+  background: var(--color-bg-secondary);
+}
+
+.rank-th-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.rank-table thead th:not(.rank-th-nosort):hover .rank-th-inner {
+  background: color-mix(in srgb, var(--color-bg-tertiary) 72%, #fff);
+  border-color: color-mix(in srgb, var(--color-border-hover) 65%, transparent);
+}
+
+.rank-table thead th.rank-th-active .rank-th-inner {
+  background: var(--color-control-active-bg);
+  border-color: var(--color-control-active-border);
+  color: var(--color-text-on-control-active);
+  font-weight: 800;
+}
+
+.rank-sort-icon {
+  font-size: 0.7rem;
+  opacity: 0.4;
+  transition: opacity var(--transition-fast);
+}
+
+.rank-th-active .rank-sort-icon {
+  opacity: 1;
+  color: var(--color-text-on-control-active);
+}
+
+/* 不可排序的列 */
+.rank-table thead th.rank-th-nosort {
+  cursor: default;
+}
+.rank-table thead th.rank-th-nosort:hover {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* 表体 */
+.rank-table tbody tr {
+  border-bottom: 1px solid rgba(139, 115, 64, 0.08);
+  transition: background var(--transition-fast);
+}
+.rank-table tbody tr:hover {
+  background: rgba(201, 169, 110, 0.04);
+}
+
+.rank-table tbody td {
+  padding: 14px 10px;
+  font-size: 0.95rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* ---- 排名数字 ---- */
+.rank-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--color-text-secondary);
+}
+.rank-num.rank-1 {
+  background: linear-gradient(135deg, #f6d365, #daa520);
+  color: #2a2418;
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.35);
+}
+.rank-num.rank-2 {
+  background: linear-gradient(135deg, #c0c0c0, #9a9a9a);
+  color: #2a2418;
+  box-shadow: 0 2px 8px rgba(160, 160, 160, 0.3);
+}
+.rank-num.rank-3 {
+  background: linear-gradient(135deg, #cd7f32, #a05a20);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(205, 127, 50, 0.3);
+}
+
+/* ---- 人物名片 ---- */
+.rank-leader-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.rank-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold-dark));
+}
+
+.rank-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rank-leader-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rank-leader-name {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+}
+.rank-table tbody tr:hover .rank-leader-name {
+  color: var(--color-gold);
+}
+
+.rank-leader-sub {
+  font-size: 0.82rem;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- 政权标签 ---- */
+.rank-polity-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-polity-tag:hover {
+  transform: scale(1.05);
+  transition: transform var(--transition-fast);
+}
+
+/* ---- 分数显示 ---- */
+.rank-score-total {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+}
+
+.rank-score-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.rank-score-num {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.rank-score-bar {
+  width: 100%;
+  max-width: 64px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(139, 115, 64, 0.1);
+  overflow: hidden;
+}
+
+.rank-score-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 分数颜色分级 */
+.rank-score-excellent { color: #2e8b57; }
+.rank-score-good { color: var(--color-gold); }
+.rank-score-average { color: var(--color-text-secondary); }
+.rank-score-poor { color: var(--color-vermilion); }
+
+.rank-bar-excellent { background: linear-gradient(90deg, #3cb371, #2e8b57); }
+.rank-bar-good { background: linear-gradient(90deg, var(--color-gold-light), var(--color-gold)); }
+.rank-bar-average { background: linear-gradient(90deg, #b0a58a, #8a8275); }
+.rank-bar-poor { background: linear-gradient(90deg, #d45454, #b33a3a); }
+
+/* ---- 无结果 ---- */
+.rank-empty {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  color: var(--color-text-tertiary);
+}
+
+.rank-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.4;
+}
+
+.rank-empty-text {
+  font-size: 0.95rem;
+}
+
+/* ---- 行动画 ---- */
+.rank-table tbody tr {
+  opacity: 0;
+  animation: rankRowIn 0.4s ease forwards;
+}
+
+@keyframes rankRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- 可点击行 ---- */
+.rank-table tbody tr {
+  cursor: pointer;
+}
+
+/* ---- 横向滚动容器 ---- */
+.rank-scroll {
+  overflow-x: auto;
+  overflow-y: scroll;
+  height: 780px;
+  max-height: calc(100vh - 120px);
+  min-height: 400px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---- Mobile sort picker (shown only on mobile) ---- */
+.rank-mobile-sort-bar {
+  display: none;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 1024px) {
+  .rank-col-dim { width: 70px; }
+  .rank-col-polity { width: 80px; }
+}
+
+@media (max-width: 1024px) {
+  .rank-title { font-size: 1.6rem; }
+  .rank-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .rank-filter-stack,
+  .rank-filter-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+
+  /* Show mobile sort bar */
+  .rank-mobile-sort-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    flex-wrap: wrap;
+  }
+
+  .rank-mobile-sort-label {
+    font-size: 0.8rem;
+    color: var(--color-text-tertiary);
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  .rank-mobile-sort-select {
+    flex: 1;
+    min-width: 100px;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='%238a8275' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+
+  .rank-mobile-sort-select:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+  }
+
+  .rank-mobile-dir-btn {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-control-active-bg);
+    color: var(--color-text-on-control-active);
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .rank-mobile-dir-btn:hover {
+    border-color: var(--color-gold);
+  }
+
+  /* ---- Hide dimension header columns that are NOT selected ---- */
+  .rank-table thead th.rank-th-dim:not(.rank-th-dim--visible) {
+    display: none;
+  }
+  .rank-table tbody td.rank-td-dim:not(.rank-td-dim--visible) {
+    display: none;
+  }
+  .rank-table colgroup .rank-col-dim {
+    display: none;
+  }
+
+  /* ---- Hide polity column on mobile ---- */
+  .rank-table thead th.rank-col-polity,
+  .rank-table tbody td.rank-td-polity {
+    display: none;
+  }
+
+  /* ---- Disable horizontal scroll ---- */
+  .rank-scroll {
+    overflow-x: hidden;
+    padding-right: 10px;
+    scrollbar-width: none;
+  }
+
+  .rank-scroll::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .rank-table {
+    table-layout: auto;
+  }
+
+  .rank-col-rank { width: 40px; }
+  .rank-col-name { min-width: 0; }
+  .rank-col-total { width: 42px; }
+
+  .rank-table thead th.rank-th-dim.rank-th-dim--visible,
+  .rank-table tbody td.rank-td-dim.rank-td-dim--visible {
+    width: 52px;
+  }
+
+  .rank-table thead th:nth-child(4),
+  .rank-table tbody td:nth-child(4),
+  .rank-table thead th.rank-th-dim.rank-th-dim--visible,
+  .rank-table tbody td.rank-td-dim.rank-td-dim--visible {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .rank-table thead th {
+    padding: 8px 6px;
+    font-size: 0.75rem;
+  }
+  .rank-table tbody td {
+    padding: 9px 4px;
+    font-size: 0.82rem;
+  }
+
+  .rank-avatar { width: 28px; height: 28px; font-size: 0.8rem; }
+  .rank-leader-name { font-size: 0.88rem; }
+  .rank-leader-sub { font-size: 0.7rem; }
+  .rank-leader-cell { gap: 6px; }
+
+  .rank-table tbody td:nth-child(2) {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .rank-score-total { font-size: 0.95rem; }
+  .rank-score-bar { display: none; }
+  .rank-score-num { font-size: 0.85rem; }
+
+  .rank-num { width: 26px; height: 26px; font-size: 0.75rem; }
+}
+
+@media (max-width: 380px) {
+  .rank-leader-sub { display: none; }
+  .rank-avatar { width: 26px; height: 26px; }
+  .rank-leader-name { font-size: 0.82rem; }
+}

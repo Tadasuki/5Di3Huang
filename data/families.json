@@ -2,6 +2,7 @@
   {
     "id": "zhongli_zhu",
     "name": "钟离朱氏",
+    "badge": "朱",
     "ancestralHome": "濠州钟离（今安徽凤阳）",
     "ancestralHomeCoords": [
       117.56,
@@ -14,6 +15,7 @@
   {
     "id": "fenghua_chiang",
     "name": "奉化蒋氏",
+    "badge": "蒋",
     "ancestralHome": "浙江奉化溪口",
     "ancestralHomeCoords": [
       121.28,
@@ -25,7 +27,8 @@
   {
     "id": "jeonju_yi",
     "name": "全州李氏",
-    "ancestralHome": "全州（今全罗北道全州）",
+    "badge": "李",
+    "ancestralHome": "全州",
     "ancestralHomeCoords": [
       127.1489,
       35.8219
@@ -36,6 +39,7 @@
   {
     "id": "jianzhou_aixinjueluo",
     "name": "建州爱新觉罗氏",
+    "badge": "爱新觉罗",
     "ancestralHome": "赫图阿拉（今辽宁新宾）",
     "ancestralHomeCoords": [
       124.858986,
@@ -43,11 +47,12 @@
     ],
     "color": "#DAA520",
     "yHaplogroup": "C-F14749",
-    "description": "清朝皇室家族，发祥于东北建州女真，由努尔哈赤奠基、皇太极改族名为满洲，最终入主中原建立大清。"
+    "description": "后金、清朝皇室家族，发祥于东北建州女真，由努尔哈赤奠基，建立“后金政权”，皇太极改族名为满，最终入主中原建立大清。"
   },
   {
     "id": "shangqiu_zi",
     "name": "殷商子姓王族",
+    "badge": "子",
     "ancestralHome": "亳（今河南商丘或安徽亳州一带）",
     "ancestralHomeCoords": [
       115.65,
@@ -60,6 +65,7 @@
   {
     "id": "zhuozhou_zhao",
     "name": "涿州赵氏",
+    "badge": "赵",
     "ancestralHome": "河北涿州",
     "ancestralHomeCoords": [
       115.98,
@@ -72,6 +78,7 @@
   {
     "id": "longxi_li",
     "name": "陇西李氏",
+    "badge": "李",
     "ancestralHome": "陇西（今甘肃临洮一带）",
     "ancestralHomeCoords": [
       103.57,
@@ -84,6 +91,7 @@
   {
     "id": "qin_ying",
     "name": "秦国嬴姓公族",
+    "badge": "嬴",
     "ancestralHome": "秦邑（今甘肃天水一带）",
     "ancestralHomeCoords": [
       105.72,

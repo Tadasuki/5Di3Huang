@@ -21,7 +21,7 @@
   padding: var(--space-sm) var(--space-md);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .dynasty-detail-btn {
     margin-left: 0;
     width: 100%;
@@ -82,7 +82,7 @@
   gap: var(--space-md);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .dynasty-leaders-grid {
     grid-template-columns: 1fr;
   }

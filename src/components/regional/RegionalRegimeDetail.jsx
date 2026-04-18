@@ -3,6 +3,7 @@ import { useRegionalRegime } from '../../hooks/useRegionalRegime'
 import LeaderCard from '../home/LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import AnnotatedText from '../common/AnnotatedText'
 import './RegionalRegimeDetail.css'
 
 export default function RegionalRegimeDetail() {
@@ -31,11 +32,6 @@ export default function RegionalRegimeDetail() {
   return (
     <div className="regional-detail" id={`regional-detail-${regime.id}`}>
       <div className="container">
-        <div className="regional-detail-nav">
-          <Link to="/timeline" className="regional-detail-back">← 时间线</Link>
-          <Link to="/" className="regional-detail-back">首页</Link>
-        </div>
-
         <header
           className="regional-detail-header"
           style={{ '--regional-color': color }}
@@ -59,7 +55,7 @@ export default function RegionalRegimeDetail() {
               {regime.capital && <span>🏰 {regime.capital}</span>}
             </div>
             {regime.description && (
-              <p className="regional-detail-desc">{regime.description}</p>
+              <p className="regional-detail-desc"><AnnotatedText text={regime.description} /></p>
             )}
             {related && (
               <p className="regional-detail-related">
@@ -72,7 +68,7 @@ export default function RegionalRegimeDetail() {
 
         <section aria-labelledby="regional-leaders-heading">
           <h2 id="regional-leaders-heading" className="regional-detail-section-title">
-            统治者
+            执政者
           </h2>
           <div className="regional-detail-leaders">
             {(regime.leaderData || []).map((leader, i) => (
@@ -85,7 +81,7 @@ export default function RegionalRegimeDetail() {
             ))}
             {(regime.leaderData || []).length === 0 && (
               <p className="regional-detail-empty">
-                暂无统治者条目，可在「data/leaders/{regime.id}/」下添加 JSON，并在
+                暂无执政者条目，可在「data/leaders/{regime.id}/」下添加 JSON，并在
                 「data/regional_regimes.json」中为该政权补充 leaders 字段。
               </p>
             )}

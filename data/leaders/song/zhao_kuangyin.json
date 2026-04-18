@@ -1,11 +1,12 @@
 {
   "id": "zhao_kuangyin",
   "name": "赵匡胤",
-  "alternateNames": "宋太祖、赵九重（小名）",
-  "title": "大宋开国皇帝",
+  "alternateNames": "赵九重",
+  "templeName": "太祖",
+  "posthumousName": "神德皇帝、大孝皇帝",
+  "title": "大宋皇帝",
   "shortTitle": "太祖",
-  "factionId": "ccp",
-  "factionTag": "开国",
+  "eraName": "建隆、乾德、开宝",
   "color": "#914614",
   "birthYear": 927,
   "deathYear": 976,
@@ -20,6 +21,10 @@
   ],
   "ethnicity": "汉族",
   "image": "/leaders/song/zky.jpg",
+  "quote": {
+    "text": "卧榻之侧，岂容他人酣睡？",
+    "source": "赵匡胤"
+  },
   "bio": "宋太祖赵匡胤（927年—976年），字元朗，涿郡（今河北涿州）人，生于洛阳夹马营。五代至北宋初期的军事家、政治家，北宋开国皇帝。他出身军旅，受后周世宗重用，领殿前都点检。960年发动“陈桥兵变”，黄袍加身，取代后周建立宋朝。在位期间，他先后灭亡南平、后蜀、南汉、南唐等割据政权，基本统一中国，并实行“重文轻武”国策，确立了宋朝长达三百余年的政治格局。",
   "timeline": [
     {

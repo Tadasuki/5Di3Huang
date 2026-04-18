@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useHistoricalEvents } from '../../hooks/useHistoricalEvents'
+import AnnotatedText from '../common/AnnotatedText'
 import './EventTypeView.css'
 
 function byYearAsc(a, b) {
@@ -33,11 +34,6 @@ export default function EventTypeView() {
   return (
     <div className="event-type-page" id={`event-type-${typeLabel}`}>
       <div className="container">
-        <div className="event-type-nav">
-          <Link to="/" className="event-type-back">← 首页</Link>
-          <Link to="/map" className="event-type-back">地图</Link>
-        </div>
-
         <header className="event-type-header">
           <div className="event-type-badge">🏷</div>
           <div>
@@ -55,7 +51,7 @@ export default function EventTypeView() {
                 {evt.location || '—'}
               </div>
               <div className="event-type-desc">
-                {evt.summary || evt.impact || ''}
+                <AnnotatedText text={evt.summary || evt.impact || ''} />
               </div>
             </Link>
           ))}
@@ -67,4 +63,3 @@ export default function EventTypeView() {
     </div>
   )
 }
-

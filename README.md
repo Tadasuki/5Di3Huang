@@ -1,16 +1,51 @@
-# React + Vite
+<div align="center">
+  <h1>🕰️ 五帝三皇神圣事 <br/> <sup>Chinese Historical Leaders Database</sup></h1>
+  <p><b>一个以现代化界面、多维图表和详细数据支撑的中国历代执政者/政权谱系百科</b></p>
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<br/>
 
-Currently, two official plugins are available:
+## 📖 编者的话 (Editor's Note)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**“五帝三皇神圣事，骗了无涯过客。”** —— 《贺新郎·读史》（毛泽东）
 
-## React Compiler
+「五帝三皇神圣事」是一个开源的历史人物百科数据库。本站名称取自毛泽东词《贺新郎·读史》，旨在以此剥离历史神格化的滤镜，客观梳理华夏几千载的统治更迭。图标为一个钟表，其灵感源于司马光“君者表也，臣者景也，表动则景随矣。” 这里的“表”是指标杆，也就是中国古代的钟——日晷的那根标杆，暗喻统治者应当为天下之表率，最起码要做对得起人民的事情。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+网站建立的最初灵感，来源于互联网上广受欢迎的各类性格测试与人物原型分析。我们最初只是想做一个趣味性的互动工具，让用户通过答题寻找“自己最像哪位执政者”。但随着数据的沉淀与思考的深入，我们的野心开始向更深处扎根：我们不仅想让用户知道自己“像谁”，更想跨越史料的迷雾，带你探寻这些执政者究竟“是谁”——在那些被神化为图腾、或被妖魔化为怪物的传说面具下，剥离出人性的真实逻辑与权力的刻骨冷酷。
 
-## Expanding the ESLint configuration
+更重要的是，我们视图向每一位造访者传递一个核心观点——**封建帝王与现代领袖不应是高高在上、不可直视的偶像符号。** 历史唯物主义清醒地揭示：**唯有人民，才是创造历史的真正动力。** 哪怕是史册中最耀眼的星辰，也不过是历史大潮激荡起的浪花。即使是传统叙事中所谓“贤明君主”，也往往无法掩盖其维护阶级统治的本质；他们的政策往往并非源于纯粹的仁慈，而是生产力发展的倒逼，或是为了长治久安而进行的权力权宜。我们在此巨细无遗地记录他们，并非源于英雄史观的崇拜，而是为了从这些鲜活的个体与剧变的时代中，透视那条不以人的意志为转移的历史规律，从而照见我们每一个人自己。
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+基于此理念，随着基础框架的稳步搭建，未来的扩展将聚焦于：数据打磨（重大事件与历史人物）、更多维的资料联动（体制与疆域面积演变）、增强地理历史学、分子人类学等学科交叉内容。以及构建臣子、藩王等更广泛的网状知识体系图谱。
+
+## 🤖 AI 赋能 (Powered by AI)
+
+本系统的程序架构、前端交互以及海量结构化文案均由业界最顶尖的 AI 联合协力生成：
+
+*   **[基础框架与核心架构]** - **Claude Opus 4.6**：主导了前端整体的数据解耦、组件重构和复杂的 React 状态管理及深色美学设计。
+*   **[史料整合与内容生成]** - **Gemini 3.1 Pro / Flash**：提供并校对了海量的结构化历史数据、人物六维得分、Y-DNA 单倍群参考，并输出了绝大部分文案。
+*   **[代码审查与敏捷开发]** - **GPT 5.3-Codex / 5.2**：负责查漏补缺、协助解决各类前端 CSS 布局疑难杂症以及开发性能调优。
+
+## 📚 参考资料 (References)
+
+*   **维基百科**
+*   **识典古籍**
+*   **中国哲学书电子化计划**
+*   **中国知网**
+*   **23mofang**
+
+## ⚠️ 致歉与免责声明 (Disclaimer & Apology)
+
+我们深知，历史人物的评价往往具有极强的时代局限性与主观色彩。本网站的资料为四方收集而来，并经过数轮 AI 与编者的琢磨，力求有一定程度的客观与中立。
+
+> **关于客观性与历史争议**：
+> 本站持坚定的历史唯物主义观点，这无可避免地会受到现有古籍文献倾向甚至现代史观的干扰。部分历史见解、评分维度、或是特定人物政权的归属认定，可能**不能符合所有访客的观念**（例如两岸各自的正统政治性叙事准则）。
+>  
+> **我们绝对无意、也不对、更坚决反对任何刻意美化或抹黑历史执政者的行为。**不论是千古一帝还是伟大领袖，盖棺定论，他们的历史功过均已成为过往云烟，本项目仅仅作为一份数字化归档。请各位访客**务必辩证看待**，切莫将本站数据作为严格的学术引用或者敏感的政治辩论依据。因教育背景与认知差异带来的冒犯，我们在此提前致以诚挚的歉意。
+
+> **错误指正**：
+> 鉴于五千年文明浩如烟海，错漏在所难免（如事件细节错误、单倍群归属错误等）。在此恳请大家发现事实性错误时，移步 **[GitHub Issue](#)** 友好指出，我们将尽快核实并修正！友好交流，理性读史。
+
+---
+<div align="center">
+  <p><i>采用 <b><a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh-hans">CC BY-SA 4.0</a></b> 协议开放版权。切勿用于商业、专业学术用途。</i></p>
+</div>

@@ -1,0 +1,103 @@
+.annotated-text {
+  position: relative;
+  display: inline;
+}
+
+.annotated-text-trigger {
+  display: inline;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--color-gold) 55%, var(--color-border));
+  border-radius: 3px;
+  transition: color var(--transition-fast), background var(--transition-fast), text-decoration-color var(--transition-fast);
+  white-space: normal;
+  line-height: inherit;
+  text-align: left;
+  vertical-align: baseline;
+  word-break: normal;
+  overflow-wrap: break-word;
+  outline: none;
+}
+
+.annotated-text-trigger:hover,
+.annotated-text-trigger:focus-visible,
+.annotated-text-trigger.is-pinned {
+  color: var(--color-gold-dark);
+  background: color-mix(in srgb, var(--color-gold) 10%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--color-gold) 85%, var(--color-border));
+}
+
+.annotation-popover {
+  position: fixed;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--gradient-card);
+  box-shadow: var(--shadow-card-hover);
+  z-index: 9999;
+}
+
+.annotation-title {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--color-text-primary);
+  margin: 0 0 6px;
+}
+
+.annotation-content {
+  font-family: var(--font-zhenkai);
+  font-size: 1.13rem;
+  font-weight: 700;
+  font-synthesis: weight;
+  /* 字体阴影仿粗 */
+  text-shadow:
+    0.005em 0 0 currentColor,
+    -0.005em 0 0 currentColor;
+  text-align: left;
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+}
+
+.annotation-source {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--color-text-tertiary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .annotation-popover {
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+  }
+
+  .annotation-popover {
+    width: min(460px, 88vw);
+  }
+
+  .annotation-title {
+    font-size: 0.84rem;
+  }
+
+  .annotation-content {
+    font-size: 0.95rem;
+    line-height: 1.72;
+  }
+
+  .annotation-source {
+    font-size: 0.75rem;
+  }
+}

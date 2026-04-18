@@ -115,7 +115,7 @@
   padding: var(--space-md);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .dynasty-detail-title {
     font-size: 1.5rem;
   }
@@ -177,11 +177,23 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .detail-prev-next {
-    flex-direction: column;
+    flex-direction: row;
+    gap: var(--space-sm);
   }
+
+  .detail-prev-next-card {
+    width: 100%;
+    min-height: 62px;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .detail-prev-next-v {
+    font-size: 1rem;
+  }
+
   .detail-prev-next-card.align-right {
-    text-align: left;
+    text-align: right;
   }
 }

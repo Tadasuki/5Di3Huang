@@ -63,7 +63,7 @@ export default function RadarChart({ leader, ratings, color = '#c9a96e' }) {
           color: '#5c5548',
           font: {
             size: 13,
-            family: "'Noto Sans SC', sans-serif",
+            family: "'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
             weight: 600,
           },
         },
@@ -84,11 +84,11 @@ export default function RadarChart({ leader, ratings, color = '#c9a96e' }) {
         titleColor: '#f7f4ee',
         bodyColor: '#e8e2d6',
         titleFont: {
-          family: "'Noto Sans SC', sans-serif",
+          family: "'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
           size: 13,
         },
         bodyFont: {
-          family: "'Noto Sans SC', sans-serif",
+          family: "'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
           size: 12,
         },
         borderColor: 'rgba(201, 169, 110, 0.3)',
