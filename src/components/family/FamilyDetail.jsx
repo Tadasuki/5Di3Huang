@@ -3,6 +3,7 @@ import { useFamily } from '../../hooks/useDynasties'
 import LeaderCard from '../home/LeaderCard'
 import { withOpacity } from '../../utils/colorUtils'
 import { getFamilyBadgeText } from '../../utils/familyBadge'
+import { inlineMarkupToPlain } from '../../utils/inlineMarkup'
 import AnnotatedText from '../common/AnnotatedText'
 import './FamilyDetail.css'
 
@@ -66,7 +67,7 @@ export default function FamilyDetail() {
           <div className="family-detail-intro">
             <p className="family-detail-label">执政者家族</p>
             <h1 className="family-detail-title">
-              {family.name}
+              <AnnotatedText text={family.name} />
               {haplogroup && (
                 <a
                   className="family-haplogroup-tag family-haplogroup-link family-tag-clickable"
@@ -93,10 +94,10 @@ export default function FamilyDetail() {
                     className="family-location-link"
                     title="在地图中定位该地区"
                   >
-                    {family.ancestralHome} ↗
+                    <AnnotatedText text={family.ancestralHome} /> ↗
                   </Link>
                 ) : (
-                  <span>{family.ancestralHome || '未知'}</span>
+                  <span><AnnotatedText text={inlineMarkupToPlain(family.ancestralHome || '未知')} /></span>
                 )}
               </div>
               <div className="family-detail-meta-item">

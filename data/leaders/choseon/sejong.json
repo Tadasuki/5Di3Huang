@@ -3,6 +3,7 @@
   "familyId": "jeonju_yi",
   "dynastyId": "choseon",
   "name": "李祹",
+  "image": "/leaders/choseon/sejong.jpg",
   "templeName": "世宗",
   "posthumousName": "庄宪英文明武仁圣明孝大王",
   "eraName": "永乐、洪熙、宣德、正统、景泰",
@@ -17,7 +18,6 @@
     37.578611
   ],
   "ethnicity": "朝鲜族",
-  "image": "",
   "quote": {
     "text": "国之语音，异乎中国，与文字不相流通。",
     "source": "世宗大王《训民正音》序"
@@ -65,11 +65,25 @@
     "military": 70,
     "economy": 82,
     "culture": 98,
+    "ideology": 92,
+    "practice": 91,
     "diplomacy": 78,
     "legacy": 96,
     "benevolence": 90,
     "stability": 86,
     "capability": 84
+  },
+  "ratingsExplain": {
+    "military": "北击女真、南征对马，设“四郡六镇”稳固国防，军事作为以守边安民为主。",
+    "benevolence": "重视恤民与法制修订，推动赈恤、农政与医疗措施，民本色彩明显。",
+    "economy": "编纂《农事直说》、推广测雨器与历法改良，显著提升农业与财政治理能力。",
+    "culture": "创制训民正音并推动学术机构运转，是朝鲜半岛文化史上的决定性贡献。",
+    "ideology": "以儒家王道为纲并吸收实学精神，形成“礼制+实用”并行的治国思路。",
+    "practice": "从文字、制度到边政改革均能落地，改革链条完整且执行持续。",
+    "diplomacy": "对明奉行“事大”，对周边实施“交邻”，整体实现低成本外部安全。",
+    "legacy": "韩文体系与文治制度长期延续，后世对其“圣君”定位几乎成为共识。",
+    "stability": "在位期间政局总体平稳，改革与秩序并行，未引发结构性失稳。",
+    "capability": "统筹文治、边防、科技与人事的能力均衡而高效，展现一流君主素质。"
   },
   "summary": "世宗以文治见长，尤以训民正音的创制与文化政策著称。他在制度建设、学术推动与科技发展方面的投入，使其被广泛视为朝鲜王朝最具代表性的明君之一。"
 }

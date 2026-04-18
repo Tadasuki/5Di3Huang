@@ -8,6 +8,7 @@ import { formatLifeYearRange, formatYearRangeOngoing, formatYearShort } from '..
 import { withOpacity } from '../../utils/colorUtils'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { computeTotalScore } from '../../utils/ratings'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
 import RadarChart from './RadarChart'
 import AnnotatedText from '../common/AnnotatedText'
 import './LeaderDetail.css'
@@ -226,9 +227,9 @@ export default function LeaderDetail() {
             if (!groupId) return ''
             if (groupId === 'central') return '领导核心'
             const d = (dynasties || []).find(x => String(x?.id) === String(groupId))
-            if (d) return d.fullName || d.name || String(groupId)
+            if (d) return inlineMarkupToPlain(d.fullName || d.name || String(groupId))
             const r = getRegionalList().find(x => String(x?.id) === String(groupId))
-            if (r) return r.fullName || r.name || String(groupId)
+            if (r) return inlineMarkupToPlain(r.fullName || r.name || String(groupId))
             return String(groupId)
         }
 
@@ -375,7 +376,7 @@ export default function LeaderDetail() {
     }
 
     const leaderName = typeof leader.name === 'string' ? leader.name : (leader.name != null ? String(leader.name) : '')
-    const leaderInitial = leaderName ? leaderName.charAt(0) : '?'
+    const leaderInitial = inlineMarkupInitial(leaderName)
     const epigraph = getLeaderEpigraph(leader)
 
     function formatReignValue(l) {
@@ -407,7 +408,7 @@ export default function LeaderDetail() {
             const base = f?.shortName || f?.name || String(leader.factionId)
             const tag = typeof leader?.factionTag === 'string' ? leader.factionTag.trim() : ''
             const label = tag ? `${base} · ${tag}` : base
-            const title = f?.name ? `查看阵营：${f.name}` : '查看阵营'
+            const title = f?.name ? `查看阵营：${inlineMarkupToPlain(f.name)}` : '查看阵营'
             return {
                 label: '阵营',
                 value: (
@@ -416,7 +417,7 @@ export default function LeaderDetail() {
                         className="location-link tag-clickable"
                         title={title}
                     >
-                        {label} <span className="jump-icon">↗</span>
+                        <AnnotatedText text={label} /> <span className="jump-icon">↗</span>
                     </Link>
                 )
             }
@@ -431,7 +432,7 @@ export default function LeaderDetail() {
                     className="location-link tag-clickable"
                     title="在地图中定位详细祖籍地"
                 >
-                    {family ? `${family.ancestralHome} ` : leader.ancestralHome} <span className="jump-icon">↗</span>
+                    <AnnotatedText text={family ? `${family.ancestralHome} ` : leader.ancestralHome} /> <span className="jump-icon">↗</span>
                 </Link>
             )
         },
@@ -443,7 +444,7 @@ export default function LeaderDetail() {
                     className="location-link tag-clickable"
                     title="在地图中定位详细出生地"
                 >
-                    {leader.birthplace} <span className="jump-icon">↗</span>
+                    <AnnotatedText text={leader.birthplace} /> <span className="jump-icon">↗</span>
                 </Link>
             )
         },
@@ -474,7 +475,7 @@ export default function LeaderDetail() {
                             <span>”</span>
                         </p>
                         {epigraph.source && (
-                            <p className="leader-epigraph-source">—— {epigraph.source}</p>
+                            <p className="leader-epigraph-source">—— <AnnotatedText text={epigraph.source} /></p>
                         )}
                     </div>
                 )}
@@ -507,7 +508,7 @@ export default function LeaderDetail() {
                             {avatarSrc && !avatarImgFailed ? (
                                 <img
                                     src={avatarSrc}
-                                    alt={leaderName}
+                                    alt={inlineMarkupToPlain(leaderName)}
                                     loading="eager"
                                     decoding="async"
                                     referrerPolicy="no-referrer"
@@ -530,7 +531,7 @@ export default function LeaderDetail() {
                                             border: `1px solid ${withOpacity(p.color || themeColor, 0.3)}`
                                         }}
                                     >
-                                        {p.label}
+                                        <AnnotatedText text={p.label} />
                                     </Link>
                                 ))}
                             </div>
@@ -539,16 +540,16 @@ export default function LeaderDetail() {
 
                     <div className="profile-info">
                         <h1 className="profile-name">
-                            {leaderName}
-                            <span className="profile-title-badge">{leader.title}</span>
+                            <AnnotatedText text={leaderName} />
+                            <span className="profile-title-badge"><AnnotatedText text={leader.title} /></span>
                             {family && (
                                 <Link
                                     to={`/family/${family.id}`}
                                     className="leader-family-tag"
                                     style={{ '--family-color': family.color || '#c9a96e' }}
-                                    title={`查看家族：${family.name}`}
+                                    title={`查看家族：${inlineMarkupToPlain(family.name)}`}
                                 >
-                                    {family.name}
+                                    <AnnotatedText text={family.name} />
                                 </Link>
                             )}
                         </h1>
@@ -557,7 +558,9 @@ export default function LeaderDetail() {
                             {infoItems.map(item => (
                                 <div className="profile-info-item" key={item.label}>
                                     <span className="profile-info-label">{item.label}</span>
-                                    <span className="profile-info-value">{item.value}</span>
+                                    <span className="profile-info-value">
+                                        {typeof item.value === 'string' ? <AnnotatedText text={item.value} /> : item.value}
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -607,7 +610,7 @@ export default function LeaderDetail() {
                                     >
                                         <div className="leader-timeline-dot" />
                                         <div className="leader-timeline-year">{formatYearShort(item.year)}</div>
-                                        <div className="leader-timeline-event">{item.event}</div>
+                                        <div className="leader-timeline-event"><AnnotatedText text={item.event} /></div>
                                     </div>
                                 ))}
                             </div>
@@ -621,7 +624,7 @@ export default function LeaderDetail() {
                                         key={i}
                                         style={{ animationDelay: `${i * 0.08}s` }}
                                     >
-                                        <div className="achievement-title">✦ {item.title}</div>
+                                        <div className="achievement-title">✦ <AnnotatedText text={item.title} /></div>
                                         <div className="achievement-desc"><AnnotatedText text={item.description} /></div>
                                     </div>
                                 ))}
@@ -636,7 +639,7 @@ export default function LeaderDetail() {
                                         key={i}
                                         style={{ animationDelay: `${i * 0.08}s` }}
                                     >
-                                        <div className="controversy-title">⚡ {item.title}</div>
+                                        <div className="controversy-title">⚡ <AnnotatedText text={item.title} /></div>
                                         <div className="controversy-desc"><AnnotatedText text={item.description} /></div>
                                     </div>
                                 ))}
@@ -654,12 +657,12 @@ export default function LeaderDetail() {
                                     >
                                         <div className="leader-event-head">
                                             <div className="leader-event-title">
-                                                ✦ {evt.name}
+                                                ✦ <AnnotatedText text={evt.name} />
                                                 <span className="leader-event-year">{formatYearShort(evt.year)}</span>
                                             </div>
                                         </div>
                                         <div className="leader-event-desc">
-                                            {(evt.location ? `${evt.location} · ` : '')}
+                                            {evt.location && (<><AnnotatedText text={evt.location} /> · </>)}
                                             <AnnotatedText text={evt.summary || evt.impact || ''} />
                                         </div>
                                     </Link>
@@ -712,7 +715,7 @@ export default function LeaderDetail() {
                                                 <span className="detail-prev-next-sub"> · {p.groupLabel}</span>
                                             ) : null}
                                         </div>
-                                        <div className="detail-prev-next-v">{p.leader.name}</div>
+                                        <div className="detail-prev-next-v"><AnnotatedText text={p.leader.name} /></div>
                                     </Link>
                                 ))
                             ) : (
@@ -734,7 +737,7 @@ export default function LeaderDetail() {
                                                 <span className="detail-prev-next-sub"> · {n.groupLabel}</span>
                                             ) : null}
                                         </div>
-                                        <div className="detail-prev-next-v">{n.leader.name}</div>
+                                        <div className="detail-prev-next-v"><AnnotatedText text={n.leader.name} /></div>
                                     </Link>
                                 ))
                             ) : (

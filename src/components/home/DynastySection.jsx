@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import LeaderCard from './LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import { inlineMarkupInitial } from '../../utils/inlineMarkup'
 import AnnotatedText from '../common/AnnotatedText'
 import './DynastySection.css'
 
@@ -22,14 +23,14 @@ export default function DynastySection({ dynasty, index }) {
           className="dynasty-badge"
           style={{ background: `linear-gradient(135deg, ${dynasty.color}, ${withOpacity(dynasty.color, 0.6)})` }}
         >
-          {dynasty.name.charAt(0)}
+          {inlineMarkupInitial(dynasty.name)}
         </div>
         <div className="dynasty-info">
-          <h2 className="dynasty-name">{dynasty.fullName}</h2>
+          <h2 className="dynasty-name"><AnnotatedText text={dynasty.fullName} /></h2>
           <div className="dynasty-meta">
             <span>📅 {formatYearRangeOngoing(dynasty.startYear, dynasty.endYear)}</span>
             <span>⏱ {calculateDuration(dynasty.startYear, dynasty.endYear)}年</span>
-            <span>🏰 {dynasty.capital}</span>
+            <span>🏰 <AnnotatedText text={dynasty.capital} /></span>
           </div>
         </div>
         <Link

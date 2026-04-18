@@ -2,7 +2,8 @@
   "id": "ying_zheng",
   "dynastyId": "qin",
   "name": "嬴政",
-  "alternateNames": "赵政",
+  "image": "/leaders/qin/yz.jpg",
+  "alternateNames": "赵政、赵正",
   "templeName": null,
   "posthumousName": "始皇帝",
   "eraName": null,
@@ -18,7 +19,6 @@
     36.61
   ],
   "ethnicity": "华夏族",
-  "image": "/images/leaders/ying_zheng.webp",
   "quote": {
     "text": "{{ann|少恩而虎狼心，居约易出人下，得志亦轻食人。|译文|（秦王）刻薄寡恩，心如虎狼，穷困时屈居人下，得志时就反咬一口。|尉缭言，载于司马迁《史记·秦始皇本纪》}}",
     "source": "尉缭"
@@ -130,11 +130,25 @@
     "military": 95,
     "economy": 70,
     "culture": 60,
+    "ideology": 72,
+    "practice": 84,
     "diplomacy": 75,
     "legacy": 98,
     "benevolence": 90,
     "stability": 80,
     "capability": 78
+  },
+  "ratingsExplain": {
+    "military": "横扫六国完成统一，战争动员与战略决断力在古代帝王中属顶级。",
+    "benevolence": "统一秩序带来治安与制度整合，但严刑峻法与重役削弱民生评价。",
+    "economy": "统一度量衡、货币与驰道体系，显著降低帝国内部交易与行政成本。",
+    "culture": "焚书坑儒与思想控制对文化生态造成长期负面记忆。",
+    "ideology": "以法家国家主义塑造“中央集权—官僚治理”基本范式。",
+    "practice": "郡县制、书同文等重大改革落地彻底，执行效率极高。",
+    "diplomacy": "主要以军事吞并替代传统外交，外部关系策略单一。",
+    "legacy": "“大一统国家”政治想象由其奠基，后世王朝多以此为范式。",
+    "stability": "短期高压稳定明显，长期因负担过重而难以持续。",
+    "capability": "战略视野与执行力俱强，但治理柔性与继承设计不足。"
   },
   "summary": "秦始皇是中国历史上最具影响力的帝王之一。他结束了长达数百年的分裂局面，建立了统一的中央集权国家，其创立的政治制度和文化统一措施深刻影响了中国两千余年的历史。然而，他的暴政和严刑峻法也导致了秦朝的迅速灭亡。功过参半，但其历史地位无可替代。"
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { formatYearShort, formatYearShortOngoing } from '../../utils/yearFormat'
 import { useDynasties } from '../../hooks/useDynasties'
 import { useRegionalRegimeIdSet, useRegionalRegimes } from '../../hooks/useRegionalRegime'
+import AnnotatedText from '../common/AnnotatedText'
 import './TimelineView.css'
 
 function CentralDynastyCard({ entry }) {
@@ -13,7 +14,7 @@ function CentralDynastyCard({ entry }) {
           className="timeline-card-color"
           style={{ background: entry.central.color }}
         />
-        <span className="timeline-card-name">{entry.central.name}</span>
+        <span className="timeline-card-name"><AnnotatedText text={entry.central.name} /></span>
       </div>
       <div className="timeline-card-years timeline-card-years--nowrap">
         {formatYearShort(entry.startYear)} — {formatYearShortOngoing(entry.endYear)}
@@ -48,7 +49,7 @@ function RegionalCardInner({ reg, accentColor }) {
           className="timeline-card-color timeline-card-color--regional"
           style={{ background: accentColor }}
         />
-        <span className="timeline-card-name timeline-card-name--regional">{reg.name}</span>
+        <span className="timeline-card-name timeline-card-name--regional"><AnnotatedText text={reg.name} /></span>
       </div>
       <div className="timeline-card-years timeline-card-years--nowrap timeline-card-years--small">
         {formatYearShort(reg.startYear)} — {formatYearShortOngoing(reg.endYear)}

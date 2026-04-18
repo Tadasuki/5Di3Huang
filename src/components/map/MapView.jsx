@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useAllLeaders, useFamilies } from '../../hooks/useDynasties'
+import { inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import AnnotatedText from '../common/AnnotatedText'
 import './MapView.css'
 
 import { MAPTILER_KEY, hasMapKey } from '../../config/maptiler'
@@ -24,6 +26,16 @@ let globalMapLoaded = false
 
 function raf2(fn) {
     requestAnimationFrame(() => requestAnimationFrame(fn))
+}
+
+function escHtml(s) {
+    const text = inlineMarkupToPlain(s)
+    return text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;')
 }
 
 export default function MapView() {
@@ -223,8 +235,8 @@ export default function MapView() {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
                 <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
-                  <strong style="color: ${fam.color || '#c9a96e'}">${fam.name}</strong>
-                  <br/><small>发迹地: ${fam.ancestralHome}</small>
+                  <strong style="color: ${fam.color || '#c9a96e'}">${escHtml(fam.name)}</strong>
+                  <br/><small>发迹地: ${escHtml(fam.ancestralHome)}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/family/${fam.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">家族详情</button>
                 </div>
               `)
@@ -247,8 +259,8 @@ export default function MapView() {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
                 <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
-                  <strong>${leader.name}</strong>
-                  <br/><small>祖籍: ${leader.ancestralHome}</small>
+                  <strong>${escHtml(leader.name)}</strong>
+                  <br/><small>祖籍: ${escHtml(leader.ancestralHome)}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/leader/${leader.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">人物详情</button>
                 </div>
               `)
@@ -274,8 +286,8 @@ export default function MapView() {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
                 <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
-                  <strong>${leader.name}</strong>
-                  <br/><small>出生地: ${leader.birthplace}</small>
+                  <strong>${escHtml(leader.name)}</strong>
+                  <br/><small>出生地: ${escHtml(leader.birthplace)}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/leader/${leader.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">人物详情</button>
                 </div>
               `)
@@ -302,9 +314,9 @@ export default function MapView() {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
                 <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px; max-width: 200px;">
-                  <strong style="color: var(--color-vermilion);">${evt.name}</strong> <small>(${timeStr})</small>
-                  <br/><span style="font-size: 0.8rem;">${evt.location}</span>
-                  <br/><small style="display: block; margin-top: 4px; line-height: 1.4;">${evt.summary}</small>
+                  <strong style="color: var(--color-vermilion);">${escHtml(evt.name)}</strong> <small>(${timeStr})</small>
+                  <br/><span style="font-size: 0.8rem;">${escHtml(evt.location)}</span>
+                  <br/><small style="display: block; margin-top: 4px; line-height: 1.4;">${escHtml(evt.summary)}</small>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/event/${evt.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">事件详情</button>
                 </div>
               `)
@@ -330,7 +342,7 @@ export default function MapView() {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
                 <div style="font-family: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; padding: 4px;">
-                  <strong style="color: var(--color-jade);">${polity.name}都城：${polity.capital}</strong>
+                  <strong style="color: var(--color-jade);">${escHtml(polity.name)}都城：${escHtml(polity.capital)}</strong>
                   <button class="map-popup-nav-btn btn btn-outline btn-sm" data-url="/${polity.routeType}/${polity.id}" style="margin-top: 8px; width: 100%; cursor: pointer; padding: 4px 8px; font-size: 12px;">政权详情</button>
                 </div>
               `)
@@ -394,7 +406,7 @@ export default function MapView() {
                         </p>
                         {leaders.map(l => (
                             <div key={l.id} style={{ fontSize: '0.8rem', color: 'var(--color-text-tertiary)', padding: '2px 0' }}>
-                                {l.name} — 祖籍: {l.ancestralHome} [{l.ancestralHomeCoords?.join(', ')}] | 出生地: {l.birthplace} [{l.birthplaceCoords?.join(', ')}]
+                                <AnnotatedText text={l.name} /> — 祖籍: <AnnotatedText text={l.ancestralHome} /> [{l.ancestralHomeCoords?.join(', ')}] | 出生地: <AnnotatedText text={l.birthplace} /> [{l.birthplaceCoords?.join(', ')}]
                             </div>
                         ))}
                     </div>

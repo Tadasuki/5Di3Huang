@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { Link } from 'react-router-dom'
 import './AnnotatedText.css'
 
 function normalizeAnnotations(list) {
@@ -16,18 +17,39 @@ function normalizeAnnotations(list) {
 }
 
 function parseInlineAnnotation(raw) {
-  const parts = String(raw || '').split('|')
+  const text = String(raw || '')
+  const parts = []
+  let cursor = 0
+  for (let i = 0; i < text.length && parts.length < 3; i += 1) {
+    if (text[i] === '|') {
+      parts.push(text.slice(cursor, i))
+      cursor = i + 1
+    }
+  }
+  parts.push(text.slice(cursor))
   if (parts.length < 4) return null
-  const [label, title, content, source] = parts
+  const [label, title, content, ...rest] = parts
   const clean = s => (typeof s === 'string' ? s.trim() : '')
   const out = {
     label: clean(label),
     title: clean(title),
     content: clean(content),
-    source: clean(source),
+    source: clean(rest.join('|')),
   }
   if (!out.label || !out.content) return null
   return out
+}
+
+function parseInlineLink(raw) {
+  const text = String(raw || '')
+  const idx = text.indexOf('|')
+  if (idx <= 0 || idx >= text.length - 1) return null
+  const target = text.slice(0, idx)
+  const label = text.slice(idx + 1)
+  return {
+    target: target.trim(),
+    label: label.trim()
+  }
 }
 
 function splitByTargets(text, notes) {
@@ -56,15 +78,26 @@ function splitByTargets(text, notes) {
 
 function parseInlineSegments(text) {
   const input = typeof text === 'string' ? text : String(text ?? '')
-  const regex = /\{\{ann\|([\s\S]*?)\}\}/g
+  // Support both closed `{{ann|...}}` and accidental unclosed tags till end of text.
+  const regex = /\{\{(ann|link)\|([\s\S]*?)(?:\}\}|$)/g
   const nodes = []
   let last = 0
   let m
   while ((m = regex.exec(input)) !== null) {
     if (m.index > last) nodes.push({ type: 'text', value: input.slice(last, m.index) })
-    const ann = parseInlineAnnotation(m[1])
-    if (ann) nodes.push({ type: 'ann', value: ann })
-    else nodes.push({ type: 'text', value: m[0] })
+    const type = m[1]
+    const raw = m[2]
+    
+    if (type === 'ann') {
+      const ann = parseInlineAnnotation(raw)
+      if (ann) nodes.push({ type: 'ann', value: ann })
+      else nodes.push({ type: 'text', value: m[0] })
+    } else if (type === 'link') {
+      const lk = parseInlineLink(raw)
+      if (lk) nodes.push({ type: 'link', value: lk })
+      else nodes.push({ type: 'text', value: m[0] })
+    }
+    
     last = regex.lastIndex
   }
   if (last < input.length) nodes.push({ type: 'text', value: input.slice(last) })
@@ -209,11 +242,40 @@ export default function AnnotatedText({ text, annotations }) {
     <>
       {lines.map((line, li) => (
         <Fragment key={li}>
-          {line.map((seg, si) => (
-            seg.type === 'ann'
-              ? <InlineAnnotation key={`${li}-${si}`} ann={seg.value} />
-              : <Fragment key={`${li}-${si}`}>{seg.value}</Fragment>
-          ))}
+          {line.map((seg, si) => {
+            if (seg.type === 'ann') {
+              return <InlineAnnotation key={`${li}-${si}`} ann={seg.value} />
+            } else if (seg.type === 'link') {
+              const isExternal = seg.value.target.startsWith('http')
+              const commonStyle = {
+                color: 'inherit',
+                textDecoration: 'underline',
+                textDecorationColor: 'currentColor',
+                textUnderlineOffset: '3px',
+                font: 'inherit',
+              }
+              return isExternal ? (
+                <a 
+                  key={`${li}-${si}`} 
+                  href={seg.value.target} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={commonStyle}
+                >
+                  {seg.value.label}
+                </a>
+              ) : (
+                <Link 
+                  key={`${li}-${si}`} 
+                  to={seg.value.target}
+                  style={commonStyle}
+                >
+                  {seg.value.label}
+                </Link>
+              )
+            }
+            return <Fragment key={`${li}-${si}`}>{seg.value}</Fragment>
+          })}
           {li < lines.length - 1 && <br />}
         </Fragment>
       ))}

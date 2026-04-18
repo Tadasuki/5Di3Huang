@@ -4,10 +4,11 @@
 
 @font-face {
   font-family: 'Han Chan ZhengKai';
-  src: url('https://cdn.jsdelivr.net/npm/@fontpkg/chill-kai@2.0.1/ChillKai.ttf') format('truetype');
+  src: url('/fonts/ChillKai.woff2') format('woff2'),
+    url('/fonts/ChillKai.ttf') format('truetype');
   font-weight: 400 700;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 @font-face {
@@ -86,7 +87,7 @@
   --font-serif: 'Noto Serif SC', 'Songti SC', serif;
   --font-sans: 'OPPO Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-zhenkai: 'Han Chan ZhengKai', 'KaiTi', 'STKaiti', 'Noto Serif SC', serif;
+  --font-zhenkai: 'Han Chan ZhengKai';
 
   /* 过渡 */
   --transition-fast: 150ms ease;

@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useHistoricalEvent, useHistoricalEvents } from '../../hooks/useHistoricalEvents'
 import { useAllLeaders } from '../../hooks/useDynasties'
+import { inlineMarkupInitial } from '../../utils/inlineMarkup'
 import LeaderCard from '../home/LeaderCard'
 import AnnotatedText from '../common/AnnotatedText'
 import './EventDetail.css'
@@ -46,19 +47,19 @@ export default function EventDetail() {
     <div className="event-detail" id={`event-detail-${event.id}`}>
       <div className="container">
         <header className="event-header">
-          <div className="event-badge">{event.name.charAt(0)}</div>
+          <div className="event-badge">{inlineMarkupInitial(event.name)}</div>
           <div className="event-header-main">
-            <h1 className="event-title">{event.name}</h1>
+            <h1 className="event-title"><AnnotatedText text={event.name} /></h1>
             <div className="event-meta">
               <span>📅 {event.year}</span>
               {event.location && (
                 <Link to={`/map?event=${event.id}`} className="location-link tag-clickable" title="在地图中定位该地点">
-                  📍 {event.location} <span className="jump-icon">↗</span>
+                  📍 <AnnotatedText text={event.location} /> <span className="jump-icon">↗</span>
                 </Link>
               )}
               {event.type && (
                 <Link to={`/events/type/${encodeURIComponent(event.type)}`} className="event-type-tag tag-clickable">
-                  🏷 {event.type} <span className="jump-icon">↗</span>
+                  🏷 <AnnotatedText text={event.type} /> <span className="jump-icon">↗</span>
                 </Link>
               )}
             </div>
@@ -91,7 +92,7 @@ export default function EventDetail() {
         {sameTypeEvents.length > 1 && (
           <section className="event-section" aria-labelledby="event-same-type-heading">
             <h2 id="event-same-type-heading" className="event-section-title">
-              同类事件：{event.type}
+              同类事件：<AnnotatedText text={event.type} />
             </h2>
             <div className="event-timeline-container">
               {sameTypeEvents.map(e => (
@@ -105,9 +106,9 @@ export default function EventDetail() {
                     <div className="event-timeline-date">
                       {e.year < 0 ? `公元前${Math.abs(e.year)}年` : `${e.year}年`}
                     </div>
-                    <div className="event-timeline-name">{e.name}</div>
+                    <div className="event-timeline-name"><AnnotatedText text={e.name} /></div>
                     <div className="event-timeline-desc">
-                      {e.location && <span>📍 {e.location} · </span>}
+                      {e.location && <span>📍 <AnnotatedText text={e.location} /> · </span>}
                       <AnnotatedText text={e.summary || e.impact || ''} />
                     </div>
                   </div>

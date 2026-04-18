@@ -4,6 +4,8 @@ import { useSearchVisibility } from '../../context/SearchVisibilityContext'
 import { useSearchIndex } from '../../hooks/useSearchIndex'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { withOpacity } from '../../utils/colorUtils'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import AnnotatedText from '../common/AnnotatedText'
 import './Navbar.css'
 
 const navItems = [
@@ -42,7 +44,7 @@ export default function Navbar() {
     const raw = q.trim()
     if (!raw) return []
     const query = raw.toLowerCase()
-    const match = s => (typeof s === 'string' ? s.toLowerCase().includes(query) : false)
+    const match = s => inlineMarkupToPlain(s).toLowerCase().includes(query)
 
     const leaderHits = leaders
       .filter(l => match(l.name) || match(l.templeName) || match(l.eraName) || match(l.birthplace))
@@ -159,11 +161,11 @@ export default function Navbar() {
                               className="search-card-avatar"
                               style={{ background: `linear-gradient(135deg, ${color}, ${withOpacity(color, 0.5)})` }}
                             >
-                              {l.name.charAt(0)}
+                              {inlineMarkupInitial(l.name)}
                               {img && (
                                 <img
                                   src={img}
-                                  alt={l.name}
+                                  alt={inlineMarkupToPlain(l.name)}
                                   loading="lazy"
                                   decoding="async"
                                   referrerPolicy="no-referrer"
@@ -174,10 +176,10 @@ export default function Navbar() {
                             </div>
                             <div className="search-card-main">
                               <div className="search-card-title">
-                                {item.title}
+                                <AnnotatedText text={item.title} />
                                 <span className="search-card-type">人物</span>
                               </div>
-                              <div className="search-card-sub">{item.subtitle}</div>
+                              <div className="search-card-sub"><AnnotatedText text={item.subtitle} /></div>
                             </div>
                           </button>
                         )
@@ -194,10 +196,10 @@ export default function Navbar() {
                             <div className="search-card-badge event">事</div>
                             <div className="search-card-main">
                               <div className="search-card-title">
-                                {item.title}
+                                <AnnotatedText text={item.title} />
                                 <span className="search-card-type">事件</span>
                               </div>
-                              <div className="search-card-sub">{item.subtitle}</div>
+                              <div className="search-card-sub"><AnnotatedText text={item.subtitle} /></div>
                             </div>
                           </button>
                         )
@@ -215,14 +217,14 @@ export default function Navbar() {
                             className="search-card-badge polity"
                             style={{ background: `linear-gradient(135deg, ${p.color || '#c9a96e'}, ${withOpacity(p.color || '#c9a96e', 0.55)})` }}
                           >
-                            {(p.name || p.fullName || '政').charAt(0)}
+                            {inlineMarkupInitial(p.name || p.fullName || '政')}
                           </div>
                           <div className="search-card-main">
                             <div className="search-card-title">
-                              {item.title}
+                              <AnnotatedText text={item.title} />
                               <span className="search-card-type">{item.type === 'regional' ? '政权' : '朝代'}</span>
                             </div>
-                            <div className="search-card-sub">{item.subtitle}</div>
+                            <div className="search-card-sub"><AnnotatedText text={item.subtitle} /></div>
                           </div>
                         </button>
                       )

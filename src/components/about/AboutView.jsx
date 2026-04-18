@@ -75,7 +75,7 @@ export default function AboutView() {
             </a>
             <a href="https://platform.openai.com/docs/models/all" target="_blank" rel="noopener noreferrer" className="tech-badge" style={{ padding: '8px 16px', fontSize: '1rem', display: 'flex', alignItems: 'center' }}>
               <img src="https://images.icon-icons.com/4252/PNG/512/chatgpt_logo_chatgpt_logo_square_green_gpt_ia_openai_icon_264977.png" width="18" height="18" alt="GPT" />
-              GPT-5.3 Codex / 5.2
+              GPT-5.4 / 5.3 Codex / 5.2
             </a>
           </div>
 

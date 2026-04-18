@@ -7,6 +7,7 @@ import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { withOpacity } from '../../utils/colorUtils'
 import { formatLifeYearRange, formatYearRangeOngoing } from '../../utils/yearFormat'
 import { computeTotalScore } from '../../utils/ratings'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
 import CompareRadar from './CompareRadar'
 import SearchSelect from './SearchSelect'
 import AnnotatedText from '../common/AnnotatedText'
@@ -196,7 +197,7 @@ function TimelineBar({ leader, color, minMs, maxMs, start, end, kind, scaleMode 
     <div className="lct-line">
       <div className="lct-line-label">
         <span className="lct-dot" style={{ background: color }} />
-        {leader.name}
+        <AnnotatedText text={leader.name} />
         <span className="lct-line-years">
           {formatDateLabel(start)}–{formatDateLabel(end)} {lenYears != null ? `(${lenYears.toFixed(1)}年)` : ''}
         </span>
@@ -226,7 +227,7 @@ function DurationBar({ leader, color, lenYears, maxDurationYears = 1, kind }) {
     <div className="lct-line">
       <div className="lct-line-label">
         <span className="lct-dot" style={{ background: color }} />
-        {leader.name}
+        <AnnotatedText text={leader.name} />
         <span className="lct-line-years">
           {lenYears != null ? `合计${lenYears.toFixed(1)}年` : '—'}
         </span>
@@ -280,19 +281,19 @@ function LeaderInfoCard({ leader, color, side }) {
           {img && !imgFailed ? (
             <img
               src={img}
-              alt={leader.name}
+              alt={inlineMarkupToPlain(leader.name)}
               loading="lazy"
               decoding="async"
               referrerPolicy="no-referrer"
               onError={() => setImgFailed(true)}
             />
           ) : (
-            leader.name.charAt(0)
+            inlineMarkupInitial(leader.name)
           )}
         </div>
         <div className="lct-profile-main">
           <div className="lct-name-row">
-            <div className="lct-name">{leader.name}</div>
+            <div className="lct-name"><AnnotatedText text={leader.name} /></div>
             <Link
               to={`/leader/${leader.id}`}
               className="lct-open"
@@ -302,7 +303,7 @@ function LeaderInfoCard({ leader, color, side }) {
               详情 ↗
             </Link>
           </div>
-          <div className="lct-title" style={{ color }}>{leader.shortTitle || leader.templeName || leader.title || ''}</div>
+          <div className="lct-title" style={{ color }}><AnnotatedText text={leader.shortTitle || leader.templeName || leader.title || ''} /></div>
         </div>
       </div>
 
@@ -310,7 +311,7 @@ function LeaderInfoCard({ leader, color, side }) {
         {info.map(row => (
           <div className="lct-kv-row" key={row.k}>
             <div className="lct-k">{row.k}</div>
-            <div className="lct-v">{row.v}</div>
+            <div className="lct-v">{typeof row.v === 'string' ? <AnnotatedText text={row.v} /> : row.v}</div>
           </div>
         ))}
       </div>
@@ -330,7 +331,7 @@ function MultiSegmentBar({ leader, color, minMs, maxMs, segs, kind }) {
     <div className="lct-line">
       <div className="lct-line-label">
         <span className="lct-dot" style={{ background: color }} />
-        {leader.name}
+        <AnnotatedText text={leader.name} />
         <span className="lct-line-years">{totalYears != null ? `合计${totalYears.toFixed(1)}年` : ''}</span>
       </div>
       <div className="lct-track">
@@ -455,7 +456,7 @@ export default function LeaderCompareTool() {
     return (dynasties || [])
       .slice()
       .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
-      .map(d => ({ value: String(d.id), label: d.fullName || d.name }))
+      .map(d => ({ value: String(d.id), label: inlineMarkupToPlain(d.fullName || d.name) }))
   }, [dynasties])
 
   const regionalByCentral = useMemo(() => {
@@ -476,10 +477,10 @@ export default function LeaderCompareTool() {
     if (!cid) return []
     const central = dynasties.find(d => String(d.id) === cid)
     const opts = []
-    if (central) opts.push({ value: String(central.id), label: `${central.fullName || central.name}（中央）` })
+    if (central) opts.push({ value: String(central.id), label: `${inlineMarkupToPlain(central.fullName || central.name)}（中央）` })
     const regionals = regionalByCentral.get(cid) || []
     regionals.forEach(r => {
-      opts.push({ value: String(r.id), label: r.fullName || r.name })
+      opts.push({ value: String(r.id), label: inlineMarkupToPlain(r.fullName || r.name) })
     })
     return opts
   }
@@ -498,7 +499,7 @@ export default function LeaderCompareTool() {
     const t = typeof leader.shortTitle === 'string' && leader.shortTitle.trim()
       ? leader.shortTitle.trim()
       : (leader.templeName || leader.title || '')
-    return `${leader.name}${t ? ` · ${t}` : ''}${years}`
+    return `${inlineMarkupToPlain(leader.name)}${t ? ` · ${inlineMarkupToPlain(t)}` : ''}${years}`
   }
 
   const [leftCentralId, setLeftCentralId] = useState(centralOptions[0]?.value || '')
@@ -862,10 +863,10 @@ export default function LeaderCompareTool() {
           </div>
 
           <div className="lct-panel">
-            <div className="lct-panel-title">八维评分叠加</div>
-            <div className="lct-total-row" aria-label="综合评分对比">
-              <div className="lct-total-side" style={{ '--lct-total-color': leftColor }}>
-                <div className="lct-total-name">{left?.name || '被对比方'}</div>
+          <div className="lct-panel-title">八维评分叠加</div>
+          <div className="lct-total-row" aria-label="综合评分对比">
+            <div className="lct-total-side" style={{ '--lct-total-color': leftColor }}>
+                <div className="lct-total-name"><AnnotatedText text={left?.name || '被对比方'} /></div>
                 <div className="lct-total-score">
                   <span className="lct-total-num">{Number.isFinite(leftTotal) ? leftTotal : '—'}</span>
                   <span className="lct-total-den">/100</span>
@@ -881,7 +882,7 @@ export default function LeaderCompareTool() {
               <div className="lct-total-vs">VS</div>
 
               <div className="lct-total-side align-right" style={{ '--lct-total-color': rightColor }}>
-                <div className="lct-total-name">{right?.name || '对比方'}</div>
+                <div className="lct-total-name"><AnnotatedText text={right?.name || '对比方'} /></div>
                 <div className="lct-total-score">
                   <span className="lct-total-num">{Number.isFinite(rightTotal) ? rightTotal : '—'}</span>
                   <span className="lct-total-den">/100</span>
@@ -909,13 +910,13 @@ export default function LeaderCompareTool() {
       <div className="lct-summary-grid" aria-label="总结对比">
         <div className="lct-summary" style={{ borderColor: withOpacity(leftColor, 0.35) }}>
           <div className="lct-summary-title" style={{ color: leftColor }}>
-            总结（{left?.name || '被对比方'}）
+            总结（<AnnotatedText text={left?.name || '被对比方'} />）
           </div>
           <div className="lct-summary-text"><AnnotatedText text={left?.summary || '—'} /></div>
         </div>
         <div className="lct-summary" style={{ borderColor: withOpacity(rightColor, 0.35) }}>
           <div className="lct-summary-title" style={{ color: rightColor }}>
-            总结（{right?.name || '对比方'}）
+            总结（<AnnotatedText text={right?.name || '对比方'} />）
           </div>
           <div className="lct-summary-text"><AnnotatedText text={right?.summary || '—'} /></div>
         </div>

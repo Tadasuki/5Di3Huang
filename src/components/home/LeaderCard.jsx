@@ -4,6 +4,8 @@ import { formatLifeYearRange } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { getLeaderShortTitle } from '../../utils/leaderTitle'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import AnnotatedText from '../common/AnnotatedText'
 import './LeaderCard.css'
 
 export default function LeaderCard({ leader, dynastyColor, index }) {
@@ -34,20 +36,20 @@ export default function LeaderCard({ leader, dynastyColor, index }) {
         {imageSrc && !imgFailed ? (
           <img
             src={imageSrc}
-            alt={leader.name}
+            alt={inlineMarkupToPlain(leader.name)}
             loading="lazy"
             decoding="async"
             referrerPolicy="no-referrer"
             onError={() => setImgFailed(true)}
           />
         ) : (
-          leader.name.charAt(0)
+          inlineMarkupInitial(leader.name)
         )}
       </div>
 
       <div className="leader-card-info">
         <div className="leader-card-name">
-          {leader.name}
+          <AnnotatedText text={leader.name} />
           {titleDisplay && (
             <span
               className="leader-card-title"
@@ -57,14 +59,14 @@ export default function LeaderCard({ leader, dynastyColor, index }) {
                 border: `1px solid ${withOpacity(themeColor, 0.3)}`
               }}
             >
-              {titleDisplay}
+              <AnnotatedText text={titleDisplay} />
             </span>
           )}
         </div>
         <div className="leader-card-detail">
           {formatLifeYearRange(leader.birthYear, leader.deathYear)}
-          {leader.eraName && ` · ${leader.eraName}`}
-          {factionTag && ` · ${factionTag}`}
+          {leader.eraName && <> · <AnnotatedText text={leader.eraName} /></>}
+          {factionTag && <> · <AnnotatedText text={factionTag} /></>}
         </div>
       </div>
 

@@ -55,8 +55,8 @@ export default function FactionDetail() {
             </span>
           </div>
           <div className="faction-detail-intro">
-            <p className="faction-detail-label">{faction.category || '阵营'}</p>
-            <h1 className="faction-detail-title">{faction.name}</h1>
+            <p className="faction-detail-label"><AnnotatedText text={faction.category || '阵营'} /></p>
+            <h1 className="faction-detail-title"><AnnotatedText text={faction.name} /></h1>
             {faction.description && (
               <p className="faction-detail-desc"><AnnotatedText text={faction.description} /></p>
             )}

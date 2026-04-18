@@ -7,6 +7,7 @@ import { useSearchVisibility } from '../../context/SearchVisibilityContext'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { getFamilyBadgeText } from '../../utils/familyBadge'
 import { getLeaderShortTitle } from '../../utils/leaderTitle'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
 import AnnotatedText from '../common/AnnotatedText'
 import LeaderCard from './LeaderCard'
 import DynastySection from './DynastySection'
@@ -114,7 +115,7 @@ export default function HomePage() {
     const raw = search.trim()
     if (!raw) return polities
     const q = raw.toLowerCase()
-    const match = s => (typeof s === 'string' ? s.toLowerCase().includes(q) : false)
+    const match = s => inlineMarkupToPlain(s).toLowerCase().includes(q)
 
     return polities
       .map(p => ({
@@ -135,7 +136,7 @@ export default function HomePage() {
     const raw = search.trim()
     if (!raw) return []
     const q = raw.toLowerCase()
-    const match = s => (typeof s === 'string' ? s.toLowerCase().includes(q) : false)
+    const match = s => inlineMarkupToPlain(s).toLowerCase().includes(q)
 
     return allLeaders.filter(l =>
       match(l.name) ||
@@ -236,7 +237,7 @@ export default function HomePage() {
                           {showImage ? (
                             <img
                               src={imageSrc}
-                              alt={leader.name}
+                              alt={inlineMarkupToPlain(leader.name)}
                               className="featured-leader-avatar-img"
                               loading="lazy"
                               onError={() => {
@@ -244,14 +245,14 @@ export default function HomePage() {
                               }}
                             />
                           ) : (
-                            leader.name.charAt(0)
+                            inlineMarkupInitial(leader.name)
                           )}
                         </div>
                         <div className="featured-leader-info">
                           <div className="featured-leader-name">
-                            {leader.name}
+                            <AnnotatedText text={leader.name} />
                             {leader.templeName && (
-                              <span className="featured-leader-tag">{leader.templeName}</span>
+                              <span className="featured-leader-tag"><AnnotatedText text={leader.templeName} /></span>
                             )}
                           </div>
                           <div className="featured-leader-sub">
@@ -293,7 +294,7 @@ export default function HomePage() {
                   <Link key={evt.id} className="event-item" to={`/event/${evt.id}`}>
                     <div className="event-year">{evt.year}</div>
                     <div className="event-body">
-                      <div className="event-name">{evt.name}</div>
+                      <div className="event-name"><AnnotatedText text={evt.name} /></div>
                       <div className="event-desc"><AnnotatedText text={evt.summary || evt.impact || ''} /></div>
                     </div>
                   </Link>
@@ -385,14 +386,14 @@ export default function HomePage() {
                       getFamilyBadgeText(fam)
                     )}
                   </div>
-                  <div className="featured-leader-info">
-                    <div className="featured-leader-name">
-                      {fam.name}
-                    </div>
-                    <div className="featured-leader-sub" style={{ marginTop: 4 }}>
-                      发迹地：{fam.ancestralHome || '未知'}
+                    <div className="featured-leader-info">
+                      <div className="featured-leader-name">
+                        <AnnotatedText text={fam.name} />
+                      </div>
+                      <div className="featured-leader-sub" style={{ marginTop: 4 }}>
+                        发迹地：<AnnotatedText text={fam.ancestralHome || '未知'} />
                       {fam.leaderData?.length > 0 ? ` · ${fam.leaderData.length} 位相关人物` : ''}
-                    </div>
+                      </div>
                     {fam.description && (
                       <div className="featured-leader-desc" style={{ marginTop: 8, opacity: 0.85 }}>
                         <AnnotatedText text={fam.description} />

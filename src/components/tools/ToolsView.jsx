@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import AnnotatedText from '../common/AnnotatedText'
 import './ToolsView.css'
 
 const tools = [
@@ -75,8 +76,8 @@ export default function ToolsView() {
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="tool-card-icon">{tool.icon}</div>
-                <div className="tool-card-name">{tool.name}</div>
-                <p className="tool-card-desc">{tool.desc}</p>
+                <div className="tool-card-name"><AnnotatedText text={tool.name} /></div>
+                <p className="tool-card-desc"><AnnotatedText text={tool.desc} /></p>
                 <span className="tool-card-status status-available">可用</span>
               </Link>
             ) : (
@@ -87,8 +88,8 @@ export default function ToolsView() {
                 style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="tool-card-icon">{tool.icon}</div>
-                <div className="tool-card-name">{tool.name}</div>
-                <p className="tool-card-desc">{tool.desc}</p>
+                <div className="tool-card-name"><AnnotatedText text={tool.name} /></div>
+                <p className="tool-card-desc"><AnnotatedText text={tool.desc} /></p>
                 <span className="tool-card-status status-coming">开发中</span>
               </div>
             )

@@ -46,9 +46,9 @@ export default function EventTypeView() {
           {list.map(evt => (
             <Link key={evt.id} to={`/event/${evt.id}`} className="event-type-card">
               <div className="event-type-year">{evt.year}</div>
-              <div className="event-type-name">{evt.name}</div>
+              <div className="event-type-name"><AnnotatedText text={evt.name} /></div>
               <div className="event-type-meta">
-                {evt.location || '—'}
+                <AnnotatedText text={evt.location || '—'} />
               </div>
               <div className="event-type-desc">
                 <AnnotatedText text={evt.summary || evt.impact || ''} />

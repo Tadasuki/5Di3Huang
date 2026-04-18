@@ -5,6 +5,7 @@ import { useDynasties } from '../../hooks/useDynasties'
 import LeaderCard from '../home/LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import { inlineMarkupInitial } from '../../utils/inlineMarkup'
 import AnnotatedText from '../common/AnnotatedText'
 import './DynastyDetail.css'
 
@@ -99,10 +100,10 @@ export default function DynastyDetail() {
               background: `linear-gradient(135deg, ${color}, ${withOpacity(color, 0.55)})`,
             }}
           >
-            {dynasty.name.charAt(0)}
+            {inlineMarkupInitial(dynasty.name)}
           </div>
           <div className="dynasty-detail-intro">
-            <h1 className="dynasty-detail-title">{dynasty.fullName}</h1>
+            <h1 className="dynasty-detail-title"><AnnotatedText text={dynasty.fullName} /></h1>
             <div className="dynasty-detail-meta">
               <span>📅 {formatYearRangeOngoing(dynasty.startYear, dynasty.endYear)}</span>
               <span>⏱ {calculateDuration(dynasty.startYear, dynasty.endYear)}年</span>
@@ -112,7 +113,7 @@ export default function DynastyDetail() {
                   className="location-link tag-clickable"
                   title="在地图中定位该都城"
                 >
-                  🏰 {dynasty.capital} <span className="jump-icon">↗</span>
+                  🏰 <AnnotatedText text={dynasty.capital} /> <span className="jump-icon">↗</span>
                 </Link>
               )}
             </div>
@@ -147,7 +148,7 @@ export default function DynastyDetail() {
               {prevDynasty ? (
                 <Link to={`/dynasty/${prevDynasty.id}`} className="detail-prev-next-card">
                   <div className="detail-prev-next-k">上一时期</div>
-                  <div className="detail-prev-next-v">{prevDynasty.fullName || prevDynasty.name}</div>
+                  <div className="detail-prev-next-v"><AnnotatedText text={prevDynasty.fullName || prevDynasty.name} /></div>
                 </Link>
               ) : (
                 <div className="detail-prev-next-spacer" />
@@ -168,7 +169,7 @@ export default function DynastyDetail() {
                         <span className="detail-prev-next-sub"> · {n.groupLabel}</span>
                       ) : null}
                     </div>
-                    <div className="detail-prev-next-v">{n.fullName || n.name}</div>
+                    <div className="detail-prev-next-v"><AnnotatedText text={n.fullName || n.name} /></div>
                   </Link>
                 ))
               ) : (

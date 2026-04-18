@@ -3,6 +3,8 @@ export const RATING_DIMENSIONS = [
   { key: 'benevolence', label: '仁德', fallbackKey: 'politics' },
   { key: 'economy', label: '经济' },
   { key: 'culture', label: '文化' },
+  { key: 'ideology', label: '思想' },
+  { key: 'practice', label: '实践' },
   { key: 'diplomacy', label: '外交' },
   { key: 'legacy', label: '后世贡献' },
   { key: 'stability', label: '稳定' },
@@ -32,6 +34,19 @@ export function getRatingValue(ratings, key) {
     if (m != null && c != null) return clampScore(Math.round((m + c) / 2))
     return 50
   }
+  if (key === 'ideology') {
+    const c = typeof r?.culture === 'number' ? r.culture : null
+    const l = typeof r?.legacy === 'number' ? r.legacy : null
+    if (c != null && l != null) return clampScore(Math.round(c * 0.45 + l * 0.55))
+    return 50
+  }
+  if (key === 'practice') {
+    const e = typeof r?.economy === 'number' ? r.economy : null
+    const s = typeof r?.stability === 'number' ? r.stability : null
+    const b = typeof r?.benevolence === 'number' ? r.benevolence : null
+    if (e != null && s != null && b != null) return clampScore(Math.round(e * 0.45 + s * 0.35 + b * 0.2))
+    return 50
+  }
 
   return 0
 }
@@ -54,4 +69,3 @@ function clampScore(x) {
   if (x > 100) return 100
   return x
 }
-

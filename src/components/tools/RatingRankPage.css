@@ -8,6 +8,11 @@
   padding-bottom: var(--space-3xl);
 }
 
+/* 排行页单独加宽容器，尽量完整展示 10 维表格 */
+.rank-page .container {
+  max-width: min(1560px, calc(100vw - 28px));
+}
+
 /* ---- 导航 ---- */
 .rank-nav {
   display: flex;
@@ -20,6 +25,7 @@
   color: var(--color-text-tertiary);
   transition: color var(--transition-fast);
 }
+
 .rank-back:hover {
   color: var(--color-gold);
 }
@@ -42,6 +48,9 @@
 .rank-sub {
   color: var(--color-text-tertiary);
   font-size: 0.95rem;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ---- 总人数统计 ---- */
@@ -51,6 +60,7 @@
   color: var(--color-text-tertiary);
   margin-bottom: var(--space-lg);
 }
+
 .rank-count strong {
   color: var(--color-gold);
   font-weight: 700;
@@ -60,6 +70,7 @@
 .rank-controls {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-md) var(--space-xl);
   margin-bottom: var(--space-xl);
   align-items: flex-end;
@@ -69,11 +80,13 @@
   display: flex;
   gap: var(--space-md);
   align-items: flex-end;
+  justify-content: center;
 }
 
 .rank-filter-group {
   display: flex;
   align-items: flex-end;
+  justify-content: center;
 }
 
 .rank-clear-btn {
@@ -88,6 +101,7 @@
   transition: all var(--transition-fast);
   margin-bottom: 4px;
 }
+
 .rank-clear-btn:hover {
   border-color: var(--color-vermilion);
   color: var(--color-vermilion);
@@ -102,21 +116,38 @@
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
+  width: min(100%, 1310px);
+  margin: 0 auto;
 }
 
 .rank-table {
   width: 100%;
+  min-width: 1130px;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
 /* 列宽定义 */
-.rank-col-rank { width: 52px; }
-.rank-col-name { width: auto; min-width: 154px; }
-.rank-col-polity { width: 130px; }
-.rank-col-total { width: 96px; }
+.rank-col-rank {
+  width: 72px;
+}
 
-.rank-col-dim { width: 84px; }
+.rank-col-name {
+  width: auto;
+  min-width: 136px;
+}
+
+.rank-col-polity {
+  width: 120px;
+}
+
+.rank-col-total {
+  width: 90px;
+}
+
+.rank-col-dim {
+  width: 78px;
+}
 
 /* 表头 */
 .rank-table thead th {
@@ -190,6 +221,7 @@
 .rank-table thead th.rank-th-nosort {
   cursor: default;
 }
+
 .rank-table thead th.rank-th-nosort:hover {
   background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
@@ -200,6 +232,7 @@
   border-bottom: 1px solid rgba(139, 115, 64, 0.08);
   transition: background var(--transition-fast);
 }
+
 .rank-table tbody tr:hover {
   background: rgba(201, 169, 110, 0.04);
 }
@@ -209,6 +242,13 @@
   font-size: 0.95rem;
   vertical-align: middle;
   text-align: center;
+}
+
+/* 人物列整体右移一点，视觉更居中 */
+.rank-table thead th:nth-child(2),
+.rank-table tbody td:nth-child(2) {
+  padding-left: 24px;
+  padding-right: 6px;
 }
 
 /* ---- 排名数字 ---- */
@@ -223,16 +263,19 @@
   font-weight: 800;
   color: var(--color-text-secondary);
 }
+
 .rank-num.rank-1 {
   background: linear-gradient(135deg, #f6d365, #daa520);
   color: #2a2418;
   box-shadow: 0 2px 8px rgba(218, 165, 32, 0.35);
 }
+
 .rank-num.rank-2 {
   background: linear-gradient(135deg, #c0c0c0, #9a9a9a);
   color: #2a2418;
   box-shadow: 0 2px 8px rgba(160, 160, 160, 0.3);
 }
+
 .rank-num.rank-3 {
   background: linear-gradient(135deg, #cd7f32, #a05a20);
   color: #fff;
@@ -243,7 +286,7 @@
 .rank-leader-cell {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-align: left;
 }
 
@@ -285,6 +328,7 @@
   text-overflow: ellipsis;
   transition: color var(--transition-fast);
 }
+
 .rank-table tbody tr:hover .rank-leader-name {
   color: var(--color-gold);
 }
@@ -308,11 +352,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .rank-polity-tag:hover {
   transform: scale(1.05);
-  transition: transform var(--transition-fast);
+  box-shadow: 0 6px 14px rgba(77, 62, 32, 0.22);
 }
 
 /* ---- 分数显示 ---- */
@@ -353,15 +398,37 @@
 }
 
 /* 分数颜色分级 */
-.rank-score-excellent { color: #2e8b57; }
-.rank-score-good { color: var(--color-gold); }
-.rank-score-average { color: var(--color-text-secondary); }
-.rank-score-poor { color: var(--color-vermilion); }
+.rank-score-excellent {
+  color: #2e8b57;
+}
 
-.rank-bar-excellent { background: linear-gradient(90deg, #3cb371, #2e8b57); }
-.rank-bar-good { background: linear-gradient(90deg, var(--color-gold-light), var(--color-gold)); }
-.rank-bar-average { background: linear-gradient(90deg, #b0a58a, #8a8275); }
-.rank-bar-poor { background: linear-gradient(90deg, #d45454, #b33a3a); }
+.rank-score-good {
+  color: var(--color-gold);
+}
+
+.rank-score-average {
+  color: var(--color-text-secondary);
+}
+
+.rank-score-poor {
+  color: var(--color-vermilion);
+}
+
+.rank-bar-excellent {
+  background: linear-gradient(90deg, #3cb371, #2e8b57);
+}
+
+.rank-bar-good {
+  background: linear-gradient(90deg, var(--color-gold-light), var(--color-gold));
+}
+
+.rank-bar-average {
+  background: linear-gradient(90deg, #b0a58a, #8a8275);
+}
+
+.rank-bar-poor {
+  background: linear-gradient(90deg, #d45454, #b33a3a);
+}
 
 /* ---- 无结果 ---- */
 .rank-empty {
@@ -391,6 +458,7 @@
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -419,16 +487,25 @@
 
 /* ---- 响应式 ---- */
 @media (max-width: 1024px) {
-  .rank-col-dim { width: 70px; }
-  .rank-col-polity { width: 80px; }
+  .rank-col-dim {
+    width: 70px;
+  }
+
+  .rank-col-polity {
+    width: 80px;
+  }
 }
 
 @media (max-width: 1024px) {
-  .rank-title { font-size: 1.6rem; }
+  .rank-title {
+    font-size: 1.6rem;
+  }
+
   .rank-controls {
     flex-direction: column;
     align-items: stretch;
   }
+
   .rank-filter-stack,
   .rank-filter-group {
     flex-direction: column;
@@ -510,9 +587,11 @@
   .rank-table thead th.rank-th-dim:not(.rank-th-dim--visible) {
     display: none;
   }
+
   .rank-table tbody td.rank-td-dim:not(.rank-td-dim--visible) {
     display: none;
   }
+
   .rank-table colgroup .rank-col-dim {
     display: none;
   }
@@ -537,12 +616,21 @@
   }
 
   .rank-table {
+    min-width: 0;
     table-layout: auto;
   }
 
-  .rank-col-rank { width: 40px; }
-  .rank-col-name { min-width: 0; }
-  .rank-col-total { width: 42px; }
+  .rank-col-rank {
+    width: 40px;
+  }
+
+  .rank-col-name {
+    min-width: 0;
+  }
+
+  .rank-col-total {
+    width: 42px;
+  }
 
   .rank-table thead th.rank-th-dim.rank-th-dim--visible,
   .rank-table tbody td.rank-td-dim.rank-td-dim--visible {
@@ -561,30 +649,65 @@
     padding: 8px 6px;
     font-size: 0.75rem;
   }
+
   .rank-table tbody td {
     padding: 9px 4px;
     font-size: 0.82rem;
   }
 
-  .rank-avatar { width: 28px; height: 28px; font-size: 0.8rem; }
-  .rank-leader-name { font-size: 0.88rem; }
-  .rank-leader-sub { font-size: 0.7rem; }
-  .rank-leader-cell { gap: 6px; }
+  .rank-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .rank-leader-name {
+    font-size: 0.88rem;
+  }
+
+  .rank-leader-sub {
+    font-size: 0.7rem;
+  }
+
+  .rank-leader-cell {
+    gap: 6px;
+  }
 
   .rank-table tbody td:nth-child(2) {
     padding-left: 2px;
     padding-right: 2px;
   }
 
-  .rank-score-total { font-size: 0.95rem; }
-  .rank-score-bar { display: none; }
-  .rank-score-num { font-size: 0.85rem; }
+  .rank-score-total {
+    font-size: 0.95rem;
+  }
 
-  .rank-num { width: 26px; height: 26px; font-size: 0.75rem; }
+  .rank-score-bar {
+    display: none;
+  }
+
+  .rank-score-num {
+    font-size: 0.85rem;
+  }
+
+  .rank-num {
+    width: 26px;
+    height: 26px;
+    font-size: 0.75rem;
+  }
 }
 
 @media (max-width: 380px) {
-  .rank-leader-sub { display: none; }
-  .rank-avatar { width: 26px; height: 26px; }
-  .rank-leader-name { font-size: 0.82rem; }
+  .rank-leader-sub {
+    display: none;
+  }
+
+  .rank-avatar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .rank-leader-name {
+    font-size: 0.82rem;
+  }
 }

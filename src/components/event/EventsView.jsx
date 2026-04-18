@@ -82,13 +82,13 @@ export default function EventsView() {
           {filtered.map(evt => (
             <Link key={evt.id} to={`/event/${evt.id}`} className="events-card">
               <div className="events-card-year">{evt.year}</div>
-              <div className="events-card-main">
-                <div className="events-card-title">
-                  {evt.name}
+                <div className="events-card-main">
+                  <div className="events-card-title">
+                  <AnnotatedText text={evt.name} />
                   <span className="events-card-tag">🏷 {labelForType(evt.type)}</span>
                 </div>
                 <div className="events-card-sub">
-                  {evt.location || '—'}
+                  <AnnotatedText text={evt.location || '—'} />
                 </div>
                 <div className="events-card-desc">
                   <AnnotatedText text={evt.summary || evt.impact || ''} />

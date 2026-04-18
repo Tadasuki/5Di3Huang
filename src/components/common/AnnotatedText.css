@@ -16,7 +16,7 @@
   text-decoration-color: color-mix(in srgb, var(--color-gold) 55%, var(--color-border));
   border-radius: 3px;
   transition: color var(--transition-fast), background var(--transition-fast), text-decoration-color var(--transition-fast);
-  white-space: normal;
+  white-space: pre-wrap;
   line-height: inherit;
   text-align: left;
   vertical-align: baseline;
@@ -59,9 +59,11 @@
   font-synthesis: weight;
   /* 字体阴影仿粗 */
   text-shadow:
-    0.005em 0 0 currentColor,
-    -0.005em 0 0 currentColor;
-  text-align: left;
+    0.003em 0 0 currentColor,
+    -0.003em 0 0 currentColor;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-align-last: auto;
   color: var(--color-text-secondary);
   line-height: 1.8;
   margin: 0 0 8px;

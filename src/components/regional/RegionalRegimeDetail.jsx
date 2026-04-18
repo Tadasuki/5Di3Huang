@@ -3,6 +3,7 @@ import { useRegionalRegime } from '../../hooks/useRegionalRegime'
 import LeaderCard from '../home/LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
+import { inlineMarkupInitial } from '../../utils/inlineMarkup'
 import AnnotatedText from '../common/AnnotatedText'
 import './RegionalRegimeDetail.css'
 
@@ -42,17 +43,17 @@ export default function RegionalRegimeDetail() {
               background: `linear-gradient(135deg, ${color}, ${withOpacity(color, 0.55)})`,
             }}
           >
-            {regime.name.charAt(0)}
+            {inlineMarkupInitial(regime.name)}
           </div>
           <div className="regional-detail-intro">
             <p className="regional-detail-label">割据 / 并立政权</p>
-            <h1 className="regional-detail-title">{regime.fullName || regime.name}</h1>
+            <h1 className="regional-detail-title"><AnnotatedText text={regime.fullName || regime.name} /></h1>
             <div className="regional-detail-meta">
               <span>📅 {formatYearRangeOngoing(regime.startYear, regime.endYear)}</span>
               {regime.endYear != null && (
                 <span>⏱ {calculateDuration(regime.startYear, regime.endYear)}年</span>
               )}
-              {regime.capital && <span>🏰 {regime.capital}</span>}
+              {regime.capital && <span>🏰 <AnnotatedText text={regime.capital} /></span>}
             </div>
             {regime.description && (
               <p className="regional-detail-desc"><AnnotatedText text={regime.description} /></p>

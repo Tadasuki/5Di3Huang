@@ -8,6 +8,8 @@ import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { getLeaderShortTitle } from '../../utils/leaderTitle'
 import { withOpacity } from '../../utils/colorUtils'
 import { formatYearShort } from '../../utils/yearFormat'
+import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import AnnotatedText from '../common/AnnotatedText'
 import SearchSelect from './SearchSelect'
 import './RatingRankPage.css'
 
@@ -16,10 +18,10 @@ import './RatingRankPage.css'
 function buildPolityMap(dynasties, regimes) {
   const map = new Map()
     ; (dynasties || []).forEach(d => {
-      map.set(String(d.id), { name: d.fullName || d.name, color: d.color || '#888', type: 'dynasty' })
+      map.set(String(d.id), { name: inlineMarkupToPlain(d.fullName || d.name), color: d.color || '#888', type: 'dynasty' })
     })
     ; (regimes || []).forEach(r => {
-      map.set(String(r.id), { name: r.fullName || r.name, color: r.color || '#888', type: 'regional' })
+      map.set(String(r.id), { name: inlineMarkupToPlain(r.fullName || r.name), color: r.color || '#888', type: 'regional' })
     })
   return map
 }
@@ -77,7 +79,7 @@ export default function RatingRankPage() {
     return (dynasties || [])
       .slice()
       .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
-      .map(d => ({ value: String(d.id), label: d.fullName || d.name }))
+      .map(d => ({ value: String(d.id), label: inlineMarkupToPlain(d.fullName || d.name) }))
   }, [dynasties])
 
   const regionalByCentral = useMemo(() => {
@@ -98,11 +100,11 @@ export default function RatingRankPage() {
     if (!cid) return []
     const central = dynasties.find(d => String(d.id) === cid)
     const opts = []
-    if (central) opts.push({ value: String(central.id), label: `${central.fullName || central.name}（中央）` })
+    if (central) opts.push({ value: String(central.id), label: `${inlineMarkupToPlain(central.fullName || central.name)}（中央）` })
     const regionals = regionalByCentral.get(cid) || []
     regionals.forEach(r => {
       if (String(r.id) === 'prc_sec') return
-      opts.push({ value: String(r.id), label: r.fullName || r.name })
+      opts.push({ value: String(r.id), label: inlineMarkupToPlain(r.fullName || r.name) })
     })
     return opts
   }
@@ -114,6 +116,13 @@ export default function RatingRankPage() {
   const handlePolityTagClick = useCallback((e, polityId) => {
     e.stopPropagation();
     if (!polityId) return;
+
+    // Click the same tag again to clear polity-related filters.
+    if (filterPolityId === polityId) {
+      setFilterCentralId('');
+      setFilterPolityId('');
+      return;
+    }
 
     // Find if the polityId corresponds to a central dynasty or a regional regime
     let centralId = '';
@@ -127,11 +136,9 @@ export default function RatingRankPage() {
 
     if (centralId) {
       setFilterCentralId(centralId);
-      // We defer setting the polityId until next render by setting it via an effect, 
-      // to ensure options update, but we can also set it right away.
       setFilterPolityId(polityId);
     }
-  }, [dynasties, regimes]);
+  }, [dynasties, regimes, filterPolityId]);
 
   const activePolityOptions = useMemo(() => {
     if (!filterCentralId) return []
@@ -153,7 +160,7 @@ export default function RatingRankPage() {
 
   const factionOptions = useMemo(() => {
     const ids = new Set((leaders || []).map(l => l.factionId).filter(Boolean))
-    return (factions || []).filter(f => ids.has(f.id)).map(f => ({ value: String(f.id), label: f.shortName || f.name }))
+    return (factions || []).filter(f => ids.has(f.id)).map(f => ({ value: String(f.id), label: inlineMarkupToPlain(f.shortName || f.name) }))
   }, [leaders, factions])
 
   // ---- processed data ----
@@ -248,7 +255,7 @@ export default function RatingRankPage() {
         <div className="rank-head">
           <h1 className="rank-title">治国评分排行</h1>
           <p className="rank-sub">
-            根据军事、仁德、经济、文化、外交、后世贡献、稳定、能力八项指标综合评估历代执政者
+            根据军事、仁德、经济、文化、思想、实践、外交、后世贡献、稳定、能力十项指标综合评估历代执政者
           </p>
         </div>
 
@@ -397,7 +404,7 @@ export default function RatingRankPage() {
                           <div
                             className="rank-leader-cell"
                             onClick={() => navigate(`/leader/${l.id}`)}
-                            title={`查看 ${l.name} 详情`}
+                            title={`查看 ${inlineMarkupToPlain(l.name)} 详情`}
                             style={{ cursor: 'pointer' }}
                           >
                             <div
@@ -407,9 +414,9 @@ export default function RatingRankPage() {
                               }}
                             >
                               {imgSrc && !failedImgs.has(l.id) ? (
-                                <img
-                                  src={imgSrc}
-                                  alt={l.name}
+                                  <img
+                                    src={imgSrc}
+                                  alt={inlineMarkupToPlain(l.name)}
                                   loading="lazy"
                                   decoding="async"
                                   referrerPolicy="no-referrer"
@@ -418,11 +425,11 @@ export default function RatingRankPage() {
                                   }
                                 />
                               ) : (
-                                l.name.charAt(0)
+                                inlineMarkupInitial(l.name)
                               )}
                             </div>
                             <div className="rank-leader-info">
-                              <span className="rank-leader-name">{l.name}</span>
+                              <span className="rank-leader-name"><AnnotatedText text={l.name} /></span>
                               <span className="rank-leader-sub">
                                 {shortTitle}{shortTitle && reignLabel ? ' · ' : ''}{reignLabel}
                               </span>
@@ -442,9 +449,9 @@ export default function RatingRankPage() {
                                 cursor: 'pointer'
                               }}
                               onClick={(e) => handlePolityTagClick(e, row.polityId)}
-                              title={`筛选 ${row.polity.name}`}
+                              title={`筛选 ${inlineMarkupToPlain(row.polity.name)}`}
                             >
-                              {row.polity.name}
+                              <AnnotatedText text={row.polity.name} />
                             </span>
                           )}
                         </td>
