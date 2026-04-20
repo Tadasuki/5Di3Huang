@@ -46,7 +46,7 @@ export default function RegionalRegimeDetail() {
             {inlineMarkupInitial(regime.name)}
           </div>
           <div className="regional-detail-intro">
-            <p className="regional-detail-label">割据 / 并立政权</p>
+            {regime.id !== 'wu_zhou' && <p className="regional-detail-label">割据 / 并立政权</p>}
             <h1 className="regional-detail-title"><AnnotatedText text={regime.fullName || regime.name} /></h1>
             <div className="regional-detail-meta">
               <span>📅 {formatYearRangeOngoing(regime.startYear, regime.endYear)}</span>

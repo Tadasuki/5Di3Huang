@@ -56,6 +56,14 @@ function getLeaderEpigraph(leader) {
     return { text, source: '本站编注' }
 }
 
+function isPosthumousHonored(leader) {
+    if (!leader) return false
+    if (leader.isPosthumousHonored === true) return true
+    const title = typeof leader.title === 'string' ? leader.title : ''
+    const shortTitle = typeof leader.shortTitle === 'string' ? leader.shortTitle : ''
+    return /追尊/.test(`${title} ${shortTitle}`)
+}
+
 export default function LeaderDetail() {
     const { id } = useParams()
     const { leader, loading } = useLeader(id)
@@ -81,6 +89,7 @@ export default function LeaderDetail() {
 
     const [avatarImgFailed, setAvatarImgFailed] = useState(false)
     const avatarSrc = leader ? getLeaderImageSrc(leader) : ''
+    const isPosthumousHonoredLeader = isPosthumousHonored(leader)
 
     // Tab-bar scroll indicator state
     const tabBarRef = useRef(null)
@@ -246,6 +255,7 @@ export default function LeaderDetail() {
             function groupPrevNext(groupId) {
                 const list = (allLeaders || [])
                     .filter(l => l && l.id && (l.reignStart != null || l.birthYear != null))
+                    .filter(l => !isPosthumousHonored(l))
                     .filter(l => leaderHasGroup(l, groupId))
                     .slice()
                     .sort((a, b) => {
@@ -316,6 +326,11 @@ export default function LeaderDetail() {
                 finalPrevList = []
                 if (dxp) finalPrevList.push({ leader: dxp, groupId: 'central', groupLabel: '领导核心' })
                 if (zzy) finalPrevList.push({ leader: zzy, groupId: 'prc_sec', groupLabel: '总书记' })
+            }
+            if (id === 'wu_shiyue') {
+                const wz = allLeaders.find(l => l.id === 'wu_zhao')
+                finalPrevList = []
+                finalNextList = wz ? [{ leader: wz, groupId: 'wu_zhou', groupLabel: '武周' }] : []
             }
 
             const seenPrev = new Set()
@@ -423,7 +438,7 @@ export default function LeaderDetail() {
             }
         })(),
         { label: '生卒', value: formatLifeYearRange(leader.birthYear, leader.deathYear) },
-        { label: '在位', value: formatReignValue(leader) },
+        !isPosthumousHonoredLeader && { label: '在位', value: formatReignValue(leader) },
         (family?.ancestralHome || leader.ancestralHome) && {
             label: '祖籍',
             value: (
@@ -486,7 +501,7 @@ export default function LeaderDetail() {
                     style={{ '--profile-color': themeColor }}
                 >
                     <div
-                        className="profile-card"
+                        className="profile-top-accent"
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -495,9 +510,8 @@ export default function LeaderDetail() {
                             height: '4px',
                             background: `linear-gradient(90deg, ${themeColor}, ${withOpacity(themeColor, 0.3)})`,
                             borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0',
-                            padding: 0,
-                            border: 'none',
-                            margin: 0,
+                            zIndex: 4,
+                            pointerEvents: 'none',
                         }}
                     />
                     <div className="profile-avatar-section">
@@ -565,6 +579,9 @@ export default function LeaderDetail() {
                             ))}
                         </div>
                     </div>
+                    {isPosthumousHonoredLeader && (
+                        <div className="profile-posthumous-watermark" aria-hidden="true">追尊</div>
+                    )}
                 </div>
 
                 {/* Tabs */}

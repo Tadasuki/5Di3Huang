@@ -14,8 +14,29 @@
 }
 
 .timeline-page-header {
+  position: relative;
   text-align: center;
   margin-bottom: var(--space-2xl);
+}
+
+.timeline-mode-select {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 210px;
+}
+
+.timeline-mode-select .ss-root {
+  width: 100%;
+}
+
+.timeline-mode-select .ss-label {
+  text-align: left;
+  text-transform: none;
+}
+
+.timeline-mode-select .ss-menu {
+  text-align: left;
 }
 
 .timeline-page-title {
@@ -312,6 +333,12 @@
     padding-top: calc(var(--navbar-height) + var(--space-md));
   }
 
+  .timeline-mode-select {
+    position: static;
+    margin: 0 auto var(--space-sm);
+    width: min(280px, 100%);
+  }
+
   .timeline-page-title {
     font-size: 1.6rem;
   }
@@ -467,4 +494,3 @@
     transform: translateX(-50%) scale(1.2);
   }
 }
-

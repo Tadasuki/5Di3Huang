@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect, useCallback } from 'react'
 import { useHistoricalEvent, useHistoricalEvents } from '../../hooks/useHistoricalEvents'
 import { useAllLeaders } from '../../hooks/useDynasties'
 import { inlineMarkupInitial } from '../../utils/inlineMarkup'
@@ -7,11 +7,108 @@ import LeaderCard from '../home/LeaderCard'
 import AnnotatedText from '../common/AnnotatedText'
 import './EventDetail.css'
 
+const CANDLE_COUNTER_API = 'https://api.countapi.xyz'
+const CANDLE_COUNTER_NAMESPACE = '5di3huang-candle'
+
+function localCandleKey(eventId) {
+  return `event-candle-count:${String(eventId || '')}`
+}
+
+function safeLocalGet(eventId) {
+  try {
+    const raw = localStorage.getItem(localCandleKey(eventId))
+    const n = Number(raw)
+    return Number.isFinite(n) && n >= 0 ? Math.floor(n) : null
+  } catch {
+    return null
+  }
+}
+
+function safeLocalSet(eventId, value) {
+  try {
+    localStorage.setItem(localCandleKey(eventId), String(value))
+  } catch {
+    // ignore local storage failures
+  }
+}
+
+async function getRemoteCandleCount(eventId) {
+  const key = encodeURIComponent(String(eventId || '').trim())
+  if (!key) return null
+  const res = await fetch(`${CANDLE_COUNTER_API}/get/${CANDLE_COUNTER_NAMESPACE}/${key}`)
+  if (res.status === 404) return 0
+  if (!res.ok) throw new Error('Failed to fetch candle count')
+  const data = await res.json()
+  const value = Number(data?.value)
+  return Number.isFinite(value) && value >= 0 ? Math.floor(value) : 0
+}
+
+async function hitRemoteCandleCount(eventId) {
+  const key = encodeURIComponent(String(eventId || '').trim())
+  if (!key) return null
+  const res = await fetch(`${CANDLE_COUNTER_API}/hit/${CANDLE_COUNTER_NAMESPACE}/${key}`)
+  if (!res.ok) throw new Error('Failed to hit candle count')
+  const data = await res.json()
+  const value = Number(data?.value)
+  return Number.isFinite(value) && value >= 0 ? Math.floor(value) : null
+}
+
 export default function EventDetail() {
   const { id } = useParams()
   const event = useHistoricalEvent(id)
   const events = useHistoricalEvents()
   const leaders = useAllLeaders()
+  const [candleCount, setCandleCount] = useState(0)
+  const [candleSyncing, setCandleSyncing] = useState(false)
+
+  const isMemorialEvent = event?.type === '惨案'
+  const isMemorialLit = !isMemorialEvent || candleCount > 0
+
+  useEffect(() => {
+    if (!isMemorialEvent || !event?.id) {
+      setCandleCount(0)
+      return
+    }
+
+    const cached = safeLocalGet(event.id)
+    if (cached != null) setCandleCount(cached)
+    else setCandleCount(0)
+
+    let cancelled = false
+    getRemoteCandleCount(event.id)
+      .then((count) => {
+        if (cancelled || count == null) return
+        setCandleCount(count)
+        safeLocalSet(event.id, count)
+      })
+      .catch(() => {
+        // keep showing cached/local count on failure
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [event?.id, isMemorialEvent])
+
+  const handleCandleClick = useCallback(async () => {
+    if (!event?.id || candleSyncing) return
+    setCandleSyncing(true)
+    try {
+      const next = await hitRemoteCandleCount(event.id)
+      if (next != null) {
+        setCandleCount(next)
+        safeLocalSet(event.id, next)
+        return
+      }
+      throw new Error('Invalid candle count')
+    } catch {
+      const fallback = candleCount + 1
+      setCandleCount(fallback)
+      safeLocalSet(event.id, fallback)
+    } finally {
+      setCandleSyncing(false)
+    }
+  }, [event?.id, candleSyncing, candleCount])
 
   const leaderList = useMemo(() => {
     if (!event?.leaderIds?.length) return []
@@ -44,7 +141,10 @@ export default function EventDetail() {
   }
 
   return (
-    <div className="event-detail" id={`event-detail-${event.id}`}>
+    <div
+      className={`event-detail${isMemorialEvent ? ' event-detail-memorial' : ''}${isMemorialEvent && !isMemorialLit ? ' event-detail-memorial-muted' : ''}${isMemorialEvent && isMemorialLit ? ' event-detail-memorial-lit' : ''}`}
+      id={`event-detail-${event.id}`}
+    >
       <div className="container">
         <header className="event-header">
           <div className="event-badge">{inlineMarkupInitial(event.name)}</div>
@@ -65,6 +165,27 @@ export default function EventDetail() {
             </div>
             {event.summary && <p className="event-summary"><AnnotatedText text={event.summary} /></p>}
           </div>
+          {isMemorialEvent && (
+            <aside className="event-memorial-aside" aria-label="遇难者纪念">
+              <div className="event-memorial-stat">
+                <div className="event-memorial-value">300000+</div>
+                <div className="event-memorial-label">遇难者</div>
+              </div>
+              <div className="event-candle-wrap">
+                <button
+                  type="button"
+                  className="event-candle-btn"
+                  onClick={handleCandleClick}
+                  title="点亮蜡烛"
+                  aria-label="点亮蜡烛纪念遇难者"
+                  disabled={candleSyncing}
+                >
+                  🕯️
+                </button>
+                <span className="event-candle-count">{candleCount}</span>
+              </div>
+            </aside>
+          )}
         </header>
 
         <section className="event-section" aria-labelledby="event-impact-heading">

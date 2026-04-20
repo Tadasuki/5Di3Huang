@@ -17,6 +17,7 @@
   transition: all var(--transition-fast);
   text-decoration: none;
 }
+
 .leader-back:hover {
   color: var(--color-gold);
   background: var(--color-bg-glass);
@@ -82,6 +83,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+  position: relative;
+  z-index: 1;
 }
 
 .profile-avatar {
@@ -124,10 +127,34 @@
   gap: var(--space-sm);
 }
 
-/* Info section */
+/* 人物卡片 */
 .profile-info {
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* 追尊 */
+.profile-posthumous-watermark {
+  position: absolute;
+  top: 0px;
+  right: -8px;
+  font-family: var(--font-serif);
+  font-size: clamp(5.2rem, 10.5vw, 8.6rem);
+  font-style: italic;
+  font-weight: 900;
+  color: var(--color-text-primary);
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  line-height: 1;
+  letter-spacing: normal;
+  text-shadow: 0 2px 18px rgba(44, 40, 32, 0.08);
+  z-index: 0;
 }
 
 .profile-name {
@@ -541,7 +568,7 @@
   color: var(--color-text-tertiary);
 }
 
-.summary-text > h3 {
+.summary-text>h3 {
   margin-bottom: var(--space-md);
 }
 
@@ -765,6 +792,12 @@
     color: var(--color-text-tertiary);
     letter-spacing: 0.06em;
     opacity: 0.78;
+  }
+
+  .profile-posthumous-watermark {
+    top: -10px;
+    right: -6px;
+    font-size: clamp(3.6rem, 18vw, 5.4rem);
   }
 
   /* Bio */

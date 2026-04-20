@@ -1,0 +1,161 @@
+[
+  {
+    "startYear": null,
+    "endYear": 250,
+    "central": {
+      "id": "jp_yayoi",
+      "name": "绳纹-弥生时代",
+      "color": "#6A5B4D"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 250,
+    "endYear": 592,
+    "central": {
+      "id": "jp_kofun",
+      "name": "古坟时代",
+      "color": "#7B6D5A"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 592,
+    "endYear": 710,
+    "central": {
+      "id": "jp_asuka",
+      "name": "飞鸟时代",
+      "color": "#7D7A5C"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 710,
+    "endYear": 794,
+    "central": {
+      "id": "jp_nara",
+      "name": "奈良时代",
+      "color": "#876C54"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 794,
+    "endYear": 1185,
+    "central": {
+      "id": "jp_heian",
+      "name": "平安时代",
+      "color": "#8D5F6B"
+    },
+    "regional": [
+      {
+        "id": "jp_heishi",
+        "name": "平氏政权",
+        "startYear": 1167,
+        "endYear": 1185
+      }
+    ]
+  },
+  {
+    "startYear": 1185,
+    "endYear": 1333,
+    "central": {
+      "id": "jp_kamakura",
+      "name": "镰仓幕府",
+      "color": "#5A6E85"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1333,
+    "endYear": 1336,
+    "central": {
+      "id": "jp_kemmu",
+      "name": "建武政权",
+      "color": "#5A6E85"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1336,
+    "endYear": 1573,
+    "central": {
+      "id": "jp_muromachi",
+      "name": "室町幕府",
+      "color": "#567A6A"
+    },
+    "regional": [
+      {
+        "id": "jp_nancho",
+        "name": "南朝",
+        "startYear": 1336,
+        "endYear": 1392
+      },
+      {
+        "id": "jp_hokucho",
+        "name": "北朝",
+        "startYear": 1336,
+        "endYear": 1392
+      },
+      {
+        "id": "jp_sengoku",
+        "name": "战国时代",
+        "startYear": 1467,
+        "endYear": 1573
+      }
+    ]
+  },
+  {
+    "startYear": 1573,
+    "endYear": 1603,
+    "central": {
+      "id": "jp_azcmmym",
+      "name": "安土桃山时代",
+      "color": "#8A4F43"
+    },
+    "regional": [
+      {
+        "id": "jp_oda",
+        "name": "织田政权",
+        "startYear": 1568,
+        "endYear": 1582
+      },
+      {
+        "id": "jp_toyotomi",
+        "name": "丰臣政权",
+        "startYear": 1584,
+        "endYear": 1603
+      }
+    ]
+  },
+  {
+    "startYear": 1603,
+    "endYear": 1868,
+    "central": {
+      "id": "jp_edo",
+      "name": "江户幕府",
+      "color": "#4E6C7D"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1868,
+    "endYear": 1947,
+    "central": {
+      "id": "jp_mei2sho",
+      "name": "大日本帝国",
+      "color": "#9A5B43"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1947,
+    "endYear": null,
+    "central": {
+      "id": "jp_postwar",
+      "name": "日本国",
+      "color": "#8F6E52"
+    },
+    "regional": []
+  }
+]

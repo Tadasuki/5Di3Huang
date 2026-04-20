@@ -156,8 +156,12 @@
     "startYear": 690,
     "endYear": 705,
     "color": "#B8860B",
-    "capital": "洛阳",
-    "description": "武则天称帝所建国号周，史称武周，承唐制度而重科举与吏治，神龙政变后中宗复辟，仍属唐朝脉络。"
+    "capital": "神都洛阳",
+    "description": "武则天称帝所建国号周，史称武周，承唐制度而重科举与吏治，神龙政变后中宗复辟，仍属唐朝脉络。",
+    "leaders": [
+      "wu_shiyue",
+      "wu_zhao"
+    ]
   },
   {
     "id": "five_dynasties",
@@ -212,14 +216,16 @@
   {
     "id": "choseon",
     "name": "朝鲜王国",
-    "fullName": "朝鲜王朝",
+    "fullName": "朝鲜王国",
     "relatedCentralDynastyId": "ming",
     "startYear": 1392,
     "endYear": 1897,
     "color": "#4169E1",
     "capital": "汉城（今首尔）",
     "description": "李成桂建国，奉明正朔，与明清两代中国关系密切，儒学治国，甲午战争后国号改为大韩帝国。",
-    "leaders": ["sejong"]
+    "leaders": [
+      "sejong"
+    ]
   },
   {
     "id": "zheng",
@@ -281,7 +287,9 @@
     "color": "#2F4F4F",
     "capital": "新京（长春）",
     "description": "日本侵华期间在东北扶植的傀儡政权，溥仪为执政/皇帝。1945年苏联出兵东北后瓦解。",
-    "leaders": ["pu_yi"]
+    "leaders": [
+      "pu_yi"
+    ]
   },
   {
     "id": "wangjingwei",
@@ -303,7 +311,15 @@
     "color": "#003399",
     "capital": "台北",
     "description": "1949年后中华民国政府在台湾延续其法统与政治体制，与海峡两岸关系及国际秩序密切相关。",
-    "leaders": ["chiang_kai_shek", "chiang_ching_kuo", "lee_teng_hui", "chen_shui_bian", "ma_ying_jeou", "tsai_ing_wen", "lai_ching_te"]
+    "leaders": [
+      "chiang_kai_shek",
+      "chiang_ching_kuo",
+      "lee_teng_hui",
+      "chen_shui_bian",
+      "ma_ying_jeou",
+      "tsai_ing_wen",
+      "lai_ching_te"
+    ]
   },
   {
     "id": "prc_sec",
@@ -315,6 +331,9 @@
     "color": "#DE2910",
     "capital": "北京",
     "description": "反映中国共产党高层权力更迭的支线，主要呈现华国锋至江泽民之间中共中央最高负责人的变动情况。",
-    "leaders": ["hu_yaobang", "zhao_ziyang"]
+    "leaders": [
+      "hu_yaobang",
+      "zhao_ziyang"
+    ]
   }
 ]

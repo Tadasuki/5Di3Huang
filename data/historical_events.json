@@ -3,7 +3,10 @@
     "id": "muye_battle",
     "name": "牧野之战",
     "year": -1046,
-    "coords": [113.9, 35.3],
+    "coords": [
+      113.9,
+      35.3
+    ],
     "location": "牧野（今河南新乡一带）",
     "polityId": "western_zhou",
     "type": "战争",
@@ -15,25 +18,35 @@
     "id": "qin_unification",
     "name": "秦灭六国",
     "year": -221,
-    "coords": [108.7, 34.3],
+    "coords": [
+      108.7,
+      34.3
+    ],
     "location": "咸阳（今陕西西安附近）",
     "polityId": "qin",
     "type": "战争",
     "summary": "秦始皇完成统一，建立中国第一个大一统中央集权王朝。",
     "impact": "推动度量衡、文字、车轨等统一，并以郡县制重塑治理结构，奠定两千年帝制的基本框架。",
-    "leaderIds": ["ying_zheng"]
+    "leaderIds": [
+      "ying_zheng"
+    ]
   },
   {
     "id": "xuanwumen",
     "name": "玄武门之变",
     "year": 626,
-    "coords": [108.9, 34.27],
+    "coords": [
+      108.9,
+      34.27
+    ],
     "location": "长安（今陕西西安）",
     "polityId": "tang",
     "type": "政变",
     "summary": "李世民发动政变，随后即位，开启贞观政治格局。",
     "impact": "改变唐初权力结构，为贞观之治的政策推行创造条件，也留下道德与政治合法性争议。",
-    "leaderIds": ["li_shimin"]
+    "leaderIds": [
+      "li_shimin"
+    ]
   },
   {
     "id": "chenqiao_mutiny",
@@ -56,96 +69,173 @@
     "id": "founding_prc",
     "name": "开国大典",
     "year": 1949,
-    "coords": [116.39, 39.91],
+    "coords": [
+      116.39,
+      39.91
+    ],
     "location": "北京天安门",
     "polityId": "prc",
     "type": "建国",
     "summary": "中华人民共和国成立宣告。",
     "impact": "中国现代国家形态与国际关系格局发生重要转折，开启新政权治理体系与社会动员方式。",
-    "leaderIds": ["mao_zedong"]
+    "leaderIds": [
+      "mao_zedong"
+    ]
   },
   {
     "id": "hangul_1446",
     "name": "训民正音颁布",
     "year": 1446,
-    "coords": [126.975941, 37.578832],
+    "coords": [
+      126.975941,
+      37.578832
+    ],
     "location": "汉城集贤殿",
     "polityId": "choseon",
     "type": "文化",
     "summary": "训民正音正式颁布，后世称韩文。",
     "impact": "促进本土文化传播与教育普及，增强语言文字的社会渗透力，对朝鲜半岛文化演进影响深远。",
-    "leaderIds": ["sejong"]
+    "leaderIds": [
+      "sejong"
+    ]
   },
   {
     "id": "xinhai_revolution",
     "name": "辛亥革命",
     "year": 1911,
-    "coords": [114.301943, 30.528065],
+    "coords": [
+      114.301943,
+      30.528065
+    ],
     "location": "武昌",
     "polityId": "roc",
     "type": "革命",
     "summary": "由资产阶级革命派发动的全国性武装起义，以武昌起义为开端，迅速席卷全国各省，最终推翻了清朝统治。",
     "impact": "彻底结束了中国长达两千多年的封建君主专制制度，建立了亚洲第一个民主共和国，使民主共和的观念深入人心。",
-    "leaderIds": ["sun_yat_sen", "pu_yi", "li_yuanhong"]
+    "leaderIds": [
+      "sun_yat_sen",
+      "pu_yi",
+      "li_yuanhong"
+    ]
   },
   {
     "id": "jingnan_campaign",
     "name": "靖难之役",
     "year": 1399,
-    "coords": [116.4074, 39.9042],
+    "coords": [
+      116.4074,
+      39.9042
+    ],
     "location": "北平至南京一带",
     "polityId": "ming",
     "type": "政变",
     "summary": "燕王朱棣以“清君侧、靖国难”为名，起兵反抗建文帝朱允炆的削藩政策。历时四年的内战最终以朱棣攻克南京篡位称帝告终。",
     "impact": "导致明朝皇权由太祖长房转移至燕王一系，直接促成了后来明朝迁都北京、郑和下西洋等重大战略调整，深刻改变了明朝的政治与地缘格局。",
-    "leaderIds": ["zhu_yunwen", "zhu_di"]
+    "leaderIds": [
+      "zhu_yunwen",
+      "zhu_di"
+    ]
   },
   {
     "id": "tiananmen_protests",
     "name": "八九学运",
     "year": 1989,
-    "coords": [116.3974, 39.9092],
+    "coords": [
+      116.3974,
+      39.9092
+    ],
     "location": "北京天安门广场",
     "polityId": "prc",
     "type": "社会运动",
     "summary": "1989年春夏之交由高校学生发起、广大市民参与的全国性要求民主与反腐败的抗议活动。最终以中国政府宣布戒严并在6月4日出动军队进行武力清场（即“六四事件”）而流血收场。",
     "impact": "直接导致了中国政治体制改革的停滞以及随后数年的经济收缩，并引发了西方国家长期的武器禁运与外交制裁，是中国现代政治史上高度敏感且深远影响的重大分水岭。",
-    "leaderIds": ["deng_xiaoping"]
+    "leaderIds": [
+      "deng_xiaoping"
+    ]
   },
   {
     "id": "sunflower_movement",
     "name": "太阳花学运",
     "year": 2014,
-    "coords": [121.5197, 25.0443],
+    "coords": [
+      121.5197,
+      25.0443
+    ],
     "location": "台北立法院",
     "polityId": "roc_taiwan",
     "type": "社会运动",
     "summary": "台湾大学生与公民团体为抗议马英九政府强行通过《海峡两岸服务贸易协议》的审查程序，冲入并占领立法院长达23天的社会运动。",
     "impact": "成功阻挡了服贸协议的生效，深刻改变了台湾年轻一代的政治认同，催生了“时代力量”等新兴政治势力，并直接导致了国民党在随后数次大选中的惨败。",
-    "leaderIds": ["ma_ying_jeou", "tsai_ing_wen", "lai_ching_te"]
+    "leaderIds": [
+      "ma_ying_jeou",
+      "tsai_ing_wen",
+      "lai_ching_te"
+    ]
   },
   {
     "id": "huairentang_incident",
     "name": "怀仁堂事变",
     "year": 1976,
-    "coords": [116.377814, 39.915390],
+    "coords": [
+      116.377814,
+      39.915390
+    ],
     "location": "北京中南海怀仁堂",
     "polityId": "prc",
     "type": "政变",
     "summary": "1976年10月6日，华国锋、叶剑英、汪东兴等人在中南海怀仁堂采取断然措施，将王洪文、张春桥、江青、姚文元等“四人帮”成员隔离审查。",
     "impact": "标志着历时十年的“文化大革命”正式结束，挽救了国家命运，为随后的拨乱反正及改革开放扫清了重大的政治障碍。",
-    "leaderIds": ["hua_guofeng"]
+    "leaderIds": [
+      "hua_guofeng"
+    ]
   },
   {
     "id": "hk_protests_2019",
     "name": "香港反修例运动",
     "year": 2019,
-    "coords": [114.1628, 22.2797],
+    "coords": [
+      114.1628,
+      22.2797
+    ],
     "location": "香港",
     "polityId": "prc",
     "type": "社会运动",
     "summary": "2019年爆发的抗议《逃犯条例》修订草案的社会运动，随后演变为涵盖更广泛民主诉求及警权争议的大规模示威。",
     "impact": "深刻改变了香港的政治与社会生态，引发国际高度关注，并直接促成了《香港国安法》在2020年的颁布实施。",
-    "leaderIds": ["xi_jinping"]
+    "leaderIds": [
+      "xi_jinping"
+    ]
+  },
+  {
+    "id": "nanjing_massacre",
+    "name": "南京大屠杀",
+    "year": 1937,
+    "coords": [
+      118.7377,
+      32.0378
+    ],
+    "location": "南京",
+    "polityId": "roc",
+    "type": "惨案",
+    "summary": "1937年12月13日日军攻陷南京后，在约六周内对战俘与平民实施大规模屠杀、强奸、纵火与劫掠。",
+    "impact": "是日本帝国在第二次中日战争初期，攻占中华民国首都南京后实行占领与扫荡时，日本军对南京当地平民与战俘实施的屠杀、强奸、纵火、抢劫等一系列战争罪及反人类罪的罪行。",
+    "leaderIds": []
+  },
+  {
+    "id": "wu_zhou_foundation",
+    "name": "武周代唐",
+    "year": 690,
+    "coords": [
+      112.45,
+      34.62
+    ],
+    "location": "神都洛阳",
+    "polityId": "wu_zhou",
+    "type": "建国",
+    "summary": "武则天正式登基称帝，改国号为周，定都洛阳，史称“武周”。",
+    "impact": "标志着中国历史上唯一正统女皇统治的正式确立，打破了儒家男权统治的传统，其‘承前启后’的统治时期为开元盛世奠定了基础。",
+    "leaderIds": [
+      "wu_zetian"
+    ]
   }
 ]

@@ -1,0 +1,79 @@
+{
+  "id": "wu_shiyue",
+  "dynastyId": "wu_zhou",
+  "name": "武士彟",
+  "alternateNames": "武应公、武信明",
+  "templeName": "太祖",
+  "posthumousName": "无上孝明高皇帝",
+  "title": "武周太祖、应国公",
+  "shortTitle": "太祖",
+  "isPosthumousHonored": true,
+  "birthYear": 559,
+  "deathYear": 635,
+  "familyId": "wenshui_wu",
+  "birthplace": "并州文水 (今山西文水)",
+  "birthplaceCoords": [
+    112.03,
+    37.43
+  ],
+  "ethnicity": "汉族",
+  "image": "/leaders/wu_zhou/wsy.jpg",
+  "quote": {
+    "text": "与其并世而生，不若同功而起。",
+    "source": "事关太原起兵之策"
+  },
+  "bio": "武士彟（559年—635年），唐朝开国勋臣，武则天之父。出身太原并州商人，隋末任鹰扬府队正，与李渊交厚。在唐朝建立过程中，他积极参与太原起兵，是“晋阳元谋”的重要功臣之一。唐初历任工部尚书、利州都督、荆州都督，封应国公。他不仅在军事和行政上有所贡献，其政治远见也为武家后来的崛起奠定了基础。武则天称帝后，追尊其为太祖无上孝明高皇帝。",
+  "timeline": [
+    {
+      "year": 559,
+      "event": "生于并州文水"
+    },
+    {
+      "year": 615,
+      "event": "任职鹰扬府，结识河东慰抚使李渊"
+    },
+    {
+      "year": 617,
+      "event": "参与太原起兵，随李渊进入长安"
+    },
+    {
+      "year": 618,
+      "event": "唐朝建立，任光禄大夫，封义原郡公"
+    },
+    {
+      "year": 620,
+      "event": "晋封应国公，出任工部尚书"
+    },
+    {
+      "year": 624,
+      "event": "武则天出生"
+    },
+    {
+      "year": 635,
+      "event": "病逝于荆州都督任上，李渊崩后哀痛过度而卒"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "太原起兵元谋",
+      "description": "作为李渊的早期密友，为太原起兵提供了重要的后勤支持与战略建议，位列‘晋阳元谋’功臣。"
+    },
+    {
+      "title": "典掌部委",
+      "description": "任工部尚书期间，主持唐初都城建设与水利工程，展现了出色的组织协调能力。"
+    }
+  ],
+  "ratings": {
+    "military": 75,
+    "economy": 88,
+    "culture": 70,
+    "ideology": 78,
+    "practice": 85,
+    "diplomacy": 75,
+    "legacy": 90,
+    "benevolence": 72,
+    "stability": 80,
+    "capability": 82
+  },
+  "summary": "武士彟是唐朝开国的关键人物之一，也是武则天走向权力巅峰的遗传根源。他不仅以商人的精明为起兵提供了基础，更以敏锐的政治觉悟投身大时代。虽未亲见女儿称帝，但他所积累的名望与地位，正是武周王朝最深厚的基石。"
+}

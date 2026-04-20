@@ -1,12 +1,40 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { formatYearShort, formatYearShortOngoing } from '../../utils/yearFormat'
 import { useDynasties } from '../../hooks/useDynasties'
 import { useRegionalRegimeIdSet, useRegionalRegimes } from '../../hooks/useRegionalRegime'
 import AnnotatedText from '../common/AnnotatedText'
+import SearchSelect from '../tools/SearchSelect'
 import './TimelineView.css'
 
+const TIMELINE_MODE = {
+  central: 'central',
+  korea: 'korea',
+  japan: 'japan',
+}
+
+const TIMELINE_META = {
+  [TIMELINE_MODE.central]: {
+    label: '中国',
+    title: '中国历代政权时间线',
+    subtitle: '中央轴线为时间主轴；大方块为中央政权，左右交替；旁侧小方块为割据或并立政权（可点击查看详情）。',
+  },
+  [TIMELINE_MODE.korea]: {
+    label: '朝鲜',
+    title: '朝鲜半岛历代政权时间线',
+    subtitle: '中央轴线为时间主轴；大方块为主要政权，左右交替；旁侧小方块为并立政权（可点击查看详情）。',
+  },
+  [TIMELINE_MODE.japan]: {
+    label: '日本',
+    title: '日本列岛历代政权时间线',
+    subtitle: '中央轴线为时间主轴；大方块为主要时代政权，左右交替；旁侧小方块为并立政权（可点击查看详情）。',
+  },
+}
+
 function CentralDynastyCard({ entry }) {
+  const yearText = entry?.yearLabel
+    || `${formatYearShort(entry.startYear)} — ${formatYearShortOngoing(entry.endYear)}`
+
   return (
     <div className="timeline-card timeline-card--central">
       <div className="timeline-card-header">
@@ -17,18 +45,18 @@ function CentralDynastyCard({ entry }) {
         <span className="timeline-card-name"><AnnotatedText text={entry.central.name} /></span>
       </div>
       <div className="timeline-card-years timeline-card-years--nowrap">
-        {formatYearShort(entry.startYear)} — {formatYearShortOngoing(entry.endYear)}
+        {yearText}
       </div>
     </div>
   )
 }
 
-function CentralBlock({ entry, hasDynastyLink }) {
+function CentralBlock({ entry, centralLink }) {
   const inner = <CentralDynastyCard entry={entry} />
-  if (hasDynastyLink) {
+  if (centralLink) {
     return (
       <Link
-        to={`/dynasty/${entry.central.id}`}
+        to={centralLink}
         className="timeline-dynasty-link"
       >
         {inner}
@@ -87,10 +115,20 @@ function RegionalColumn({ regs, regionalIdSet, accentColor }) {
 }
 
 export default function TimelineView() {
-  const [timelineData, setTimelineData] = useState([])
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [timelineDataByMode, setTimelineDataByMode] = useState({
+    [TIMELINE_MODE.central]: [],
+    [TIMELINE_MODE.korea]: [],
+    [TIMELINE_MODE.japan]: [],
+  })
   const { dynasties, loading: dynLoading } = useDynasties()
   const regionalIdSet = useRegionalRegimeIdSet()
   const regionalRegimes = useRegionalRegimes()
+
+  const modeParam = searchParams.get('region')
+  const mode = Object.prototype.hasOwnProperty.call(TIMELINE_META, modeParam)
+    ? modeParam
+    : TIMELINE_MODE.central
 
   const dynastyIdsWithDetail = useMemo(
     () => new Set(dynasties.map(d => d.id)),
@@ -104,17 +142,30 @@ export default function TimelineView() {
   )
 
   useEffect(() => {
-    import('/data/timeline.json').then(module => {
-      setTimelineData(module.default || module)
+    Promise.all([
+      import('/data/timeline.json'),
+      import('/data/timeline_korea.json'),
+      import('/data/timeline_japan.json'),
+    ]).then(([centralModule, koreaModule, japanModule]) => {
+      setTimelineDataByMode({
+        [TIMELINE_MODE.central]: centralModule.default || centralModule,
+        [TIMELINE_MODE.korea]: koreaModule.default || koreaModule,
+        [TIMELINE_MODE.japan]: japanModule.default || japanModule,
+      })
     })
   }, [])
+
+  const timelineData = timelineDataByMode[mode] || []
 
   const enrichedTimeline = useMemo(() => {
     return (timelineData || []).map(entry => {
       const dyn = entry?.central?.id ? dynMap.get(entry.central.id) : null
+      const regCentral = entry?.central?.id ? regMap.get(entry.central.id) : null
       const central = dyn
         ? { ...entry.central, name: dyn.name, color: dyn.color }
-        : entry.central
+        : regCentral
+          ? { ...entry.central, name: regCentral.name, color: regCentral.color || entry.central.color }
+          : entry.central
 
       const regional = (entry.regional || []).map(r => {
         const rr = r?.id ? regMap.get(r.id) : null
@@ -131,13 +182,39 @@ export default function TimelineView() {
     })
   }, [dynMap, regMap, timelineData])
 
+  const headerCopy = TIMELINE_META[mode] || TIMELINE_META[TIMELINE_MODE.central]
+  const regionOptions = useMemo(
+    () => Object.entries(TIMELINE_META).map(([value, item]) => ({ value, label: item.label })),
+    []
+  )
+  const startOnLeft = enrichedTimeline.length % 2 === 0
+
+  function handleModeChange(nextMode) {
+    const next = Object.prototype.hasOwnProperty.call(TIMELINE_META, nextMode)
+      ? nextMode
+      : TIMELINE_MODE.central
+    const nextParams = new URLSearchParams(searchParams)
+    if (next === TIMELINE_MODE.central) nextParams.delete('region')
+    else nextParams.set('region', next)
+    setSearchParams(nextParams, { replace: true })
+  }
+
   return (
     <div className="timeline-page" id="timeline-page">
       <div className="container timeline-page-inner">
         <header className="timeline-page-header">
-          <h1 className="timeline-page-title">中国历代政权时间线</h1>
+          <div className="timeline-mode-select" aria-label="时间线视图切换">
+            <SearchSelect
+              label="地域"
+              placeholder="选择地域"
+              options={regionOptions}
+              value={mode}
+              onChange={handleModeChange}
+            />
+          </div>
+          <h1 className="timeline-page-title">{headerCopy.title}</h1>
           <p className="timeline-page-subtitle">
-            中央轴线为时间主轴；大方块为中央政权，左右交替；旁侧小方块为割据或并立政权（可点击查看详情）。
+            {headerCopy.subtitle}
           </p>
         </header>
 
@@ -145,9 +222,12 @@ export default function TimelineView() {
           <div className="timeline-axis" aria-hidden />
 
           {enrichedTimeline.map((entry, i) => {
-            const centralOnLeft = i % 2 === 0
-            const hasDynastyLink =
-              dynastyIdsWithDetail.has(entry.central.id) && !dynLoading
+            const centralOnLeft = startOnLeft ? (i % 2 === 0) : (i % 2 !== 0)
+            let centralLink = null
+            if (!dynLoading) {
+              if (dynastyIdsWithDetail.has(entry.central.id)) centralLink = `/dynasty/${entry.central.id}`
+              else if (entry.central.id && regionalIdSet.has(entry.central.id)) centralLink = `/regional/${entry.central.id}`
+            }
             const accent = entry.central.color || 'var(--color-gold)'
 
             return (
@@ -166,14 +246,14 @@ export default function TimelineView() {
                       />
                       <CentralBlock
                         entry={entry}
-                        hasDynastyLink={hasDynastyLink}
+                        centralLink={centralLink}
                       />
                     </>
                   ) : (
                     <>
                       <CentralBlock
                         entry={entry}
-                        hasDynastyLink={hasDynastyLink}
+                        centralLink={centralLink}
                       />
                       <RegionalColumn
                         regs={entry.regional}

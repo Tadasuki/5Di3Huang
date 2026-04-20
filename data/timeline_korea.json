@@ -1,0 +1,169 @@
+[
+  {
+    "startYear": -2333,
+    "endYear": -108,
+    "central": {
+      "id": "kor_gojoseon",
+      "name": "古朝鲜",
+      "color": "#6B5B4B"
+    },
+    "regional": [
+      {
+        "id": "kor_tangun",
+        "name": "檀君朝鲜",
+        "startYear": -2333,
+        "endYear": -1126
+      },
+      {
+        "id": "kor_kija",
+        "name": "箕子朝鲜",
+        "startYear": -1126,
+        "endYear": -195
+      },
+      {
+        "id": "kor_wiman",
+        "name": "卫满朝鲜",
+        "startYear": -195,
+        "endYear": -108
+      }
+    ]
+  },
+  {
+    "startYear": -108,
+    "endYear": 313,
+    "central": {
+      "id": "kor_proto_three",
+      "name": "三韩时代",
+      "color": "#5D6D7E"
+    },
+    "regional": [
+      {
+        "id": "kor_mahan",
+        "name": "马韩",
+        "startYear": -100,
+        "endYear": 300
+      },
+      {
+        "id": "kor_jinhan",
+        "name": "辰韩",
+        "startYear": -100,
+        "endYear": 356
+      },
+      {
+        "id": "kor_byeonhan",
+        "name": "弁韩",
+        "startYear": -100,
+        "endYear": 562
+      }
+    ]
+  },
+  {
+    "startYear": 313,
+    "endYear": 668,
+    "central": {
+      "id": "kor_three_kingdoms",
+      "name": "三国时代",
+      "color": "#8C5A4A"
+    },
+    "regional": [
+      {
+        "id": "kor_goguryeo",
+        "name": "高句丽",
+        "startYear": 37,
+        "endYear": 668
+      },
+      {
+        "id": "kor_baekje",
+        "name": "百济",
+        "startYear": -18,
+        "endYear": 660
+      },
+      {
+        "id": "kor_silla",
+        "name": "新罗",
+        "startYear": -57,
+        "endYear": 935
+      }
+    ]
+  },
+  {
+    "startYear": 668,
+    "endYear": 935,
+    "central": {
+      "id": "kor_unified_silla",
+      "name": "统一新罗",
+      "color": "#7B8B4A"
+    },
+    "regional": [
+      {
+        "id": "kor_balhae",
+        "name": "渤海国",
+        "startYear": 698,
+        "endYear": 926
+      }
+    ]
+  },
+  {
+    "startYear": 918,
+    "endYear": 1392,
+    "central": {
+      "id": "kor_goryeo",
+      "name": "高丽王国",
+      "color": "#4C7A8F"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1392,
+    "endYear": 1897,
+    "central": {
+      "id": "choseon",
+      "name": "朝鲜王国",
+      "color": "#7E9A72"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1897,
+    "endYear": 1910,
+    "central": {
+      "id": "kor_empire",
+      "name": "大韩帝国",
+      "color": "#3F5E8C"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1910,
+    "endYear": 1945,
+    "central": {
+      "id": "kor_japanese_rule",
+      "name": "大日本帝国",
+      "color": "#6D6D6D"
+    },
+    "regional": []
+  },
+  {
+    "startYear": 1948,
+    "endYear": null,
+    "central": {
+      "id": "kor_divided",
+      "name": "分治时期",
+      "color": "#C76B3A"
+    },
+    "regional": [
+      {
+        "id": "kor_north",
+        "name": "朝鲜民主主义人民共和国",
+        "startYear": 1948,
+        "endYear": null
+      },
+      {
+        "id": "kor_south",
+        "name": "大韩民国",
+        "startYear": 1948,
+        "endYear": null
+      }
+    ]
+  }
+]

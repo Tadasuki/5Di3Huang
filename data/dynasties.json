@@ -1,5 +1,19 @@
 [
   {
+    "id": "old_china",
+    "name": "古国时代",
+    "fullName": "古国时代",
+    "startYear": -3800,
+    "endYear": -2070,
+    "type": "central",
+    "color": "#998877",
+    "description": "古国时代是中华文明探源工程提出的中国历史新时期之一，包括了新石器时代晚期至夏朝建立前夕的中国历史。",
+    "leaders": [
+      "da_yu",
+      "qi"
+    ]
+  },
+  {
     "id": "xia",
     "name": "夏",
     "fullName": "夏朝",
@@ -69,11 +83,14 @@
       108.9398,
       34.3413
     ],
-    "description": "中国历史上最强盛的朝代之一，国力空前强大，文化灿烂辉煌，是当时世界上最强大的国家之一。唐朝的开放与包容，使其成为中华文明的巅峰时期。",
+    "displayYearRange": "618—690, 705—907",
+    "displayDuration": "274",
+    "description": "中国历史上的一个重要朝代，前接隋朝，两者常合称隋唐，都是经历五胡乱华和南北朝分裂之后的大一统时期。唐朝声誉远及海外，其历史地位极其深远重要，到明清时期海外多称中国人为“唐人”。",
     "leaders": [
       "li_yuan",
       "li_shimin",
-      "wu_zetian",
+      "li_zhi",
+      "wu_zhao",
       "li_longji"
     ]
   },

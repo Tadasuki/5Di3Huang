@@ -105,8 +105,8 @@ export default function DynastyDetail() {
           <div className="dynasty-detail-intro">
             <h1 className="dynasty-detail-title"><AnnotatedText text={dynasty.fullName} /></h1>
             <div className="dynasty-detail-meta">
-              <span>📅 {formatYearRangeOngoing(dynasty.startYear, dynasty.endYear)}</span>
-              <span>⏱ {calculateDuration(dynasty.startYear, dynasty.endYear)}年</span>
+              <span>📅 {dynasty.displayYearRange || formatYearRangeOngoing(dynasty.startYear, dynasty.endYear)}</span>
+              <span>⏱ {dynasty.displayDuration || calculateDuration(dynasty.startYear, dynasty.endYear)}年</span>
               {dynasty.capital && (
                 <Link
                   to={`/map?polity=${dynasty.id}`}
