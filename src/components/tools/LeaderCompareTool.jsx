@@ -8,6 +8,8 @@ import { withOpacity } from '../../utils/colorUtils'
 import { formatLifeYearRange, formatYearRangeOngoing } from '../../utils/yearFormat'
 import { computeTotalScore } from '../../utils/ratings'
 import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import { ALL_COUNTRY_VALUE, getCountryOptions } from '../../data/countries'
+import { resolveLeaderCountry } from '../../data/catalog'
 import CompareRadar from './CompareRadar'
 import SearchSelect from './SearchSelect'
 import AnnotatedText from '../common/AnnotatedText'
@@ -452,12 +454,7 @@ export default function LeaderCompareTool() {
     return rgbToHex(tweaked)
   }
 
-  const centralOptions = useMemo(() => {
-    return (dynasties || [])
-      .slice()
-      .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
-      .map(d => ({ value: String(d.id), label: inlineMarkupToPlain(d.fullName || d.name) }))
-  }, [dynasties])
+  const countryOptions = useMemo(() => getCountryOptions({ includeAll: true }), [])
 
   const regionalByCentral = useMemo(() => {
     const map = new Map()
@@ -472,13 +469,21 @@ export default function LeaderCompareTool() {
     return map
   }, [regionalRegimes])
 
-  function polityOptionsForCentral(centralId) {
+  function centralOptionsForCountry(country) {
+    return (dynasties || [])
+      .filter(d => country === ALL_COUNTRY_VALUE || d.country === country)
+      .slice()
+      .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
+      .map(d => ({ value: String(d.id), label: inlineMarkupToPlain(d.fullName || d.name) }))
+  }
+
+  function polityOptionsForCentral(centralId, country = ALL_COUNTRY_VALUE) {
     const cid = String(centralId || '')
     if (!cid) return []
     const central = dynasties.find(d => String(d.id) === cid)
     const opts = []
     if (central) opts.push({ value: String(central.id), label: `${inlineMarkupToPlain(central.fullName || central.name)}（中央）` })
-    const regionals = regionalByCentral.get(cid) || []
+    const regionals = (regionalByCentral.get(cid) || []).filter(r => country === ALL_COUNTRY_VALUE || r.country === country)
     regionals.forEach(r => {
       opts.push({ value: String(r.id), label: inlineMarkupToPlain(r.fullName || r.name) })
     })
@@ -502,66 +507,38 @@ export default function LeaderCompareTool() {
     return `${inlineMarkupToPlain(leader.name)}${t ? ` · ${inlineMarkupToPlain(t)}` : ''}${years}`
   }
 
-  const [leftCentralId, setLeftCentralId] = useState(centralOptions[0]?.value || '')
-  const [leftPolityId, setLeftPolityId] = useState(() => {
-    const cid = centralOptions[0]?.value || ''
-    return polityOptionsForCentral(cid)[0]?.value || ''
-  })
+  const [leftCountry, setLeftCountry] = useState(ALL_COUNTRY_VALUE)
+  const [leftCentralId, setLeftCentralId] = useState('')
+  const [leftPolityId, setLeftPolityId] = useState('')
   const [leftLeaderId, setLeftLeaderId] = useState('')
 
-  const [rightCentralId, setRightCentralId] = useState(centralOptions[0]?.value || '')
-  const [rightPolityId, setRightPolityId] = useState(() => {
-    const cid = centralOptions[0]?.value || ''
-    const opts = polityOptionsForCentral(cid)
-    return opts[1]?.value || opts[0]?.value || ''
-  })
+  const [rightCountry, setRightCountry] = useState(ALL_COUNTRY_VALUE)
+  const [rightCentralId, setRightCentralId] = useState('')
+  const [rightPolityId, setRightPolityId] = useState('')
   const [rightLeaderId, setRightLeaderId] = useState('')
 
-  const suppressCentralReset = useMemo(() => ({ left: false, right: false }), [])
-
-  const leftPolityOptions = useMemo(() => polityOptionsForCentral(leftCentralId), [leftCentralId, dynasties, regionalByCentral])
-  const rightPolityOptions = useMemo(() => polityOptionsForCentral(rightCentralId), [rightCentralId, dynasties, regionalByCentral])
+  const leftCentralOptions = useMemo(() => centralOptionsForCountry(leftCountry), [leftCountry, dynasties])
+  const rightCentralOptions = useMemo(() => centralOptionsForCountry(rightCountry), [rightCountry, dynasties])
+  const leftPolityOptions = useMemo(() => polityOptionsForCentral(leftCentralId, leftCountry), [leftCentralId, leftCountry, dynasties, regionalByCentral])
+  const rightPolityOptions = useMemo(() => polityOptionsForCentral(rightCentralId, rightCountry), [rightCentralId, rightCountry, dynasties, regionalByCentral])
 
   const leftLeaderOptions = useMemo(() => {
     return (leaders || [])
+      .filter(l => leftCountry === ALL_COUNTRY_VALUE || resolveLeaderCountry(l) === leftCountry)
       .filter(l => leaderInPolity(l, leftPolityId))
       .slice()
       .sort((a, b) => (a.birthYear ?? 999999) - (b.birthYear ?? 999999))
       .map(l => ({ value: String(l.id), label: leaderLabel(l) }))
-  }, [leaders, leftPolityId])
+  }, [leaders, leftCountry, leftPolityId])
 
   const rightLeaderOptions = useMemo(() => {
     return (leaders || [])
+      .filter(l => rightCountry === ALL_COUNTRY_VALUE || resolveLeaderCountry(l) === rightCountry)
       .filter(l => leaderInPolity(l, rightPolityId))
       .slice()
       .sort((a, b) => (a.birthYear ?? 999999) - (b.birthYear ?? 999999))
       .map(l => ({ value: String(l.id), label: leaderLabel(l) }))
-  }, [leaders, rightPolityId])
-
-  useEffect(() => {
-    // When central changes, reset polity to central default and clear leader.
-    if (suppressCentralReset.left) {
-      suppressCentralReset.left = false
-      return
-    }
-    const opts = polityOptionsForCentral(leftCentralId)
-    const nextPolity = opts[0]?.value || ''
-    setLeftPolityId(nextPolity)
-    setLeftLeaderId('')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leftCentralId])
-
-  useEffect(() => {
-    if (suppressCentralReset.right) {
-      suppressCentralReset.right = false
-      return
-    }
-    const opts = polityOptionsForCentral(rightCentralId)
-    const nextPolity = opts[0]?.value || ''
-    setRightPolityId(nextPolity)
-    setRightLeaderId('')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rightCentralId])
+  }, [leaders, rightCountry, rightPolityId])
 
   useEffect(() => {
     const leftFromUrl = searchParams.get('left')
@@ -596,24 +573,44 @@ export default function LeaderCompareTool() {
       }
     }
 
-    if (centralId && polityId) {
-      suppressCentralReset.left = true
+    const country = resolveLeaderCountry(leader) || ALL_COUNTRY_VALUE
+
+    if (polityId) {
+      setLeftCountry(country)
       setLeftCentralId(centralId)
       setLeftPolityId(polityId)
       setLeftLeaderId(String(leader.id))
     }
-  }, [searchParams, leaders, dynasties, regionalRegimes, centralOptions, suppressCentralReset])
+  }, [searchParams, leaders, dynasties, regionalRegimes])
 
   useEffect(() => {
-    if (leftLeaderId) return
-    const first = leftLeaderOptions[0]?.value || ''
-    if (first) setLeftLeaderId(first)
+    if (leftCentralId && leftCentralOptions.some(option => option.value === leftCentralId)) return
+    setLeftCentralId(leftCentralOptions[0]?.value || '')
+  }, [leftCentralId, leftCentralOptions])
+
+  useEffect(() => {
+    if (rightCentralId && rightCentralOptions.some(option => option.value === rightCentralId)) return
+    setRightCentralId(rightCentralOptions[0]?.value || '')
+  }, [rightCentralId, rightCentralOptions])
+
+  useEffect(() => {
+    if (leftPolityId && leftPolityOptions.some(option => option.value === leftPolityId)) return
+    setLeftPolityId(leftPolityOptions[0]?.value || '')
+  }, [leftPolityId, leftPolityOptions])
+
+  useEffect(() => {
+    if (rightPolityId && rightPolityOptions.some(option => option.value === rightPolityId)) return
+    setRightPolityId(rightPolityOptions[0]?.value || '')
+  }, [rightPolityId, rightPolityOptions])
+
+  useEffect(() => {
+    if (leftLeaderId && leftLeaderOptions.some(option => option.value === leftLeaderId)) return
+    setLeftLeaderId(leftLeaderOptions[0]?.value || '')
   }, [leftLeaderOptions, leftLeaderId])
 
   useEffect(() => {
-    if (rightLeaderId) return
-    const first = rightLeaderOptions[0]?.value || ''
-    if (first) setRightLeaderId(first)
+    if (rightLeaderId && rightLeaderOptions.some(option => option.value === rightLeaderId)) return
+    setRightLeaderId(rightLeaderOptions[0]?.value || '')
   }, [rightLeaderOptions, rightLeaderId])
 
   const left = useMemo(() => (leaders || []).find(l => String(l.id) === String(leftLeaderId)) ?? null, [leaders, leftLeaderId])
@@ -684,9 +681,16 @@ export default function LeaderCompareTool() {
       <div className="lct-pickers" role="group" aria-label="人物对比选择">
         <div className="lct-picker-stack">
           <SearchSelect
+            label="选择国家"
+            placeholder="搜索国家..."
+            options={countryOptions}
+            value={leftCountry}
+            onChange={setLeftCountry}
+          />
+          <SearchSelect
             label="选择时期"
             placeholder="搜索中央朝代/政府..."
-            options={centralOptions}
+            options={leftCentralOptions}
             value={leftCentralId}
             onChange={setLeftCentralId}
           />
@@ -697,7 +701,6 @@ export default function LeaderCompareTool() {
             value={leftPolityId}
             onChange={(v) => {
               setLeftPolityId(v)
-              setLeftLeaderId('')
             }}
             disabled={!leftCentralId}
           />
@@ -715,9 +718,16 @@ export default function LeaderCompareTool() {
 
         <div className="lct-picker-stack">
           <SearchSelect
+            label="选择国家"
+            placeholder="搜索国家..."
+            options={countryOptions}
+            value={rightCountry}
+            onChange={setRightCountry}
+          />
+          <SearchSelect
             label="选择时期"
             placeholder="搜索中央朝代/政府..."
-            options={centralOptions}
+            options={rightCentralOptions}
             value={rightCentralId}
             onChange={setRightCentralId}
           />
@@ -728,7 +738,6 @@ export default function LeaderCompareTool() {
             value={rightPolityId}
             onChange={(v) => {
               setRightPolityId(v)
-              setRightLeaderId('')
             }}
             disabled={!rightCentralId}
           />

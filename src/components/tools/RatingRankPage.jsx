@@ -9,6 +9,8 @@ import { getLeaderShortTitle } from '../../utils/leaderTitle'
 import { withOpacity } from '../../utils/colorUtils'
 import { formatYearShort } from '../../utils/yearFormat'
 import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import { ALL_COUNTRY_VALUE, COUNTRY_KEYS, getCountryOptions, isAllCountriesSelected, toggleCountrySelection } from '../../data/countries'
+import { resolveLeaderCountry } from '../../data/catalog'
 import AnnotatedText from '../common/AnnotatedText'
 import SearchSelect from './SearchSelect'
 import './RatingRankPage.css'
@@ -57,6 +59,7 @@ export default function RatingRankPage() {
   const [sortKey, setSortKey] = useState('total') // 'total' | dimension key
   const [sortDir, setSortDir] = useState('desc')  // 'asc' | 'desc'
   const [mobileDimKey, setMobileDimKey] = useState(RATING_DIMENSIONS[0]?.key || 'military')
+  const [selectedCountries, setSelectedCountries] = useState(COUNTRY_KEYS)
 
   const handleSort = useCallback((key) => {
     if (key === sortKey) {
@@ -75,12 +78,26 @@ export default function RatingRankPage() {
   }, [])
 
   // ---- filters ----
+  const countryOptions = useMemo(() => getCountryOptions(), [])
+  const selectedCountrySet = useMemo(() => new Set(selectedCountries), [selectedCountries])
+  const allCountriesActive = useMemo(() => isAllCountriesSelected(selectedCountries), [selectedCountries])
+
+  const leaderMatchesCountry = useCallback((leader) => {
+    const country = resolveLeaderCountry(leader)
+    return allCountriesActive || selectedCountrySet.has(country)
+  }, [allCountriesActive, selectedCountrySet])
+
+  const toggleCountry = useCallback((countryValue) => {
+    setSelectedCountries(prev => toggleCountrySelection(prev, countryValue))
+  }, [])
+
   const centralOptions = useMemo(() => {
     return (dynasties || [])
+      .filter(d => allCountriesActive || selectedCountrySet.has(d.country))
       .slice()
       .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
       .map(d => ({ value: String(d.id), label: inlineMarkupToPlain(d.fullName || d.name) }))
-  }, [dynasties])
+  }, [dynasties, allCountriesActive, selectedCountrySet])
 
   const regionalByCentral = useMemo(() => {
     const map = new Map()
@@ -114,31 +131,36 @@ export default function RatingRankPage() {
   const [filterFactionId, setFilterFactionId] = useState('')
 
   const handlePolityTagClick = useCallback((e, polityId) => {
-    e.stopPropagation();
-    if (!polityId) return;
+    e.stopPropagation()
+    if (!polityId) return
 
     // Click the same tag again to clear polity-related filters.
     if (filterPolityId === polityId) {
-      setFilterCentralId('');
-      setFilterPolityId('');
-      return;
+      setFilterCentralId('')
+      setFilterPolityId('')
+      return
     }
 
     // Find if the polityId corresponds to a central dynasty or a regional regime
-    let centralId = '';
-    const dyn = dynasties.find(d => String(d.id) === polityId);
+    let centralId = ''
+    const dyn = dynasties.find(d => String(d.id) === polityId)
+    const reg = regimes?.find(r => String(r.id) === polityId) || null
     if (dyn) {
-      centralId = polityId;
+      centralId = polityId
     } else {
-      const reg = regimes?.find(r => String(r.id) === polityId);
-      if (reg) centralId = String(reg.relatedCentralDynastyId || '');
+      if (reg) centralId = String(reg.relatedCentralDynastyId || '')
+    }
+
+    const polity = dyn || reg || null
+    if (polity?.country) {
+      setSelectedCountries([polity.country])
     }
 
     if (centralId) {
-      setFilterCentralId(centralId);
-      setFilterPolityId(polityId);
+      setFilterCentralId(centralId)
+      setFilterPolityId(polityId)
     }
-  }, [dynasties, regimes, filterPolityId]);
+  }, [dynasties, regimes, filterPolityId])
 
   const activePolityOptions = useMemo(() => {
     if (!filterCentralId) return []
@@ -146,6 +168,13 @@ export default function RatingRankPage() {
   }, [filterCentralId, dynasties, regionalByCentral])
 
   // Reset polity when central changes
+  useEffect(() => {
+    if (filterCentralId && !centralOptions.some(option => option.value === filterCentralId)) {
+      setFilterCentralId('')
+      setFilterPolityId('')
+    }
+  }, [centralOptions, filterCentralId])
+
   useEffect(() => {
     if (filterCentralId) {
       const opts = polityOptionsForCentral(filterCentralId)
@@ -159,13 +188,20 @@ export default function RatingRankPage() {
   }, [filterCentralId])
 
   const factionOptions = useMemo(() => {
-    const ids = new Set((leaders || []).map(l => l.factionId).filter(Boolean))
+    const ids = new Set((leaders || []).filter(leaderMatchesCountry).map(l => l.factionId).filter(Boolean))
     return (factions || []).filter(f => ids.has(f.id)).map(f => ({ value: String(f.id), label: inlineMarkupToPlain(f.shortName || f.name) }))
-  }, [leaders, factions])
+  }, [leaders, factions, leaderMatchesCountry])
+
+  useEffect(() => {
+    if (filterFactionId && !factionOptions.some(option => option.value === filterFactionId)) {
+      setFilterFactionId('')
+    }
+  }, [factionOptions, filterFactionId])
 
   // ---- processed data ----
   const rows = useMemo(() => {
     const list = (leaders || [])
+      .filter(leaderMatchesCountry)
       .filter(l => l.ratings) // only leaders with ratings
       .map(l => {
         const total = computeTotalScore(l.ratings)
@@ -223,9 +259,10 @@ export default function RatingRankPage() {
     })
 
     return filtered
-  }, [leaders, polityMap, sortKey, sortDir, filterPolityId, filterCentralId, filterFactionId, dynasties, regionalByCentral])
+  }, [leaders, leaderMatchesCountry, polityMap, sortKey, sortDir, filterPolityId, filterCentralId, filterFactionId, dynasties, regionalByCentral])
 
   const clearFilters = useCallback(() => {
+    setSelectedCountries(COUNTRY_KEYS)
     setFilterCentralId('')
     setFilterPolityId('')
     setFilterFactionId('')
@@ -245,7 +282,6 @@ export default function RatingRankPage() {
     )
   }
 
-  const hasFilters = !!filterCentralId || !!filterFactionId
   const sortLabel = sortKey === 'total' ? '综合' : RATING_DIMENSIONS.find(d => d.key === sortKey)?.label || '综合'
 
   return (
@@ -261,6 +297,32 @@ export default function RatingRankPage() {
 
         {/* Controls */}
         <div className="rank-controls">
+          <div className="rank-country-group" aria-label="国家筛选">
+            <div className="ss-label">国家</div>
+            <div className="rank-country-chips">
+              <button
+                type="button"
+                className={`rank-country-chip ${allCountriesActive ? 'active' : ''}`}
+                onClick={() => toggleCountry(ALL_COUNTRY_VALUE)}
+              >
+                全部
+              </button>
+              {countryOptions.map(option => {
+                const active = selectedCountrySet.has(option.value) && !allCountriesActive
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`rank-country-chip ${active ? 'active' : ''}`}
+                    onClick={() => toggleCountry(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           <div className="rank-filter-stack">
             <SearchSelect
               label="大朝代"
@@ -289,11 +351,9 @@ export default function RatingRankPage() {
             />
           </div>
 
-          {hasFilters && (
-            <button className="rank-clear-btn" onClick={clearFilters} type="button" style={{ alignSelf: 'flex-end', marginBottom: '4px' }}>
-              清除筛选
-            </button>
-          )}
+          <button className="rank-clear-btn" onClick={clearFilters} type="button" style={{ alignSelf: 'flex-end', marginBottom: '4px' }}>
+            清除筛选
+          </button>
         </div>
 
         {/* Count info */}
@@ -495,7 +555,7 @@ export default function RatingRankPage() {
           <div className="rank-empty">
             <div className="rank-empty-icon">🏯</div>
             <div className="rank-empty-text">
-              {hasFilters ? '当前筛选条件下无匹配结果，请调整筛选范围' : '暂无评分数据'}
+              {'当前筛选条件下无匹配结果，请调整筛选范围'}
             </div>
           </div>
         )}

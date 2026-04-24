@@ -1,0 +1,36 @@
+[
+  {
+    "id": "empire_of_japan",
+    "name": "大日本帝国",
+    "fullName": "大日本帝国",
+    "startYear": 1868,
+    "endYear": 1947,
+    "type": "central",
+    "color": "#9A5B43",
+    "capital": "东京",
+    "capitalCoords": [
+      139.6917,
+      35.6895
+    ],
+    "description": "明治维新后建立的近代日本国家形态，在工业化与中央集权快速推进的同时，也走向对外扩张，最终于二战战败后终结。",
+    "leaders": [
+      "meiji"
+    ]
+  },
+  {
+    "id": "postwar_japan",
+    "name": "日本国",
+    "fullName": "日本国",
+    "startYear": 1947,
+    "endYear": null,
+    "type": "central",
+    "color": "#8F6E52",
+    "capital": "东京",
+    "capitalCoords": [
+      139.6917,
+      35.6895
+    ],
+    "description": "1947年施行《日本国宪法》后的现代日本，以议会内阁制与象征天皇制为基本政治框架。",
+    "leaders": []
+  }
+]

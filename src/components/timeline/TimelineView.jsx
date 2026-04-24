@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { formatYearShort, formatYearShortOngoing } from '../../utils/yearFormat'
 import { useDynasties } from '../../hooks/useDynasties'
 import { useRegionalRegimeIdSet, useRegionalRegimes } from '../../hooks/useRegionalRegime'
+import { getTimelineMapRaw } from '../../data/catalog'
 import AnnotatedText from '../common/AnnotatedText'
 import SearchSelect from '../tools/SearchSelect'
 import './TimelineView.css'
@@ -116,11 +117,6 @@ function RegionalColumn({ regs, regionalIdSet, accentColor }) {
 
 export default function TimelineView() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [timelineDataByMode, setTimelineDataByMode] = useState({
-    [TIMELINE_MODE.central]: [],
-    [TIMELINE_MODE.korea]: [],
-    [TIMELINE_MODE.japan]: [],
-  })
   const { dynasties, loading: dynLoading } = useDynasties()
   const regionalIdSet = useRegionalRegimeIdSet()
   const regionalRegimes = useRegionalRegimes()
@@ -140,21 +136,14 @@ export default function TimelineView() {
     () => new Map(regionalRegimes.map(r => [r.id, r])),
     [regionalRegimes]
   )
-
-  useEffect(() => {
-    Promise.all([
-      import('/data/timeline.json'),
-      import('/data/timeline_korea.json'),
-      import('/data/timeline_japan.json'),
-    ]).then(([centralModule, koreaModule, japanModule]) => {
-      setTimelineDataByMode({
-        [TIMELINE_MODE.central]: centralModule.default || centralModule,
-        [TIMELINE_MODE.korea]: koreaModule.default || koreaModule,
-        [TIMELINE_MODE.japan]: japanModule.default || japanModule,
-      })
-    })
+  const timelineDataByMode = useMemo(() => {
+    const timelines = getTimelineMapRaw()
+    return {
+      [TIMELINE_MODE.central]: timelines.china || [],
+      [TIMELINE_MODE.korea]: timelines.korea || [],
+      [TIMELINE_MODE.japan]: timelines.japan || [],
+    }
   }, [])
-
   const timelineData = timelineDataByMode[mode] || []
 
   const enrichedTimeline = useMemo(() => {

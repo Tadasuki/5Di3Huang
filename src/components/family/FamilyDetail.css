@@ -1,6 +1,6 @@
 .family-detail {
   min-height: calc(100vh - var(--navbar-height));
-  padding-top: var(--navbar-height);
+  padding-top: calc(var(--navbar-height) + var(--space-lg));
   padding-bottom: var(--space-xl);
 }
 
@@ -211,6 +211,10 @@
     justify-items: center;
     gap: var(--space-md);
     padding: var(--space-lg);
+  }
+
+  .family-detail-label {
+    text-align: center;
   }
 
   .family-detail-title {

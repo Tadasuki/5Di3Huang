@@ -1,23 +1,10 @@
 import { useMemo } from 'react'
-
-const regionalModules = import.meta.glob('/data/regional_regimes.json', { eager: true })
-const leaderFiles = import.meta.glob('/data/leaders/**/*.json', { eager: true })
-
-function getRegionalList() {
-  const path = Object.keys(regionalModules)[0]
-  if (!path) return []
-  const raw = regionalModules[path]?.default || regionalModules[path]
-  return Array.isArray(raw) ? raw : []
-}
+import { getLeaderMapRaw, getRegionalRegimeListRaw } from '../data/catalog'
 
 let leadersMapCache = null
 function getLeadersMap() {
   if (leadersMapCache) return leadersMapCache
-  leadersMapCache = {}
-  Object.values(leaderFiles).forEach(module => {
-    const data = module.default || module
-    if (data?.id) leadersMapCache[data.id] = data
-  })
+  leadersMapCache = getLeaderMapRaw()
   return leadersMapCache
 }
 
@@ -45,7 +32,7 @@ function getRegionalRegimeMap() {
   if (!regimeMapCache) {
     const leaders = getLeadersMap()
     const leadersByPolity = getLeadersByPolityMap()
-    const enrichedList = getRegionalList().map(r => ({
+    const enrichedList = getRegionalRegimeListRaw().map(r => ({
       ...r,
       leaderData: Array.from(
         new Set([...(r.leaders || []), ...((leadersByPolity[r.id] || []))])
@@ -75,5 +62,5 @@ export function useRegionalRegimes() {
 }
 
 export function useRegionalRegimeIdSet() {
-  return useMemo(() => new Set(getRegionalList().map(r => r.id)), [])
+  return useMemo(() => new Set(getRegionalRegimeListRaw().map(r => r.id)), [])
 }

@@ -17,7 +17,7 @@ export default function RegionalRegimeDetail() {
       <div className="regional-detail">
         <div className="container regional-detail-not-found">
           <h2>未找到该政权</h2>
-          <p>可在 <code>data/regional_regimes.json</code> 中补充该割据政权的条目。</p>
+          <p>可在对应国家目录下的 <code>data/countries/&lt;country&gt;/regional_regimes.json</code> 中补充该政权条目。</p>
           <p style={{ marginTop: 'var(--space-md)' }}>
             <Link to="/timeline" className="btn btn-primary">返回时间线</Link>
             {' '}
@@ -82,8 +82,8 @@ export default function RegionalRegimeDetail() {
             ))}
             {(regime.leaderData || []).length === 0 && (
               <p className="regional-detail-empty">
-                暂无执政者条目，可在「data/leaders/{regime.id}/」下添加 JSON，并在
-                「data/regional_regimes.json」中为该政权补充 leaders 字段。
+                暂无执政者条目，可在对应国家目录下的「data/countries/&lt;country&gt;/leaders/{regime.id}/」添加 JSON，并在
+                「data/countries/&lt;country&gt;/regional_regimes.json」中为该政权补充 leaders 字段。
               </p>
             )}
           </div>

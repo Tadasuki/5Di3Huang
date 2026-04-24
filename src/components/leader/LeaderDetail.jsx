@@ -9,17 +9,11 @@ import { withOpacity } from '../../utils/colorUtils'
 import { getLeaderImageSrc } from '../../utils/leaderImage'
 import { computeTotalScore } from '../../utils/ratings'
 import { inlineMarkupInitial, inlineMarkupToPlain } from '../../utils/inlineMarkup'
+import { getRegionalRegimeListRaw, resolveLeaderCountry } from '../../data/catalog'
+import { getCountryLabel } from '../../data/countries'
 import RadarChart from './RadarChart'
 import AnnotatedText from '../common/AnnotatedText'
 import './LeaderDetail.css'
-
-const regionalModules = import.meta.glob('/data/regional_regimes.json', { eager: true })
-function getRegionalList() {
-    const path = Object.keys(regionalModules)[0]
-    if (!path) return []
-    const raw = regionalModules[path]?.default || regionalModules[path]
-    return Array.isArray(raw) ? raw : []
-}
 
 const TAB_LIST = [
     { key: 'bio', label: '简介', icon: '📖' },
@@ -121,14 +115,15 @@ export default function LeaderDetail() {
     // Find dynasty info
     const dynasty = dynasties.find(d => d.id === leader?.dynastyId)
     const regionalRegime = leader?.dynastyId
-        ? (getRegionalList().find(r => r.id === leader.dynastyId) ?? null)
+        ? (getRegionalRegimeListRaw().find(r => r.id === leader.dynastyId) ?? null)
         : null
     const customColor = typeof leader?.color === 'string' ? leader.color.trim() : ''
     const themeColor = customColor || dynasty?.color || regionalRegime?.color || '#c9a96e'
+    const leaderCountry = useMemo(() => resolveLeaderCountry(leader), [leader])
 
     const polityLinks = useMemo(() => {
         if (!leader?.dynastyId) return []
-        const regList = getRegionalList()
+        const regList = getRegionalRegimeListRaw()
         const regMap = new Map(regList.map(r => [r.id, r]))
         const dynMap = new Map(dynasties.map(d => [d.id, d]))
 
@@ -152,11 +147,25 @@ export default function LeaderDetail() {
             .filter(Boolean)
     }, [dynasties, leader?.dynastyId, leader?.positions])
 
-    const centralPolityIds = useMemo(() => {
-        // Central polities are those defined in dynasties.json with type === 'central'.
-        // Non-central (regional/parallel regimes, ROC Taiwan, etc.) should navigate within themselves.
-        return new Set((dynasties || []).filter(d => d?.type === 'central' && d?.id).map(d => String(d.id)))
+    const centralPolityIdsByCountry = useMemo(() => {
+        const map = new Map()
+        ; (dynasties || []).forEach(d => {
+            if (d?.type !== 'central' || !d?.id || !d?.country) return
+            const key = String(d.country)
+            if (!map.has(key)) map.set(key, new Set())
+            map.get(key).add(String(d.id))
+        })
+        return map
     }, [dynasties])
+
+    function isCentralPolityId(polityId, country) {
+        if (!polityId || !country) return false
+        return centralPolityIdsByCountry.get(String(country))?.has(String(polityId)) || false
+    }
+
+    function centralGroupId(country) {
+        return country ? `central:${country}` : 'central'
+    }
 
     function pickNavPolityId(l) {
         if (!l) return null
@@ -178,23 +187,25 @@ export default function LeaderDetail() {
 
     const navGroupId = useMemo(() => {
         if (!leader) return null
+        const country = resolveLeaderCountry(leader)
+        const countryCentralGroup = centralGroupId(country)
 
-        // If the leader ever served a central polity (or has a central dynastyId), prefer central navigation.
         const positions = Array.isArray(leader.positions) ? leader.positions : []
         const servedCentral = positions.some(p => {
             const pid = p?.polityId
-            return pid && centralPolityIds.has(String(pid))
+            return isCentralPolityId(pid, country)
         })
-        if (servedCentral || (leader.dynastyId && centralPolityIds.has(String(leader.dynastyId)))) return 'central'
+        if (servedCentral || isCentralPolityId(leader.dynastyId, country)) return countryCentralGroup
 
         const pid = pickNavPolityId(leader)
         if (!pid) return null
-        return centralPolityIds.has(pid) ? 'central' : pid
-    }, [leader, centralPolityIds])
+        return isCentralPolityId(pid, country) ? countryCentralGroup : pid
+    }, [leader, centralPolityIdsByCountry])
 
     const leaderNavGroupId = useMemo(() => {
         function leaderGroupIds(l) {
             if (!l) return []
+            const country = resolveLeaderCountry(l)
             const ids = []
             const positions = Array.isArray(l.positions) ? l.positions : []
             positions.forEach(p => {
@@ -203,7 +214,7 @@ export default function LeaderDetail() {
             })
             if (l.dynastyId) ids.push(String(l.dynastyId))
             const mapped = ids
-                .map(pid => (centralPolityIds.has(pid) ? 'central' : pid))
+                .map(pid => (isCentralPolityId(pid, country) ? centralGroupId(country) : pid))
                 .filter(Boolean)
             return Array.from(new Set(mapped))
         }
@@ -215,13 +226,13 @@ export default function LeaderDetail() {
 
         function groupStartKey(l, groupId) {
             if (!l || !groupId) return 999999
+            const country = resolveLeaderCountry(l)
             const positions = Array.isArray(l.positions) ? l.positions : []
-            // Prefer the start year from the position matching this group (or any central position when groupId === 'central').
             let best = null
             for (const p of positions) {
                 const pid = p?.polityId ? String(p.polityId) : null
                 if (!pid) continue
-                const mapped = centralPolityIds.has(pid) ? 'central' : pid
+                const mapped = isCentralPolityId(pid, country) ? centralGroupId(country) : pid
                 if (mapped !== groupId) continue
                 const start = typeof p?.start === 'number' ? p.start : Number(p?.start)
                 const startNum = Number.isFinite(start) ? start : null
@@ -234,16 +245,19 @@ export default function LeaderDetail() {
 
         function groupLabel(groupId) {
             if (!groupId) return ''
-            if (groupId === 'central') return '领导核心'
+            if (String(groupId).startsWith('central:')) {
+                const country = String(groupId).split(':')[1]
+                return `${getCountryLabel(country)}中央政权`
+            }
             const d = (dynasties || []).find(x => String(x?.id) === String(groupId))
             if (d) return inlineMarkupToPlain(d.fullName || d.name || String(groupId))
-            const r = getRegionalList().find(x => String(x?.id) === String(groupId))
+            const r = getRegionalRegimeListRaw().find(x => String(x?.id) === String(groupId))
             if (r) return inlineMarkupToPlain(r.fullName || r.name || String(groupId))
             return String(groupId)
         }
 
         return { leaderGroupIds, leaderHasGroup, groupStartKey, groupLabel }
-    }, [centralPolityIds, dynasties])
+    }, [centralPolityIdsByCountry, dynasties])
 
     // Must be declared before any early returns to keep hook order stable.
     const { prevLeaders, nextLeaders } = useMemo(() => {
@@ -256,6 +270,7 @@ export default function LeaderDetail() {
                 const list = (allLeaders || [])
                     .filter(l => l && l.id && (l.reignStart != null || l.birthYear != null))
                     .filter(l => !isPosthumousHonored(l))
+                    .filter(l => resolveLeaderCountry(l) === leaderCountry)
                     .filter(l => leaderHasGroup(l, groupId))
                     .slice()
                     .sort((a, b) => {
@@ -273,8 +288,8 @@ export default function LeaderDetail() {
 
             const groups = leaderGroupIds(leader)
             const orderedGroups = groups.slice().sort((a, b) => {
-                if (a === 'central' && b !== 'central') return -1
-                if (b === 'central' && a !== 'central') return 1
+                if (String(a).startsWith('central:') && !String(b).startsWith('central:')) return -1
+                if (String(b).startsWith('central:') && !String(a).startsWith('central:')) return 1
                 const ak = groupStartKey(leader, a)
                 const bk = groupStartKey(leader, b)
                 if (ak !== bk) return ak - bk
@@ -305,26 +320,26 @@ export default function LeaderDetail() {
                 const jzm = allLeaders.find(l => l.id === 'jiang_zemin')
                 if (jzm) {
                     // 邓小平直接跳转到江泽民，绕过胡、赵
-                    finalNextList = [{ leader: jzm, groupId: 'central', groupLabel: '领导核心' }]
+                    finalNextList = [{ leader: jzm, groupId: 'central:china', groupLabel: '中国中央政权' }]
                 }
             }
             if (id === 'hu_yaobang') {
                 const hgf = allLeaders.find(l => l.id === 'hua_guofeng')
                 if (hgf) {
-                    finalPrevList = [{ leader: hgf, groupId: 'central', groupLabel: '中央政权' }]
+                    finalPrevList = [{ leader: hgf, groupId: 'central:china', groupLabel: '中国中央政权' }]
                 }
             }
             if (id === 'zhao_ziyang') {
                 const jzm = allLeaders.find(l => l.id === 'jiang_zemin')
                 if (jzm) {
-                    finalNextList.push({ leader: jzm, groupId: 'central', groupLabel: '中央政权' })
+                    finalNextList.push({ leader: jzm, groupId: 'central:china', groupLabel: '中国中央政权' })
                 }
             }
             if (id === 'jiang_zemin') {
                 const dxp = allLeaders.find(l => l.id === 'deng_xiaoping')
                 const zzy = allLeaders.find(l => l.id === 'zhao_ziyang')
                 finalPrevList = []
-                if (dxp) finalPrevList.push({ leader: dxp, groupId: 'central', groupLabel: '领导核心' })
+                if (dxp) finalPrevList.push({ leader: dxp, groupId: 'central:china', groupLabel: '中国中央政权' })
                 if (zzy) finalPrevList.push({ leader: zzy, groupId: 'prc_sec', groupLabel: '总书记' })
             }
             if (id === 'wu_shiyue') {
@@ -357,7 +372,7 @@ export default function LeaderDetail() {
             // Never let prev/next calculation break the whole page.
             return { prevLeaders: [], nextLeaders: [] }
         }
-    }, [allLeaders, id, leader, navGroupId, leaderNavGroupId])
+    }, [allLeaders, id, leader, leaderCountry, navGroupId, leaderNavGroupId])
 
     useEffect(() => {
         window.scrollTo(0, 0)

@@ -6,16 +6,16 @@ import AnnotatedText from '../common/AnnotatedText'
 import './MapView.css'
 
 import { MAPTILER_KEY, hasMapKey } from '../../config/maptiler'
+import { getDynastyListRaw, getRegionalRegimeListRaw, resolveLeaderCountry } from '../../data/catalog'
+import { ALL_COUNTRY_VALUE, COUNTRY_KEYS, getCountryLabel, isAllCountriesSelected, parseCountrySelectionParam, serializeCountrySelectionParam, toggleCountrySelection } from '../../data/countries'
 
 // --- 引入真实数据 ---
 import eventsData from '../../../data/historical_events.json'
-import dynastiesData from '../../../data/dynasties.json'
-import regionalData from '../../../data/regional_regimes.json'
 
 // 合并所有政权用于提取都城点，并注入路由类型以便跳转
 const allPolities = [
-    ...dynastiesData.map(d => ({ ...d, routeType: 'dynasty' })),
-    ...regionalData.map(r => ({ ...r, routeType: 'regional' }))
+    ...getDynastyListRaw().map(d => ({ ...d, routeType: 'dynasty' })),
+    ...getRegionalRegimeListRaw().map(r => ({ ...r, routeType: 'regional' }))
 ]
 
 // 全局缓存地图 DOM 和实例，避免切换页面时重复加载
@@ -39,7 +39,7 @@ function escHtml(s) {
 }
 
 export default function MapView() {
-    const [searchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
     const focusLng = parseFloat(searchParams.get('lng'))
     const focusLat = parseFloat(searchParams.get('lat'))
@@ -75,6 +75,36 @@ export default function MapView() {
     const [mapLoaded, setMapLoaded] = useState(globalMapLoaded)
     const [filter, setFilter] = useState(searchParams.get('filter') || 'all')
     const [isLegendExpanded, setIsLegendExpanded] = useState(window.innerWidth > 768)
+    const selectedCountries = useMemo(
+        () => parseCountrySelectionParam(searchParams.get('countries')),
+        [searchParams]
+    )
+    const allCountriesActive = useMemo(() => isAllCountriesSelected(selectedCountries), [selectedCountries])
+    const selectedCountrySet = useMemo(() => new Set(selectedCountries), [selectedCountries])
+    const countryMatches = useMemo(() => {
+        return (country) => allCountriesActive || selectedCountrySet.has(String(country || ''))
+    }, [allCountriesActive, selectedCountrySet])
+    const leaderById = useMemo(() => new Map((leaders || []).map(leader => [String(leader.id), leader])), [leaders])
+
+    function resolveEventCountry(evt) {
+        if (evt?.country && countryMatches(evt.country)) return evt.country
+        const leaderIds = Array.isArray(evt?.leaderIds) ? evt.leaderIds : []
+        for (const leaderId of leaderIds) {
+            const linked = leaderById.get(String(leaderId))
+            const linkedCountry = resolveLeaderCountry(linked)
+            if (linkedCountry) return linkedCountry
+        }
+        return 'china'
+    }
+
+    function handleCountryToggle(countryValue) {
+        const nextParams = new URLSearchParams(searchParams)
+        const nextSelection = toggleCountrySelection(selectedCountries, countryValue)
+        const encoded = serializeCountrySelectionParam(nextSelection)
+        if (encoded) nextParams.set('countries', encoded)
+        else nextParams.delete('countries')
+        setSearchParams(nextParams, { replace: true })
+    }
 
     // 统一的“先 resize 再飞行”：避免容器尺寸未就绪导致图标/画布错位到左上角
     const flyToFocus = useMemo(() => {
@@ -231,6 +261,7 @@ export default function MapView() {
             if (filter === 'all' || filter === '祖籍') {
                 // 1) 绘制家族
                 families.forEach(fam => {
+                    if (!countryMatches(fam.country)) return
                     if (fam.ancestralHomeCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
@@ -255,6 +286,7 @@ export default function MapView() {
 
                 // 2) 绘制没有单独归类家族的执政者个体祖籍
                 leaders.forEach(leader => {
+                    if (!countryMatches(resolveLeaderCountry(leader))) return
                     if (!leader.familyId && leader.ancestralHomeCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
@@ -282,6 +314,7 @@ export default function MapView() {
             // 1b. 添加执政者出生地点 (符合 "all" 或 "出生地" 过滤条件时显示)
             if (filter === 'all' || filter === '出生地') {
                 leaders.forEach(leader => {
+                    if (!countryMatches(resolveLeaderCountry(leader))) return
                     if (leader.birthplaceCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
@@ -309,6 +342,7 @@ export default function MapView() {
             // 2. 添加历史事件点 (符合 "all" 或 "事件" 过滤条件时显示)
             if (filter === 'all' || filter === '事件') {
                 eventsData.forEach(evt => {
+                    if (!countryMatches(resolveEventCountry(evt))) return
                     if (evt.coords) {
                         const timeStr = evt.year < 0 ? `公元前${Math.abs(evt.year)}年` : `公元${evt.year}年`
                         const popup = new maptilerSDK.Popup({ offset: 25 })
@@ -338,6 +372,7 @@ export default function MapView() {
             // 3. 添加历代都城点 (符合 "all" 或 "建都" 过滤条件时显示)
             if (filter === 'all' || filter === '建都') {
                 allPolities.forEach(polity => {
+                    if (!countryMatches(polity.country)) return
                     if (polity.capitalCoords) {
                         const popup = new maptilerSDK.Popup({ offset: 25 })
                             .setHTML(`
@@ -367,7 +402,7 @@ export default function MapView() {
             markersRef.current.forEach(m => m.remove())
             markersRef.current = []
         }
-    }, [mapLoaded, leaders, families, filter, eventId, leaderId, polityId, familyParam])
+    }, [mapLoaded, leaders, families, filter, eventId, leaderId, polityId, familyParam, allCountriesActive, selectedCountrySet])
 
     const showPlaceholder = !hasMapKey()
 
@@ -377,16 +412,43 @@ export default function MapView() {
         <div className="map-page" id="map-page">
             <div className="map-header container">
                 <h1 className="map-title">历史地图</h1>
-                <div className="map-filters">
-                    {filters.map(f => (
-                        <button
-                            key={f}
-                            className={`map-filter-btn ${filter === f ? 'active' : ''}`}
-                            onClick={() => setFilter(f)}
-                        >
-                            {f === 'all' ? '全部' : f}
-                        </button>
-                    ))}
+                <div className="map-controls">
+                    <div className="map-country-group" aria-label="地图国家筛选">
+                        <div className="map-country-label">国家</div>
+                        <div className="map-country-chips">
+                            <button
+                                type="button"
+                                className={`map-country-chip ${allCountriesActive ? 'active' : ''}`}
+                                onClick={() => handleCountryToggle(ALL_COUNTRY_VALUE)}
+                            >
+                                全部
+                            </button>
+                            {COUNTRY_KEYS.map(country => {
+                                const active = selectedCountries.includes(country) && !allCountriesActive
+                                return (
+                                    <button
+                                        key={country}
+                                        type="button"
+                                        className={`map-country-chip ${active ? 'active' : ''}`}
+                                        onClick={() => handleCountryToggle(country)}
+                                    >
+                                        {getCountryLabel(country)}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </div>
+                    <div className="map-filters">
+                        {filters.map(f => (
+                            <button
+                                key={f}
+                                className={`map-filter-btn ${filter === f ? 'active' : ''}`}
+                                onClick={() => setFilter(f)}
+                            >
+                                {f === 'all' ? '全部' : f}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -404,7 +466,7 @@ export default function MapView() {
                         <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>
                             <strong>📍 已录入地理坐标：</strong>
                         </p>
-                        {leaders.map(l => (
+                        {leaders.filter(l => countryMatches(resolveLeaderCountry(l))).map(l => (
                             <div key={l.id} style={{ fontSize: '0.8rem', color: 'var(--color-text-tertiary)', padding: '2px 0' }}>
                                 <AnnotatedText text={l.name} /> — 祖籍: <AnnotatedText text={l.ancestralHome} /> [{l.ancestralHomeCoords?.join(', ')}] | 出生地: <AnnotatedText text={l.birthplace} /> [{l.birthplaceCoords?.join(', ')}]
                             </div>

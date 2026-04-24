@@ -1,0 +1,32 @@
+[
+  {
+    "id": "choseon",
+    "name": "朝鲜王国",
+    "fullName": "朝鲜王国",
+    "startYear": 1392,
+    "endYear": 1897,
+    "type": "central",
+    "color": "#4169E1",
+    "capital": "汉城（今首尔）",
+    "capitalCoords": [
+      126.978,
+      37.5665
+    ],
+    "description": "李成桂建国，奉明正朔，与明清两代中国关系密切，长期以儒学治国，是朝鲜半岛近世最重要的王朝政体。",
+    "leaders": [
+      "sejong"
+    ]
+  },
+  {
+    "id": "divided_korea",
+    "name": "分治时期",
+    "fullName": "朝鲜半岛分治时期",
+    "startYear": 1948,
+    "endYear": null,
+    "type": "central",
+    "color": "#C76B3A",
+    "capital": "首尔、平壤",
+    "description": "1948年后朝鲜半岛分别建立大韩民国与朝鲜民主主义人民共和国，形成长期分治格局。",
+    "leaders": []
+  }
+]

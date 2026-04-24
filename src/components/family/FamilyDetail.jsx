@@ -26,7 +26,7 @@ export default function FamilyDetail() {
       <div className="family-detail">
         <div className="container family-detail-empty">
           <h2>未找到相关家族资料</h2>
-          <p>可在 <code>data/families.json</code> 中补充家族条目。</p>
+          <p>可在对应国家目录下的 <code>data/countries/&lt;country&gt;/families.json</code> 中补充家族条目。</p>
           <Link to="/" className="btn btn-primary" style={{ marginTop: 'var(--space-md)' }}>返回首页</Link>
         </div>
       </div>

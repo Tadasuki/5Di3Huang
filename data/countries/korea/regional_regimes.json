@@ -1,0 +1,26 @@
+[
+  {
+    "id": "south_korea",
+    "name": "大韩民国",
+    "fullName": "大韩民国",
+    "startYear": 1948,
+    "endYear": null,
+    "color": "#0055A4",
+    "capital": "首尔",
+    "description": "1948年在朝鲜半岛南部成立的共和国，经历威权统治、工业化与民主化转型后，成为东亚重要的民主国家。",
+    "leaders": [
+      "lee_myung_bak"
+    ]
+  },
+  {
+    "id": "north_korea",
+    "name": "朝鲜民主主义人民共和国",
+    "fullName": "朝鲜民主主义人民共和国",
+    "startYear": 1948,
+    "endYear": null,
+    "color": "#C62828",
+    "capital": "平壤",
+    "description": "1948年在朝鲜半岛北部成立的社会主义国家，长期维持高度集中的政治体制。",
+    "leaders": []
+  }
+]

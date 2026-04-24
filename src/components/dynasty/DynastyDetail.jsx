@@ -6,17 +6,9 @@ import LeaderCard from '../home/LeaderCard'
 import { formatYearRangeOngoing, calculateDuration } from '../../utils/yearFormat'
 import { withOpacity } from '../../utils/colorUtils'
 import { inlineMarkupInitial } from '../../utils/inlineMarkup'
+import { getRegionalRegimeListRaw } from '../../data/catalog'
 import AnnotatedText from '../common/AnnotatedText'
 import './DynastyDetail.css'
-
-// 引入割据政权数据，以便在需要时建立跨表跳转联系
-const regionalModules = import.meta.glob('/data/regional_regimes.json', { eager: true })
-function getRegionalList() {
-  const path = Object.keys(regionalModules)[0]
-  if (!path) return []
-  const raw = regionalModules[path]?.default || regionalModules[path]
-  return Array.isArray(raw) ? raw : []
-}
 
 export default function DynastyDetail() {
   const { id } = useParams()
@@ -25,8 +17,10 @@ export default function DynastyDetail() {
   const color = dynasty?.color || '#c9a96e'
 
   const { prevDynasty, nextDynasties } = useMemo(() => {
+    const currentCountry = dynasty?.country || ''
     const list = (dynasties || [])
       .filter(d => d && d.id && d.startYear != null)
+      .filter(d => !currentCountry || d.country === currentCountry)
       .slice()
       .sort((a, b) => (a.startYear ?? 999999) - (b.startYear ?? 999999))
     const idx = list.findIndex(d => String(d.id) === String(id))
@@ -44,8 +38,8 @@ export default function DynastyDetail() {
 
     // 针对“中华民国”页面，手动追加一个通往“台湾”政权的分支跳转
     if (id === 'roc') {
-      const regList = getRegionalList()
-      const rocTaiwan = regList.find(r => r.id === 'roc_taiwan')
+      const regList = getRegionalRegimeListRaw()
+      const rocTaiwan = regList.find(r => r.id === 'roc_taiwan' && r.country === currentCountry)
       if (rocTaiwan) {
         nexts.push({
           ...rocTaiwan,
@@ -59,7 +53,7 @@ export default function DynastyDetail() {
       prevDynasty: prev,
       nextDynasties: nexts,
     }
-  }, [dynasties, id])
+  }, [dynasties, dynasty?.country, id])
 
   if (loading) {
     return (
@@ -137,7 +131,7 @@ export default function DynastyDetail() {
               />
             ))}
             {dynasty.leaderData.length === 0 && (
-              <p className="dynasty-detail-empty">暂无执政者条目，可在「data/leaders/{dynasty.id}/」下添加 JSON。</p>
+              <p className="dynasty-detail-empty">暂无执政者条目，可在对应国家目录下的「data/countries/&lt;country&gt;/leaders/{dynasty.id}/」补充 JSON。</p>
             )}
           </div>
         </section>
